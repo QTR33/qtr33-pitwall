@@ -1,0 +1,3658 @@
+[
+  {
+    "carNumber": "1",
+    "name": "Lando Norris",
+    "code": "NOR",
+    "number": 1,
+    "team": "McLaren",
+    "team_color": "#FF8000",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.105",
+        "OverallFastest": false,
+        "PersonalFastest": false,
+        "PreviousValue": "29.105"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.486",
+        "PersonalFastest": false,
+        "PreviousValue": "30.486",
+        "OverallFastest": false
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2064
+          },
+          "4": {
+            "Status": 2064
+          },
+          "5": {
+            "Status": 2064
+          }
+        },
+        "Value": "24.034",
+        "PersonalFastest": false,
+        "PreviousValue": "24.034",
+        "OverallFastest": false
+      }
+    },
+    "Speeds": {
+      "ST": {
+        "Value": "326",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "293",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "244",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "176",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      }
+    },
+    "GapToLeader": "",
+    "IntervalToPositionAhead": {
+      "Value": "",
+      "Catching": false
+    },
+    "Line": 1,
+    "Position": "1",
+    "Status": 1088,
+    "NumberOfLaps": 70,
+    "Stints": {
+      "0": {
+        "TotalLaps": 17,
+        "LapTime": "1:25.091",
+        "LapNumber": 6,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 22,
+        "StartLaps": 0,
+        "LapTime": "1:24.349",
+        "LapNumber": 21
+      },
+      "2": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 17,
+        "StartLaps": 0,
+        "LapTime": "1:22.718",
+        "LapNumber": 41
+      },
+      "3": {
+        "LapFlags": 1,
+        "Compound": "SOFT",
+        "New": "false",
+        "TyresNotChanged": "0",
+        "TotalLaps": 17,
+        "StartLaps": 3,
+        "LapTime": "1:22.491",
+        "LapNumber": 64
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:22.491",
+      "Lap": 64
+    },
+    "LastLapTime": {
+      "Value": "1:23.625",
+      "PersonalFastest": false,
+      "OverallFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 3,
+    "PitOut": false
+  },
+  {
+    "carNumber": "3",
+    "name": "Max Verstappen",
+    "code": "VER",
+    "number": 3,
+    "team": "Red Bull Racing",
+    "team_color": "#3671C6",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.425",
+        "PersonalFastest": false,
+        "PreviousValue": "29.425",
+        "OverallFastest": false
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.537",
+        "PersonalFastest": false,
+        "PreviousValue": "30.537",
+        "OverallFastest": false
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "24.258",
+        "PersonalFastest": false,
+        "PreviousValue": "24.258"
+      }
+    },
+    "GapToLeader": "+15.080",
+    "IntervalToPositionAhead": {
+      "Value": "+15.080",
+      "Catching": false
+    },
+    "Speeds": {
+      "ST": {
+        "Value": "324",
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "300",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "245",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "259",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      }
+    },
+    "Line": 2,
+    "Position": "2",
+    "Status": 1088,
+    "NumberOfLaps": 70,
+    "Stints": {
+      "0": {
+        "TotalLaps": 14,
+        "LapTime": "1:25.359",
+        "LapNumber": 4,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 27,
+        "StartLaps": 0,
+        "LapTime": "1:24.965",
+        "LapNumber": 20
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "SOFT",
+        "New": "false",
+        "TyresNotChanged": "0",
+        "TotalLaps": 32,
+        "StartLaps": 3,
+        "LapTime": "1:23.433",
+        "LapNumber": 66
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:23.433",
+      "Lap": 66
+    },
+    "LastLapTime": {
+      "Value": "1:24.220",
+      "OverallFastest": false,
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "12",
+    "name": "Kimi Antonelli",
+    "code": "ANT",
+    "number": 12,
+    "team": "Mercedes",
+    "team_color": "#27F4D2",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.053",
+        "PersonalFastest": false,
+        "PreviousValue": "29.053",
+        "OverallFastest": false
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.514",
+        "PersonalFastest": false,
+        "PreviousValue": "30.514",
+        "OverallFastest": false
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2064
+          },
+          "4": {
+            "Status": 2064
+          },
+          "5": {
+            "Status": 2064
+          }
+        },
+        "Value": "23.905",
+        "PersonalFastest": false,
+        "PreviousValue": "23.905"
+      }
+    },
+    "GapToLeader": "+18.728",
+    "Speeds": {
+      "ST": {
+        "Value": "325",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "300",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      },
+      "I2": {
+        "Value": "239",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "265",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      }
+    },
+    "Line": 3,
+    "Position": "3",
+    "Status": 1088,
+    "IntervalToPositionAhead": {
+      "Value": "+3.648",
+      "Catching": true
+    },
+    "NumberOfLaps": 70,
+    "Stints": {
+      "0": {
+        "TotalLaps": 22,
+        "LapTime": "1:25.491",
+        "LapNumber": 9,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 31,
+        "StartLaps": 0,
+        "LapTime": "1:24.119",
+        "LapNumber": 24
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 17,
+        "StartLaps": 0,
+        "LapTime": "1:22.415",
+        "LapNumber": 58
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:22.415",
+      "Lap": 58
+    },
+    "LastLapTime": {
+      "Value": "1:23.472",
+      "PersonalFastest": false,
+      "OverallFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "16",
+    "name": "Charles Leclerc",
+    "code": "LEC",
+    "number": 16,
+    "team": "Ferrari",
+    "team_color": "#E8002D",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.124",
+        "OverallFastest": false,
+        "PersonalFastest": false,
+        "PreviousValue": "29.124"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.949",
+        "PersonalFastest": false,
+        "PreviousValue": "29.949",
+        "OverallFastest": false
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "24.025",
+        "PersonalFastest": false,
+        "PreviousValue": "24.025"
+      }
+    },
+    "GapToLeader": "+23.840",
+    "IntervalToPositionAhead": {
+      "Value": "+5.112",
+      "Catching": true
+    },
+    "Speeds": {
+      "ST": {
+        "Value": "323",
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "296",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      },
+      "I2": {
+        "Value": "247",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      },
+      "FL": {
+        "Value": "261",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 4,
+    "Position": "4",
+    "Status": 1088,
+    "NumberOfLaps": 70,
+    "Stints": {
+      "0": {
+        "TotalLaps": 19,
+        "LapTime": "1:25.434",
+        "LapNumber": 6,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 20,
+        "StartLaps": 0,
+        "LapTime": "1:24.536",
+        "LapNumber": 18
+      },
+      "2": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 20,
+        "StartLaps": 0,
+        "LapTime": "1:23.789",
+        "LapNumber": 41
+      },
+      "3": {
+        "LapFlags": 3,
+        "Compound": "SOFT",
+        "New": "false",
+        "TyresNotChanged": "0",
+        "TotalLaps": 17,
+        "StartLaps": 3,
+        "LapTime": "1:22.000",
+        "LapNumber": 58
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:22.000",
+      "Lap": 58
+    },
+    "LastLapTime": {
+      "Value": "1:23.098",
+      "PersonalFastest": false,
+      "OverallFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 3,
+    "PitOut": false
+  },
+  {
+    "carNumber": "44",
+    "name": "Lewis Hamilton",
+    "code": "HAM",
+    "number": 44,
+    "team": "Ferrari",
+    "team_color": "#E8002D",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "28.917",
+        "PersonalFastest": false,
+        "PreviousValue": "28.917",
+        "OverallFastest": false
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.223",
+        "PersonalFastest": false,
+        "PreviousValue": "30.223",
+        "OverallFastest": false
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2064
+          },
+          "4": {
+            "Status": 2064
+          },
+          "5": {
+            "Status": 2064
+          }
+        },
+        "Value": "23.890",
+        "OverallFastest": false,
+        "PersonalFastest": false,
+        "PreviousValue": "23.890"
+      }
+    },
+    "GapToLeader": "+24.540",
+    "IntervalToPositionAhead": {
+      "Value": "+0.700",
+      "Catching": true
+    },
+    "Speeds": {
+      "ST": {
+        "Value": "325",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "303",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      },
+      "I2": {
+        "Value": "245",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      },
+      "FL": {
+        "Value": "260",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 5,
+    "Position": "5",
+    "Status": 1088,
+    "NumberOfLaps": 70,
+    "Stints": {
+      "0": {
+        "TotalLaps": 13,
+        "LapTime": "1:25.228",
+        "LapNumber": 6,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 17,
+        "StartLaps": 0,
+        "LapTime": "1:24.937",
+        "LapNumber": 15
+      },
+      "2": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 26,
+        "StartLaps": 0,
+        "LapTime": "1:23.671",
+        "LapNumber": 32
+      },
+      "3": {
+        "LapFlags": 1,
+        "Compound": "SOFT",
+        "New": "false",
+        "TyresNotChanged": "0",
+        "TotalLaps": 17,
+        "StartLaps": 3,
+        "LapTime": "1:22.300",
+        "LapNumber": 59
+      }
+    },
+    "LastLapTime": {
+      "Value": "1:23.030",
+      "OverallFastest": false,
+      "PersonalFastest": false
+    },
+    "BestLapTime": {
+      "Value": "1:22.300",
+      "Lap": 59
+    },
+    "InPit": false,
+    "NumberOfPitStops": 3,
+    "PitOut": false
+  },
+  {
+    "carNumber": "6",
+    "name": "Isack Hadjar",
+    "code": "HAD",
+    "number": 6,
+    "team": "Red Bull Racing",
+    "team_color": "#3671C6",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.270",
+        "PersonalFastest": false,
+        "PreviousValue": "29.270",
+        "OverallFastest": false
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.574",
+        "PersonalFastest": false,
+        "PreviousValue": "30.574"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "24.278",
+        "PersonalFastest": false,
+        "PreviousValue": "24.278"
+      }
+    },
+    "GapToLeader": "+55.488",
+    "IntervalToPositionAhead": {
+      "Value": "+30.948",
+      "Catching": false
+    },
+    "Speeds": {
+      "ST": {
+        "Value": "325",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "307",
+        "PersonalFastest": true,
+        "OverallFastest": true
+      },
+      "I2": {
+        "Value": "244",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      },
+      "FL": {
+        "Value": "265",
+        "PersonalFastest": true
+      }
+    },
+    "Line": 6,
+    "Position": "6",
+    "Status": 1088,
+    "NumberOfLaps": 70,
+    "Stints": {
+      "0": {
+        "TotalLaps": 19,
+        "LapTime": "1:25.808",
+        "LapNumber": 4,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 23,
+        "StartLaps": 0,
+        "LapTime": "1:24.643",
+        "LapNumber": 21
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 28,
+        "StartLaps": 0,
+        "LapTime": "1:23.218",
+        "LapNumber": 45
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:23.218",
+      "Lap": 45
+    },
+    "LastLapTime": {
+      "Value": "1:24.122",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "63",
+    "name": "George Russell",
+    "code": "RUS",
+    "number": 63,
+    "team": "Mercedes",
+    "team_color": "#27F4D2",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.120",
+        "PersonalFastest": false,
+        "PreviousValue": "29.120"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.525",
+        "PersonalFastest": false,
+        "PreviousValue": "30.525",
+        "OverallFastest": false
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 0
+          },
+          "1": {
+            "Status": 0
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "24.114",
+        "PersonalFastest": false,
+        "PreviousValue": "24.114"
+      }
+    },
+    "GapToLeader": "+57.503",
+    "IntervalToPositionAhead": {
+      "Value": "+2.015",
+      "Catching": true
+    },
+    "Speeds": {
+      "ST": {
+        "Value": "327",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      },
+      "I1": {
+        "Value": "307",
+        "PersonalFastest": true
+      },
+      "I2": {
+        "Value": "240",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "263",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 7,
+    "Position": "7",
+    "Status": 1088,
+    "NumberOfLaps": 70,
+    "Stints": {
+      "0": {
+        "TotalLaps": 27,
+        "LapTime": "1:25.609",
+        "LapNumber": 22,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 27,
+        "StartLaps": 0,
+        "LapTime": "1:24.013",
+        "LapNumber": 30
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 16,
+        "StartLaps": 0,
+        "LapTime": "1:22.589",
+        "LapNumber": 58
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:22.589",
+      "Lap": 58
+    },
+    "LastLapTime": {
+      "Value": "1:23.759",
+      "PersonalFastest": false,
+      "OverallFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "30",
+    "name": "Liam Lawson",
+    "code": "LAW",
+    "number": 30,
+    "team": "Racing Bulls",
+    "team_color": "#6692FF",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.542",
+        "PersonalFastest": false,
+        "PreviousValue": "29.542"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.783",
+        "PersonalFastest": false,
+        "PreviousValue": "30.783"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "24.348",
+        "PersonalFastest": false,
+        "PreviousValue": "24.348"
+      }
+    },
+    "GapToLeader": "1L",
+    "Speeds": {
+      "ST": {
+        "Value": "325",
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "303",
+        "PersonalFastest": true
+      },
+      "I2": {
+        "Value": "241",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "258",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 8,
+    "Position": "8",
+    "Status": 1088,
+    "IntervalToPositionAhead": {
+      "Value": "+54.289",
+      "Catching": false
+    },
+    "NumberOfLaps": 69,
+    "Stints": {
+      "0": {
+        "TotalLaps": 21,
+        "LapTime": "1:26.380",
+        "LapNumber": 3,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 21,
+        "StartLaps": 0,
+        "LapTime": "1:25.714",
+        "LapNumber": 24
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "SOFT",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 27,
+        "StartLaps": 0,
+        "LapTime": "1:23.900",
+        "LapNumber": 64
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:23.900",
+      "Lap": 64
+    },
+    "LastLapTime": {
+      "Value": "1:24.673",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "27",
+    "name": "Nico Hülkenberg",
+    "code": "HUL",
+    "number": 27,
+    "team": "Audi",
+    "team_color": "#C0C0C0",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.536",
+        "PersonalFastest": false,
+        "PreviousValue": "29.536"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "31.240",
+        "PersonalFastest": false,
+        "PreviousValue": "31.240"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "24.523",
+        "PersonalFastest": false,
+        "PreviousValue": "24.523"
+      }
+    },
+    "GapToLeader": "1L",
+    "IntervalToPositionAhead": {
+      "Value": "+2.349",
+      "Catching": false
+    },
+    "Speeds": {
+      "ST": {
+        "Value": "324",
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "300",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "238",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "238",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 9,
+    "Position": "9",
+    "Status": 1088,
+    "NumberOfLaps": 69,
+    "Stints": {
+      "0": {
+        "TotalLaps": 19,
+        "LapTime": "1:26.842",
+        "LapNumber": 6,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 20,
+        "StartLaps": 0,
+        "LapTime": "1:25.814",
+        "LapNumber": 21
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "SOFT",
+        "New": "false",
+        "TyresNotChanged": "0",
+        "TotalLaps": 33,
+        "StartLaps": 3,
+        "LapTime": "1:23.964",
+        "LapNumber": 67
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:23.964",
+      "Lap": 67
+    },
+    "LastLapTime": {
+      "Value": "1:25.299",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "41",
+    "name": "Arvid Lindblad",
+    "code": "LIN",
+    "number": 41,
+    "team": "Racing Bulls",
+    "team_color": "#6692FF",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.480",
+        "PersonalFastest": false,
+        "PreviousValue": "30.480"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "33.078",
+        "PersonalFastest": false,
+        "PreviousValue": "33.078"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "25.278",
+        "PersonalFastest": false,
+        "PreviousValue": "25.278"
+      }
+    },
+    "GapToLeader": "1L",
+    "IntervalToPositionAhead": {
+      "Value": "+20.668",
+      "Catching": false
+    },
+    "Speeds": {
+      "ST": {
+        "Value": "322",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "284",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "238",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "259",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 10,
+    "Position": "10",
+    "Status": 1088,
+    "NumberOfLaps": 69,
+    "Stints": {
+      "0": {
+        "TotalLaps": 20,
+        "LapTime": "1:26.748",
+        "LapNumber": 8,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 1,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 49,
+        "StartLaps": 0,
+        "LapTime": "1:25.931",
+        "LapNumber": 47
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:25.931",
+      "Lap": 47
+    },
+    "LastLapTime": {
+      "Value": "1:28.836",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 1,
+    "PitOut": false
+  },
+  {
+    "carNumber": "5",
+    "name": "Gabriel Bortoleto",
+    "code": "BOR",
+    "number": 5,
+    "team": "Audi",
+    "team_color": "#C0C0C0",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.113",
+        "PersonalFastest": false,
+        "PreviousValue": "30.113"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "33.400",
+        "PersonalFastest": false,
+        "PreviousValue": "33.400"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "25.673",
+        "PersonalFastest": false,
+        "PreviousValue": "25.673"
+      }
+    },
+    "IntervalToPositionAhead": {
+      "Value": "+0.978",
+      "Catching": false
+    },
+    "GapToLeader": "1L",
+    "Speeds": {
+      "ST": {
+        "Value": "332",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      },
+      "I1": {
+        "Value": "290",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "233",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "253",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 11,
+    "Position": "11",
+    "Status": 1088,
+    "NumberOfLaps": 69,
+    "Stints": {
+      "0": {
+        "TotalLaps": 29,
+        "LapTime": "1:26.790",
+        "LapNumber": 22,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 1,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 40,
+        "StartLaps": 0,
+        "LapTime": "1:24.783",
+        "LapNumber": 33
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:24.783",
+      "Lap": 33
+    },
+    "LastLapTime": {
+      "Value": "1:29.186",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 1,
+    "PitOut": false
+  },
+  {
+    "carNumber": "10",
+    "name": "Pierre Gasly",
+    "code": "GAS",
+    "number": 10,
+    "team": "Alpine",
+    "team_color": "#0093CC",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.316",
+        "PersonalFastest": false,
+        "PreviousValue": "29.316",
+        "OverallFastest": false
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "31.481",
+        "PersonalFastest": false,
+        "PreviousValue": "31.481"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "24.905",
+        "PersonalFastest": false,
+        "PreviousValue": "24.905"
+      }
+    },
+    "GapToLeader": "1L",
+    "IntervalToPositionAhead": {
+      "Value": "+1.401",
+      "Catching": true
+    },
+    "Speeds": {
+      "ST": {
+        "Value": "327",
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "285",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "232",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "263",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 12,
+    "Position": "12",
+    "Status": 1088,
+    "NumberOfLaps": 69,
+    "Stints": {
+      "0": {
+        "TotalLaps": 16,
+        "LapTime": "1:27.125",
+        "LapNumber": 3,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 23,
+        "StartLaps": 0,
+        "LapTime": "1:25.638",
+        "LapNumber": 19
+      },
+      "2": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 16,
+        "StartLaps": 0,
+        "LapTime": "1:24.863",
+        "LapNumber": 42
+      },
+      "3": {
+        "LapFlags": 1,
+        "Compound": "SOFT",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 14,
+        "StartLaps": 0,
+        "LapTime": "1:22.871",
+        "LapNumber": 57
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:22.871",
+      "Lap": 57
+    },
+    "LastLapTime": {
+      "Value": "1:25.702",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 3,
+    "PitOut": false
+  },
+  {
+    "carNumber": "18",
+    "name": "Lance Stroll",
+    "code": "STR",
+    "number": 18,
+    "team": "Aston Martin",
+    "team_color": "#229971",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.757",
+        "PersonalFastest": false,
+        "PreviousValue": "29.757"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "31.358",
+        "PersonalFastest": false,
+        "PreviousValue": "31.358"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 0
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "24.635",
+        "PersonalFastest": false,
+        "PreviousValue": "24.635"
+      }
+    },
+    "IntervalToPositionAhead": {
+      "Value": "+10.399",
+      "Catching": false
+    },
+    "GapToLeader": "1L",
+    "Speeds": {
+      "ST": {
+        "Value": "320",
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "285",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "235",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "257",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 13,
+    "Position": "13",
+    "Status": 1088,
+    "NumberOfLaps": 69,
+    "Stints": {
+      "0": {
+        "TotalLaps": 8,
+        "LapTime": "1:27.685",
+        "LapNumber": 5,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "MEDIUM",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 29,
+        "StartLaps": 0,
+        "LapTime": "1:26.397",
+        "LapNumber": 10
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "SOFT",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 32,
+        "StartLaps": 0,
+        "LapTime": "1:24.718",
+        "LapNumber": 57
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:24.718",
+      "Lap": 57
+    },
+    "LastLapTime": {
+      "Value": "1:25.750",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "14",
+    "name": "Fernando Alonso",
+    "code": "ALO",
+    "number": 14,
+    "team": "Aston Martin",
+    "team_color": "#229971",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.607",
+        "PersonalFastest": false,
+        "PreviousValue": "29.607"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.700",
+        "PersonalFastest": false,
+        "PreviousValue": "30.700"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "24.406",
+        "PersonalFastest": false,
+        "PreviousValue": "24.406"
+      }
+    },
+    "IntervalToPositionAhead": {
+      "Value": "+2.224",
+      "Catching": true
+    },
+    "GapToLeader": "1L",
+    "Speeds": {
+      "ST": {
+        "Value": "320",
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "288",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "240",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "260",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 14,
+    "Position": "14",
+    "Status": 1088,
+    "NumberOfLaps": 69,
+    "Stints": {
+      "0": {
+        "TotalLaps": 34,
+        "LapTime": "1:27.186",
+        "LapNumber": 18,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "MEDIUM",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 21,
+        "StartLaps": 0,
+        "LapTime": "1:25.497",
+        "LapNumber": 50
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "SOFT",
+        "New": "false",
+        "TyresNotChanged": "0",
+        "TotalLaps": 17,
+        "StartLaps": 3,
+        "LapTime": "1:23.679",
+        "LapNumber": 57
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:23.679",
+      "Lap": 57
+    },
+    "LastLapTime": {
+      "Value": "1:24.713",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "43",
+    "name": "Franco Colapinto",
+    "code": "COL",
+    "number": 43,
+    "team": "Alpine",
+    "team_color": "#0093CC",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "31.650",
+        "PersonalFastest": false,
+        "PreviousValue": "31.650"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "32.235",
+        "PersonalFastest": false,
+        "PreviousValue": "32.235"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2064
+          },
+          "4": {
+            "Status": 2064
+          },
+          "5": {
+            "Status": 2064
+          }
+        },
+        "Value": "24.911",
+        "PersonalFastest": false,
+        "PreviousValue": "24.911"
+      }
+    },
+    "GapToLeader": "2L",
+    "IntervalToPositionAhead": {
+      "Value": "+22.537",
+      "Catching": false
+    },
+    "Speeds": {
+      "ST": {
+        "Value": "323",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "275",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "235",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "259",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 15,
+    "Position": "15",
+    "Status": 1088,
+    "NumberOfLaps": 68,
+    "Stints": {
+      "0": {
+        "TotalLaps": 15,
+        "LapTime": "1:27.505",
+        "LapNumber": 7,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 22,
+        "StartLaps": 0,
+        "LapTime": "1:26.011",
+        "LapNumber": 17
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 31,
+        "StartLaps": 0,
+        "LapTime": "1:24.624",
+        "LapNumber": 40
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:24.624",
+      "Lap": 40
+    },
+    "LastLapTime": {
+      "Value": "1:28.796",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "31",
+    "name": "Esteban Ocon",
+    "code": "OCO",
+    "number": 31,
+    "team": "Haas F1 Team",
+    "team_color": "#B6BABD",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "29.946",
+        "PersonalFastest": false,
+        "PreviousValue": "29.946"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "31.562",
+        "PersonalFastest": false,
+        "PreviousValue": "31.562"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2064
+          },
+          "4": {
+            "Status": 2064
+          },
+          "5": {
+            "Status": 2064
+          }
+        },
+        "Value": "24.899",
+        "PersonalFastest": false,
+        "PreviousValue": "24.899"
+      }
+    },
+    "IntervalToPositionAhead": {
+      "Value": "+8.983",
+      "Catching": true
+    },
+    "GapToLeader": "2L",
+    "Speeds": {
+      "ST": {
+        "Value": "321",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "291",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "239",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "255",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 16,
+    "Position": "16",
+    "Status": 1088,
+    "NumberOfLaps": 68,
+    "Stints": {
+      "0": {
+        "TotalLaps": 17,
+        "LapTime": "1:27.489",
+        "LapNumber": 3,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 18,
+        "StartLaps": 0,
+        "LapTime": "1:26.962",
+        "LapNumber": 19
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 33,
+        "StartLaps": 0,
+        "LapTime": "1:25.889",
+        "LapNumber": 62
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:25.889",
+      "Lap": 62
+    },
+    "LastLapTime": {
+      "Value": "1:26.407",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "23",
+    "name": "Alexander Albon",
+    "code": "ALB",
+    "number": 23,
+    "team": "Williams",
+    "team_color": "#64C4FF",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.234",
+        "PersonalFastest": false,
+        "PreviousValue": "30.234"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "33.030",
+        "PersonalFastest": false,
+        "PreviousValue": "33.030"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "25.739",
+        "PersonalFastest": false,
+        "PreviousValue": "25.739"
+      }
+    },
+    "IntervalToPositionAhead": {
+      "Value": "+39.870",
+      "Catching": false
+    },
+    "GapToLeader": "2L",
+    "Speeds": {
+      "ST": {
+        "Value": "341",
+        "PersonalFastest": true
+      },
+      "I1": {
+        "Value": "273",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "228",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "255",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 17,
+    "Position": "17",
+    "Status": 1088,
+    "NumberOfLaps": 68,
+    "Stints": {
+      "0": {
+        "TotalLaps": 26,
+        "LapTime": "1:27.831",
+        "LapNumber": 9,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 28,
+        "StartLaps": 0,
+        "LapTime": "1:26.440",
+        "LapNumber": 28
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "SOFT",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 14,
+        "StartLaps": 0,
+        "LapTime": "1:25.403",
+        "LapNumber": 57
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:25.403",
+      "Lap": 57
+    },
+    "LastLapTime": {
+      "Value": "1:29.003",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "55",
+    "name": "Carlos Sainz",
+    "code": "SAI",
+    "number": 55,
+    "team": "Williams",
+    "team_color": "#64C4FF",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.216",
+        "PersonalFastest": false,
+        "PreviousValue": "30.216"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "32.896",
+        "PersonalFastest": false,
+        "PreviousValue": "32.896"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "25.578",
+        "PersonalFastest": false,
+        "PreviousValue": "25.578"
+      }
+    },
+    "IntervalToPositionAhead": {
+      "Value": "+0.244",
+      "Catching": true
+    },
+    "GapToLeader": "2L",
+    "Speeds": {
+      "ST": {
+        "Value": "339",
+        "PersonalFastest": false,
+        "OverallFastest": false
+      },
+      "I1": {
+        "Value": "280",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "233",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "266",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 18,
+    "Position": "18",
+    "Status": 1088,
+    "NumberOfLaps": 68,
+    "Stints": {
+      "0": {
+        "TotalLaps": 18,
+        "LapTime": "1:27.946",
+        "LapNumber": 11,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "MEDIUM",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 25,
+        "StartLaps": 0,
+        "LapTime": "1:26.930",
+        "LapNumber": 20
+      },
+      "2": {
+        "LapFlags": 0,
+        "Compound": "SOFT",
+        "New": "false",
+        "TyresNotChanged": "0",
+        "TotalLaps": 14,
+        "StartLaps": 3,
+        "LapTime": "1:25.932",
+        "LapNumber": 46
+      },
+      "3": {
+        "LapFlags": 1,
+        "Compound": "SOFT",
+        "New": "false",
+        "TyresNotChanged": "0",
+        "TotalLaps": 17,
+        "StartLaps": 3,
+        "LapTime": "1:24.864",
+        "LapNumber": 56
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:24.864",
+      "Lap": 56
+    },
+    "LastLapTime": {
+      "Value": "1:28.690",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 3,
+    "PitOut": false
+  },
+  {
+    "carNumber": "87",
+    "name": "Oliver Bearman",
+    "code": "BEA",
+    "number": 87,
+    "team": "Haas F1 Team",
+    "team_color": "#B6BABD",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "30.338",
+        "PersonalFastest": false,
+        "PreviousValue": "30.338"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "33.073",
+        "PersonalFastest": false,
+        "PreviousValue": "33.073"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "25.549",
+        "PersonalFastest": false,
+        "PreviousValue": "25.549"
+      }
+    },
+    "IntervalToPositionAhead": {
+      "Value": "+4.225",
+      "Catching": false
+    },
+    "GapToLeader": "2L",
+    "Speeds": {
+      "ST": {
+        "Value": "340",
+        "PersonalFastest": true
+      },
+      "I1": {
+        "Value": "271",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "238",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "261",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 19,
+    "Position": "19",
+    "Status": 1088,
+    "NumberOfLaps": 68,
+    "Stints": {
+      "0": {
+        "TotalLaps": 22,
+        "LapTime": "1:27.898",
+        "LapNumber": 18,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 1,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 20,
+        "StartLaps": 0,
+        "LapTime": "1:25.884",
+        "LapNumber": 24
+      },
+      "2": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 26,
+        "StartLaps": 0,
+        "LapTime": "1:26.167",
+        "LapNumber": 48
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:25.884",
+      "Lap": 24
+    },
+    "LastLapTime": {
+      "Value": "1:28.960",
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false
+  },
+  {
+    "carNumber": "81",
+    "name": "Oscar Piastri",
+    "code": "PIA",
+    "number": 81,
+    "team": "McLaren",
+    "team_color": "#FF8000",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2052
+          }
+        },
+        "Value": "",
+        "OverallFastest": false,
+        "PersonalFastest": false,
+        "PreviousValue": "29.497",
+        "Stopped": true
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 0
+          },
+          "1": {
+            "Status": 0
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          },
+          "6": {
+            "Status": 0
+          },
+          "7": {
+            "Status": 0
+          },
+          "8": {
+            "Status": 0
+          }
+        },
+        "Value": "",
+        "OverallFastest": false,
+        "PersonalFastest": false,
+        "PreviousValue": "30.874"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 0
+          },
+          "1": {
+            "Status": 0
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 0
+          },
+          "4": {
+            "Status": 0
+          },
+          "5": {
+            "Status": 0
+          }
+        },
+        "Value": "",
+        "OverallFastest": false,
+        "PersonalFastest": false,
+        "PreviousValue": "24.225"
+      }
+    },
+    "GapToLeader": "15L",
+    "Speeds": {
+      "ST": {
+        "Value": "322",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "291",
+        "OverallFastest": false,
+        "PersonalFastest": true
+      },
+      "I2": {
+        "Value": "",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      }
+    },
+    "Line": 20,
+    "Position": "20",
+    "Status": 4,
+    "IntervalToPositionAhead": {
+      "Value": "13L",
+      "Catching": false
+    },
+    "NumberOfLaps": 55,
+    "Stints": {
+      "0": {
+        "TotalLaps": 16,
+        "LapTime": "1:24.840",
+        "LapNumber": 7,
+        "LapFlags": 0
+      },
+      "1": {
+        "LapFlags": 0,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 17,
+        "StartLaps": 0,
+        "LapTime": "1:24.282",
+        "LapNumber": 22
+      },
+      "2": {
+        "LapFlags": 1,
+        "Compound": "HARD",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 22,
+        "StartLaps": 0,
+        "LapTime": "1:23.896",
+        "LapNumber": 35
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:23.896",
+      "Lap": 35
+    },
+    "LastLapTime": {
+      "Value": "1:24.596",
+      "OverallFastest": false,
+      "PersonalFastest": false
+    },
+    "InPit": false,
+    "NumberOfPitStops": 2,
+    "PitOut": false,
+    "Stopped": true,
+    "ShowPosition": false
+  },
+  {
+    "carNumber": "11",
+    "name": "Sergio Pérez",
+    "code": "PER",
+    "number": 11,
+    "team": "Cadillac",
+    "team_color": "#D4AF37",
+    "InPit": true,
+    "Status": 28,
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2049
+          },
+          "1": {
+            "Status": 2049
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2049
+          }
+        },
+        "Value": "29.881",
+        "PersonalFastest": false,
+        "PreviousValue": "29.881"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 0
+          },
+          "2": {
+            "Status": 0
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "59.299",
+        "PersonalFastest": false,
+        "PreviousValue": "59.299"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2064
+          },
+          "4": {
+            "Status": 2064
+          },
+          "5": {
+            "Status": 2064
+          }
+        },
+        "Value": "50.818",
+        "PersonalFastest": false,
+        "PreviousValue": "50.818"
+      }
+    },
+    "GapToLeader": "22L",
+    "IntervalToPositionAhead": {
+      "Value": "7L",
+      "Catching": false
+    },
+    "Stints": {
+      "0": {
+        "TotalLaps": 21
+      },
+      "1": {
+        "LapFlags": 1,
+        "Compound": "MEDIUM",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 25,
+        "StartLaps": 0,
+        "LapTime": "1:26.342",
+        "LapNumber": 23
+      },
+      "2": {
+        "LapFlags": 0,
+        "Compound": "SOFT",
+        "New": "true",
+        "TyresNotChanged": "0",
+        "TotalLaps": 2,
+        "StartLaps": 0,
+        "LapTime": "2:19.998",
+        "LapNumber": 48
+      }
+    },
+    "Speeds": {
+      "I1": {
+        "Value": "275",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "99",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "",
+        "PersonalFastest": false
+      },
+      "ST": {
+        "Value": "334",
+        "PersonalFastest": true
+      }
+    },
+    "NumberOfLaps": 48,
+    "BestLapTime": {
+      "Value": "1:26.342",
+      "Lap": 23
+    },
+    "LastLapTime": {
+      "Value": "2:19.998",
+      "PersonalFastest": false
+    },
+    "Line": 21,
+    "Position": "21",
+    "NumberOfPitStops": 3,
+    "PitOut": false,
+    "Retired": true,
+    "Stopped": true,
+    "ShowPosition": false
+  },
+  {
+    "carNumber": "77",
+    "name": "Valtteri Bottas",
+    "code": "BOT",
+    "number": 77,
+    "team": "Cadillac",
+    "team_color": "#D4AF37",
+    "Sectors": {
+      "0": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          }
+        },
+        "Value": "31.423",
+        "PersonalFastest": false,
+        "PreviousValue": "31.423"
+      },
+      "1": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2048
+          },
+          "4": {
+            "Status": 2048
+          },
+          "5": {
+            "Status": 2048
+          },
+          "6": {
+            "Status": 2048
+          },
+          "7": {
+            "Status": 2048
+          },
+          "8": {
+            "Status": 2048
+          }
+        },
+        "Value": "47.298",
+        "PersonalFastest": false,
+        "PreviousValue": "47.298"
+      },
+      "2": {
+        "Segments": {
+          "0": {
+            "Status": 2048
+          },
+          "1": {
+            "Status": 2048
+          },
+          "2": {
+            "Status": 2048
+          },
+          "3": {
+            "Status": 2064
+          },
+          "4": {
+            "Status": 2064
+          },
+          "5": {
+            "Status": 2064
+          }
+        },
+        "Value": "",
+        "PersonalFastest": false,
+        "PreviousValue": "25.584"
+      }
+    },
+    "IntervalToPositionAhead": {
+      "Value": "35L",
+      "Catching": false
+    },
+    "GapToLeader": "57L",
+    "Speeds": {
+      "ST": {
+        "Value": "316",
+        "OverallFastest": false,
+        "PersonalFastest": false
+      },
+      "I1": {
+        "Value": "255",
+        "PersonalFastest": false
+      },
+      "I2": {
+        "Value": "134",
+        "PersonalFastest": false
+      },
+      "FL": {
+        "Value": "",
+        "PersonalFastest": false
+      }
+    },
+    "Line": 22,
+    "Position": "22",
+    "Status": 28,
+    "NumberOfLaps": 13,
+    "Stints": {
+      "0": {
+        "TotalLaps": 13,
+        "LapTime": "1:27.959",
+        "LapNumber": 4,
+        "LapFlags": 1
+      }
+    },
+    "BestLapTime": {
+      "Value": "1:27.959",
+      "Lap": 4
+    },
+    "LastLapTime": {
+      "Value": "1:29.621",
+      "PersonalFastest": false
+    },
+    "InPit": true,
+    "NumberOfPitStops": 1,
+    "ShowPosition": false,
+    "Retired": true,
+    "Stopped": true
+  }
+]
