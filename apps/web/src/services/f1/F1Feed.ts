@@ -1,4 +1,10 @@
-import { LiveTimingState, TimingMode, TimingStateManager, f1Drivers2026 } from '@livetiming/shared';
+import {
+  FeedStatus,
+  LiveTimingState,
+  TimingMode,
+  TimingStateManager,
+  f1Drivers2026,
+} from '@livetiming/shared';
 import { ENV } from '../../env.js';
 import { logger } from '../logger.js';
 import { F1Connection } from './F1Connection.js';
@@ -27,6 +33,8 @@ export class F1Feed {
   private requestedMode: TimingMode = 'live';
   // Not 'live' until F1 confirms a session is running
   private mode: TimingMode = 'replay';
+  // True until the first live probe settles, so the screen says it is connecting, not replaying
+  private firstProbe = true;
   private running = false;
   // Bumped on every mode change so a slow live probe can tell it was superseded
   private modeRun = 0;
@@ -46,6 +54,8 @@ export class F1Feed {
     this.liveManager.subscribe(() => this.mode === 'live' && this.notify());
     this.replayManager.subscribe(() => this.mode === 'replay' && this.notify());
     this.replayer.setOnStateChange(() => this.mode === 'replay' && this.notify());
+    // A dropped or restored link changes what the screen must say, even with no new data
+    this.connection?.setOnStatusChange(() => this.mode === 'live' && this.notify());
   }
 
   /** Called on every state change; read the state with getState() */
@@ -59,9 +69,19 @@ export class F1Feed {
   }
 
   public getState(): LiveTimingState {
-    return this.mode === 'live'
-      ? this.liveManager.getFullSnapshot('live')
-      : this.replayManager.getFullSnapshot('replay', this.replayer.getReplayState());
+    if (this.mode === 'live') {
+      return { ...this.liveManager.getFullSnapshot('live'), feedStatus: this.getLiveStatus() };
+    }
+    return {
+      ...this.replayManager.getFullSnapshot('replay', this.replayer.getReplayState()),
+      feedStatus: this.firstProbe ? 'connecting' : 'offline',
+    };
+  }
+
+  private getLiveStatus(): FeedStatus {
+    const status = this.connection?.getStatus() ?? 'offline';
+    // Between drop and retry the link is down but a reconnect is scheduled
+    return status === 'offline' ? 'reconnecting' : status;
   }
 
   public start(): void {
@@ -136,6 +156,7 @@ export class F1Feed {
   private enterLive() {
     logger.info('[F1] Live session running, streaming from F1');
     this.mode = 'live';
+    this.firstProbe = false;
     this.replayer.stop();
     this.notify();
 
@@ -151,6 +172,7 @@ export class F1Feed {
 
   private enterReplay() {
     this.mode = 'replay';
+    this.firstProbe = false;
     void this.replayer.start();
     this.notify();
 

@@ -1,5 +1,5 @@
 import * as signalR from '@microsoft/signalr';
-import { TimingStateManager } from '@livetiming/shared';
+import { FeedStatus, TimingStateManager } from '@livetiming/shared';
 import { logger } from '../logger.js';
 
 export const F1_TOPICS = [
@@ -32,16 +32,34 @@ export class F1Connection {
   private lastSessionActivityAt = 0;
   private watchdogTimer: ReturnType<typeof setInterval> | null = null;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private status: FeedStatus = 'offline';
+  private onStatusChange: ((status: FeedStatus) => void) | null = null;
 
   constructor(
     private manager: TimingStateManager,
     private url: string
   ) {}
 
+  public getStatus(): FeedStatus {
+    return this.status;
+  }
+
+  public setOnStatusChange(listener: (status: FeedStatus) => void) {
+    this.onStatusChange = listener;
+  }
+
+  private setStatus(status: FeedStatus) {
+    if (status === this.status) return;
+    this.status = status;
+    this.onStatusChange?.(status);
+  }
+
   public async connect(): Promise<void> {
     if (this.isConnected) return;
     this.stopRequested = false;
     this.lastSessionActivityAt = 0;
+    // A retry after a drop stays 'reconnecting' until data flows again
+    if (this.status !== 'reconnecting') this.setStatus('connecting');
 
     try {
       logger.info('[F1 Live] Connecting to F1 SignalR:', this.url);
@@ -65,6 +83,7 @@ export class F1Connection {
 
       this.connection.onreconnecting((error) => {
         logger.warn('[F1 Live] Connection lost, reconnecting...', error?.message || '');
+        this.setStatus('reconnecting');
       });
 
       // A reconnected SignalR connection starts with no subscriptions, so subscribe again
@@ -72,6 +91,7 @@ export class F1Connection {
         logger.info('[F1 Live] Reconnected, re-subscribing...');
         try {
           await this.subscribe();
+          this.setStatus('connected');
         } catch (err) {
           logger.error('[F1 Live] Re-subscribe failed, restarting connection:', err);
           await this.connection?.stop();
@@ -82,7 +102,10 @@ export class F1Connection {
       this.connection.onclose((error) => {
         this.isConnected = false;
         logger.info('[F1 Live] Connection closed:', error?.message || 'clean');
-        if (!this.stopRequested) this.scheduleReconnect();
+        if (!this.stopRequested) {
+          this.setStatus('reconnecting');
+          this.scheduleReconnect();
+        }
       });
 
       await this.connection.start();
@@ -91,9 +114,11 @@ export class F1Connection {
 
       await this.subscribe();
       this.startWatchdog();
+      this.setStatus('connected');
     } catch (err) {
       this.isConnected = false;
       logger.error('[F1 Live] Connection failed:', err);
+      if (this.status === 'connecting') this.setStatus('offline');
       throw err;
     }
   }
@@ -174,6 +199,7 @@ export class F1Connection {
       this.isConnected = false;
       logger.info('[F1 Live] Disconnected from SignalR');
     }
+    this.setStatus('offline');
   }
 
   /** True when F1 has shown session activity within the given window. */

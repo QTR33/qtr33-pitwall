@@ -1,6 +1,6 @@
 import React from 'react';
 import { SectorData } from '@livetiming/shared';
-import { getTimingTextColor, getSegmentColor } from '../../../utils/colors.js';
+import { getTimingTextColor, getTimingMeaning, getSegmentColor } from '../../../utils/colors.js';
 import { formatSectorTime } from '../../../utils/formatters.js';
 
 export interface SectorSegmentProps {
@@ -18,22 +18,28 @@ export const SectorSegment: React.FC<SectorSegmentProps> = ({
   // While the car is still in this sector, hold last lap's time (muted) until the new one lands
   const isHeld = !sector?.Value && !!sector?.PreviousValue;
   const time = sector?.Value || sector?.PreviousValue;
+  const meaning = isHeld
+    ? 'previous lap'
+    : sector?.Value
+      ? getTimingMeaning(sector.OverallFastest, sector.PersonalFastest)
+      : '';
 
   // Mini-sector segments (typically 6-8 per sector), drawn as thin bars under the time
   const segments = sector?.Segments ? Object.values(sector.Segments) : [];
 
   return (
-    <div className="inline-flex flex-col items-end gap-1">
+    <div className="flex flex-col items-end gap-1">
       <span className={`num text-data ${textColor}`} title={isHeld ? 'Previous lap' : undefined}>
         {formatSectorTime(time)}
+        {meaning && <span className="sr-only">, {meaning}</span>}
       </span>
-      {segments.length > 0 && (
-        <div className="flex gap-[2px]" aria-hidden="true">
-          {segments.map((seg, idx) => (
-            <span key={idx} className={`h-[3px] w-[6px] ${getSegmentColor(seg.Status)}`} />
-          ))}
-        </div>
-      )}
+      {/* Bars share the cell width, so the segment count (6–10 by circuit) never resizes the
+          column; the strip is always there, so the row keeps its height before data arrives */}
+      <div className="flex h-[3px] w-full gap-[2px]" aria-hidden="true">
+        {segments.map((seg, idx) => (
+          <span key={idx} className={`flex-1 ${getSegmentColor(seg.Status)}`} />
+        ))}
+      </div>
     </div>
   );
 };

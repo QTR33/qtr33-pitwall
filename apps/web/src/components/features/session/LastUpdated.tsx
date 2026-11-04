@@ -30,7 +30,16 @@ export const LastUpdated: React.FC<LastUpdatedProps> = ({ lastUpdated }) => {
       <span className="font-sans sm:hidden">Updated </span>
       <span className="hidden font-sans sm:inline">Last updated </span>
       <time dateTime={lastUpdated}>{received.toTimeString().split(' ')[0]}</time>
-      {isStale && <span className="font-sans"> · stale</span>}
+      {isStale && (
+        <span className="font-sans" aria-hidden="true">
+          {' '}
+          · stale
+        </span>
+      )}
+      {/* Announced once when it turns stale; the ticking time itself is not a live region */}
+      <span role="status" className="sr-only">
+        {isStale ? `Timing has not updated for over ${STALE_AFTER_MS / 1000} seconds` : ''}
+      </span>
     </span>
   );
 };

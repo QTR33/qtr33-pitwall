@@ -134,6 +134,13 @@ export interface ReplayState {
   currentEventIndex?: number;
 }
 
+/**
+ * Health of the link to the live timing source:
+ * connecting (first attempt in progress), connected, reconnecting (link dropped, retrying),
+ * offline (not linked: no live session, or live timing is unavailable)
+ */
+export type FeedStatus = 'connecting' | 'connected' | 'reconnecting' | 'offline';
+
 export interface LiveTimingState {
   series: RacingSeriesId;
   mode: TimingMode;
@@ -141,6 +148,9 @@ export interface LiveTimingState {
   drivers: DriverState[];
   raceControl: RaceControlMessage[];
   replay?: ReplayState;
+  /** Absent when the source does not report it */
+  feedStatus?: FeedStatus;
+  /** When timing data last arrived (ISO); not when this snapshot was taken */
   lastUpdated: string;
 }
 

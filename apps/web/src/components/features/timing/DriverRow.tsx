@@ -4,7 +4,7 @@ import { SectorSegment } from './SectorSegment.js';
 import { TyreBadge } from './TyreBadge.js';
 import { SpeedTrapCell } from './SpeedTrapCell.js';
 import { formatGap, formatInterval, formatLapTime } from '../../../utils/formatters.js';
-import { getTimingTextColor } from '../../../utils/colors.js';
+import { getTimingTextColor, getTimingMeaning } from '../../../utils/colors.js';
 
 export interface DriverRowProps {
   driver: DriverState;
@@ -28,11 +28,16 @@ export const DriverRow: React.FC<DriverRowProps> = ({
   const pos = driver.Position ? parseInt(driver.Position, 10) : driver.Line || '—';
   const posDelta = driver.PositionDelta || 0;
 
+  // A retired car's gap and interval froze when it stopped racing; they no longer mean anything
+  const isOut = !!driver.Retired;
+
   const gapValue = driver.GapToLeader || (driver as any).TimeDiffToFastest;
-  const gap = formatGap(gapValue, isLeader);
+  const gap = isOut ? '—' : formatGap(gapValue, isLeader);
 
   const intervalValue = driver.IntervalToPositionAhead || (driver as any).TimeDiffToPositionAhead;
-  const intervalInfo = formatInterval(intervalValue, isLeader);
+  const intervalInfo = isOut
+    ? { text: '—', catching: false }
+    : formatInterval(intervalValue, isLeader);
 
   const driverName =
     driver.name ||
@@ -51,9 +56,26 @@ export const DriverRow: React.FC<DriverRowProps> = ({
     driver.LastLapTime?.OverallFastest,
     driver.LastLapTime?.PersonalFastest
   );
+  const bestMeaning = getTimingMeaning(
+    driver.BestLapTime?.OverallFastest,
+    driver.BestLapTime?.PersonalFastest
+  );
+  const lastMeaning = getTimingMeaning(
+    driver.LastLapTime?.OverallFastest,
+    driver.LastLapTime?.PersonalFastest
+  );
 
-  const inPit = !!driver.InPit;
   const pitStops = driver.NumberOfPitStops ?? 0;
+  // Car state outranks the stop count: out of the race, stopped on track, in or leaving the pits
+  const carState = isOut
+    ? { label: 'Out', className: 'text-mute' }
+    : driver.Stopped
+      ? { label: 'Stopped', className: 'text-danger' }
+      : driver.InPit
+        ? { label: 'In pit', className: 'text-warn' }
+        : driver.PitOut
+          ? { label: 'Pit exit', className: 'text-warn' }
+          : null;
 
   // Sticky cells need an opaque background that tracks the row's hover / selected state
   const stickyBg = isSelected ? 'bg-raise' : 'bg-paper group-hover:bg-raise';
@@ -61,7 +83,6 @@ export const DriverRow: React.FC<DriverRowProps> = ({
   return (
     <tr
       onClick={() => onSelectDriver(driver)}
-      aria-selected={isSelected}
       className={`group cursor-pointer border-b border-rule transition-colors duration-150 ${
         isSelected ? 'bg-raise' : 'hover:bg-raise'
       }`}
@@ -74,15 +95,20 @@ export const DriverRow: React.FC<DriverRowProps> = ({
       >
         <div className="flex flex-col items-end leading-tight">
           <span className="num text-ui font-semibold text-ink">{pos}</span>
-          {posDelta !== 0 && (
-            <span className={`num text-label ${posDelta > 0 ? 'text-pb' : 'text-danger'}`}>
-              <span aria-hidden="true">{posDelta > 0 ? '▲' : '▼'}</span>
-              {Math.abs(posDelta)}
-              <span className="sr-only">
-                {posDelta > 0 ? ' positions gained' : ' positions lost'}
-              </span>
-            </span>
-          )}
+          {/* The delta line keeps its height when empty, so a gain or loss never resizes the row */}
+          <span
+            className={`num min-h-[14px] text-label ${posDelta > 0 ? 'text-pb' : 'text-danger'}`}
+          >
+            {posDelta !== 0 && (
+              <>
+                <span aria-hidden="true">{posDelta > 0 ? '▲' : '▼'}</span>
+                {Math.abs(posDelta)}
+                <span className="sr-only">
+                  {posDelta > 0 ? ' positions gained' : ' positions lost'}
+                </span>
+              </>
+            )}
+          </span>
         </div>
       </td>
 
@@ -95,29 +121,37 @@ export const DriverRow: React.FC<DriverRowProps> = ({
             aria-hidden="true"
           />
           <div className="min-w-0">
+            {/* Driver is the one flexible column: long names truncate instead of widening it */}
             <button
               type="button"
-              className="flex items-baseline gap-2 rounded-sm text-left"
-              aria-label={`${driverName}, ${driverTeam} — view details`}
+              className="flex min-w-0 max-w-full items-baseline gap-2 rounded-sm text-left"
+              aria-haspopup="dialog"
+              aria-label={`${driverName}, ${driverTeam}${isOut ? ', out of the race' : ''} — view details`}
             >
-              <span className="num w-5 text-right text-label text-mute">{carNumber}</span>
-              <span className="hidden truncate text-data font-semibold text-ink sm:inline">
+              <span className="num w-5 shrink-0 text-right text-label text-mute">{carNumber}</span>
+              <span
+                className={`hidden min-w-0 truncate text-data font-semibold sm:inline ${
+                  isOut ? 'text-mute' : 'text-ink'
+                }`}
+              >
                 {driverName}
               </span>
-              <span className="num text-label text-ink sm:text-mute">{driverCode}</span>
+              <span className="num shrink-0 text-label text-ink sm:text-mute">{driverCode}</span>
             </button>
             <p className="ml-7 hidden truncate text-label text-mute sm:block">{driverTeam}</p>
           </div>
         </div>
       </td>
 
-      <td className={`${td} num text-right text-data ${isLeader ? 'text-mute' : 'text-ink'}`}>
+      <td
+        className={`${td} num text-right text-data ${isLeader || isOut ? 'text-mute' : 'text-ink'}`}
+      >
         {gap}
       </td>
 
       <td
         className={`${td} num text-right text-data ${
-          intervalInfo.catching ? 'text-pb' : isLeader ? 'text-mute' : 'text-ink'
+          intervalInfo.catching ? 'text-pb' : isLeader || isOut ? 'text-mute' : 'text-ink'
         }`}
       >
         {intervalInfo.text}
@@ -136,10 +170,12 @@ export const DriverRow: React.FC<DriverRowProps> = ({
 
       <td className={`${td} num text-right text-data ${bestColor}`}>
         {formatLapTime(driver.BestLapTime?.Value)}
+        {bestMeaning && <span className="sr-only">, {bestMeaning}</span>}
       </td>
 
       <td className={`${td} num text-right text-data ${lastColor}`}>
         {formatLapTime(driver.LastLapTime?.Value)}
+        {lastMeaning && <span className="sr-only">, {lastMeaning}</span>}
       </td>
 
       <td className={`${td} text-right`}>
@@ -151,8 +187,8 @@ export const DriverRow: React.FC<DriverRowProps> = ({
       </td>
 
       <td className={`${td} pr-0 text-right`}>
-        {inPit ? (
-          <span className="label text-warn">In pit</span>
+        {carState ? (
+          <span className={`label whitespace-nowrap ${carState.className}`}>{carState.label}</span>
         ) : (
           <span className="num text-data text-mute">{pitStops}</span>
         )}

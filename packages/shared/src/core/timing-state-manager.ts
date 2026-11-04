@@ -85,21 +85,25 @@ export class TimingStateManager {
   // Once the official LapCount topic arrives it owns the lap counter
   private hasLapCount = false;
 
+  // When the last feed message was processed; drives the snapshot's lastUpdated
+  private lastDataAt: number | null = null;
+
   constructor(series: RacingSeriesId = 'f1') {
     this.series = series;
-    this.sessionState = {
+    this.sessionState = TimingStateManager.emptySession(series);
+  }
+
+  // Unknown until the feed says otherwise: empty names, 0 laps, no weather, never invented values
+  private static emptySession(series: RacingSeriesId): SessionState {
+    return {
       series,
-      sessionName: 'Grand Prix 2026',
-      sessionType: 'Race',
-      sessionStatus: 'Started',
+      sessionName: '',
+      sessionType: '',
+      sessionStatus: 'Inactive',
       trackStatus: 'GREEN',
-      circuitName: 'Albert Park Circuit',
-      totalLaps: 58,
-      currentLap: 1,
-      airTemp: 24,
-      trackTemp: 38,
-      humidity: 52,
-      rainfall: false,
+      circuitName: '',
+      totalLaps: 0,
+      currentLap: 0,
     };
   }
 
@@ -114,11 +118,8 @@ export class TimingStateManager {
       this.sessionState.circuitName = 'Indianapolis Motor Speedway';
       this.sessionState.sessionName = 'Indy 500';
       this.sessionState.totalLaps = 200;
-    } else {
-      this.sessionState.circuitName = 'Albert Park Circuit';
-      this.sessionState.sessionName = 'Australian Grand Prix 2026';
-      this.sessionState.totalLaps = 58;
     }
+    // F1 session details come from the real feed (SessionInfo / LapCount), so none are preset
   }
 
   public subscribe(listener: (state: LiveTimingState) => void) {
@@ -165,6 +166,7 @@ export class TimingStateManager {
 
   public processMessage(topic: string, data: any) {
     if (!data) return;
+    this.lastDataAt = Date.now();
 
     if (topic === 'TimingData' || topic === 'TimingAppData') {
       if (data.Lines) {
@@ -447,7 +449,7 @@ export class TimingStateManager {
       drivers: this.getSortedDrivers(),
       raceControl: this.raceControlMessages,
       replay: replayState,
-      lastUpdated: new Date().toISOString(),
+      lastUpdated: new Date(this.lastDataAt ?? Date.now()).toISOString(),
     };
   }
 
@@ -455,5 +457,7 @@ export class TimingStateManager {
     this.driversState = {};
     this.raceControlMessages = [];
     this.hasLapCount = false;
+    this.lastDataAt = null;
+    this.sessionState = TimingStateManager.emptySession(this.series);
   }
 }

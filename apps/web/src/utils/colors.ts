@@ -1,8 +1,5 @@
 import { TrackFlag, normalizeTrackFlag } from '@livetiming/shared';
 
-export type TrackFlagGlyph =
-  'green' | 'yellow' | 'double-yellow' | 'sc' | 'vsc' | 'red' | 'chequered';
-
 export interface TrackFlagStyle {
   /** Human-readable status, sentence case */
   label: string;
@@ -10,8 +7,6 @@ export interface TrackFlagStyle {
   text: string;
   /** Background class for the alert rule */
   fill: string;
-  /** Which flag to draw */
-  glyph: TrackFlagGlyph;
   /** Whether to raise the full-width rule across the top of the header */
   alert: boolean;
   /** Whether the rule beats like a heart — caution periods only (yellow, SC, VSC) */
@@ -25,7 +20,6 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         label: 'Yellow flag',
         text: 'text-warn',
         fill: 'bg-flag-yellow',
-        glyph: 'yellow',
         alert: true,
         pulse: true,
       };
@@ -34,7 +28,6 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         label: 'Double yellow',
         text: 'text-warn',
         fill: 'bg-flag-yellow',
-        glyph: 'double-yellow',
         alert: true,
         pulse: true,
       };
@@ -43,7 +36,6 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         label: 'Virtual safety car',
         text: 'text-warn',
         fill: 'bg-flag-yellow',
-        glyph: 'vsc',
         alert: true,
         pulse: true,
       };
@@ -52,7 +44,6 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         label: 'Safety car',
         text: 'text-warn',
         fill: 'bg-flag-yellow',
-        glyph: 'sc',
         alert: true,
         pulse: true,
       };
@@ -61,7 +52,6 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         label: 'Red flag',
         text: 'text-danger',
         fill: 'bg-flag-red',
-        glyph: 'red',
         alert: true,
         pulse: false,
       };
@@ -70,7 +60,6 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         label: 'Chequered flag',
         text: 'text-ink',
         fill: 'bg-ink',
-        glyph: 'chequered',
         alert: false,
         pulse: false,
       };
@@ -80,7 +69,6 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         // pb green is the AA-contrast text variant of flag-green in both themes
         text: 'text-pb',
         fill: 'bg-flag-green',
-        glyph: 'green',
         alert: true,
         pulse: false,
       };
@@ -144,6 +132,13 @@ export function getTimingTextColor(
   if (isOverallFastest) return 'text-best';
   if (isPersonalFastest) return 'text-pb';
   return 'text-ink';
+}
+
+/** What the timing color means, in words, for assistive tech; empty for an ordinary time */
+export function getTimingMeaning(isOverallFastest?: boolean, isPersonalFastest?: boolean): string {
+  if (isOverallFastest) return 'fastest overall';
+  if (isPersonalFastest) return 'personal best';
+  return '';
 }
 
 export function getSegmentColor(status: number): string {

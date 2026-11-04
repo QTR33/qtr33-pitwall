@@ -5,24 +5,64 @@ import { SessionClock } from './SessionClock.js';
 import { LapCounter } from './LapCounter.js';
 import { BrandMark } from './BrandMark.js';
 import { LastUpdated } from './LastUpdated.js';
-import { StatusPill } from '../../common/StatusPill.js';
+import { FeedNotice } from './FeedNotice.js';
+import { StatusPill, StatusPillProps } from '../../common/StatusPill.js';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../../../hooks/useTheme.js';
 import { getTrackFlagStyle } from '../../../utils/colors.js';
+import { formatRecordedDate } from '../../../utils/formatters.js';
 import { FEATURES } from '../../../config.js';
 
 export interface HeaderBarProps {
   state: LiveTimingState;
-  isConnected: boolean;
   onSetMode: (mode: TimingMode) => void;
   onSetSeries: (series: RacingSeriesId) => void;
 }
 
-export const HeaderBar: React.FC<HeaderBarProps> = ({ state, isConnected, onSetMode }) => {
+type FeedPill = Pick<StatusPillProps, 'status' | 'text' | 'title' | 'pulse'>;
+
+// The pill must never let a recording or a dropped link pass for live timing
+function getFeedPill(state: LiveTimingState): FeedPill | null {
+  const feed = state.feedStatus;
+  if (state.mode === 'replay') {
+    if (feed === 'connecting') {
+      return { status: 'connecting', text: 'Connecting', title: 'Connecting to live timing' };
+    }
+    // When the mode switcher is visible it already names replay
+    if (FEATURES.replay) return null;
+    return {
+      status: 'replay',
+      text: 'Recorded session',
+      title: 'No live timing right now, so a recorded session is playing',
+    };
+  }
+  if (feed === 'connecting' || feed === 'reconnecting') {
+    return { status: 'reconnecting', text: 'Reconnecting', pulse: false };
+  }
+  return FEATURES.replay ? null : { status: 'live', text: 'Live', pulse: true };
+}
+
+export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
   const isLive = state.mode === 'live';
   const { theme, toggleTheme } = useTheme();
   const trackStatus = state.session.trackStatus || 'GREEN';
   const flagStyle = getTrackFlagStyle(trackStatus);
+  const pill = getFeedPill(state);
+  const linkDown =
+    isLive && (state.feedStatus === 'reconnecting' || state.feedStatus === 'connecting');
+
+  // Only what the feed reported; a recording without session info is named by its date
+  const recordedOn =
+    !isLive && state.replay?.currentTimestamp
+      ? formatRecordedDate(state.replay.currentTimestamp)
+      : null;
+  const sessionLine = [
+    state.session.sessionName,
+    state.session.sessionType,
+    recordedOn && `Recorded ${recordedOn}`,
+  ]
+    .filter(Boolean)
+    .join(' · ');
 
   const modeButton = (mode: TimingMode, label: string) => {
     const active = state.mode === mode;
@@ -55,10 +95,14 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, isConnected, onSetM
         {/* Brand & session */}
         <div className="min-w-0">
           <BrandMark />
-          <p className="mt-1 truncate text-data text-mute">
-            {state.session.sessionName} · {state.session.sessionType}
-            <span className="hidden lg:inline"> · {state.session.circuitName}</span>
-          </p>
+          {sessionLine && (
+            <p className="mt-1 truncate text-data text-mute">
+              {sessionLine}
+              {state.session.circuitName && (
+                <span className="hidden lg:inline"> · {state.session.circuitName}</span>
+              )}
+            </p>
+          )}
         </div>
 
         {/* Lap counter — the one loud element */}
@@ -75,16 +119,9 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, isConnected, onSetM
                 {modeButton('replay', 'Replay')}
               </div>
             )}
-            <LastUpdated lastUpdated={state.lastUpdated} />
-            {/* Pill shows only Live or Offline — replay is never named here, and when the mode
-                switcher is visible it already names the mode */}
-            {(!isConnected || (isLive && !FEATURES.replay)) && (
-              <StatusPill
-                status={isConnected ? 'live' : 'paused'}
-                text={isConnected ? 'Live' : 'Offline'}
-                pulse={isConnected}
-              />
-            )}
+            {/* A recording's update time is just the wall clock, so only live shows it */}
+            {isLive && <LastUpdated lastUpdated={state.lastUpdated} />}
+            {pill && <StatusPill {...pill} />}
             <button
               type="button"
               onClick={toggleTheme}
@@ -105,6 +142,9 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, isConnected, onSetM
           </div>
         </div>
       </div>
+
+      {/* Inside the header so it stays in view while the tower scrolls */}
+      {linkDown && <FeedNotice lastUpdated={state.lastUpdated} />}
     </header>
   );
 };

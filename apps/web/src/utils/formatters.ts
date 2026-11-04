@@ -46,6 +46,20 @@ export function formatSectorTime(time?: string): string {
   return time;
 }
 
+/** "24 Jul 2026" in the viewer's locale; empty when the timestamp is unreadable */
+export function formatRecordedDate(isoString: string): string {
+  const date = new Date(isoString);
+  if (isNaN(date.getTime())) return '';
+  return date.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+/** Local HH:MM:SS for a feed timestamp; empty when unreadable */
+export function formatClockTime(isoString: string): string {
+  const date = new Date(isoString);
+  if (isNaN(date.getTime())) return '';
+  return date.toTimeString().split(' ')[0];
+}
+
 export function formatTimeAgo(isoString: string): string {
   try {
     const date = new Date(isoString);
