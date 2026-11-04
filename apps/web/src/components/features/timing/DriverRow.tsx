@@ -45,7 +45,8 @@ export const DriverRow: React.FC<DriverRowProps> = ({
     (driver as any).BroadcastName ||
     `Car ${driver.carNumber || driver.number}`;
   const driverCode = driver.code || (driver as any).Tla || '';
-  const driverTeam = driver.team || (driver as any).TeamName || 'Independent';
+  // Unknown stays empty: a made-up team would be a claim the feed never made
+  const driverTeam = driver.team || (driver as any).TeamName || '';
   const carNumber = driver.carNumber || driver.number;
 
   const bestColor = getTimingTextColor(
@@ -126,7 +127,7 @@ export const DriverRow: React.FC<DriverRowProps> = ({
               type="button"
               className="flex min-w-0 max-w-full items-baseline gap-2 rounded-sm text-left"
               aria-haspopup="dialog"
-              aria-label={`${driverName}, ${driverTeam}${isOut ? ', out of the race' : ''} — view details`}
+              aria-label={`${driverName}${driverTeam ? `, ${driverTeam}` : ''}${isOut ? ', out of the race' : ''} — view details`}
             >
               <span className="num w-5 shrink-0 text-right text-label text-mute">{carNumber}</span>
               <span
@@ -138,7 +139,10 @@ export const DriverRow: React.FC<DriverRowProps> = ({
               </span>
               <span className="num shrink-0 text-label text-ink sm:text-mute">{driverCode}</span>
             </button>
-            <p className="ml-7 hidden truncate text-label text-mute sm:block">{driverTeam}</p>
+            <p className="ml-7 hidden truncate text-label text-mute sm:block">
+              {/* A non-breaking space keeps the row height when the team is unknown */}
+              {driverTeam || '\u00a0'}
+            </p>
           </div>
         </div>
       </td>

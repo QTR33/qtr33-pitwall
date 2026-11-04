@@ -363,6 +363,22 @@ export class TimingStateManager {
         this.sessionState.circuitName = data.Meeting.Circuit.ShortName;
       }
       if (data.Name) this.sessionState.sessionType = data.Name;
+      const kind = String(data.Type ?? '').toLowerCase();
+      if (kind === 'race' || kind === 'qualifying' || kind === 'practice') {
+        this.sessionState.sessionKind = kind;
+      }
+    } else if (topic === 'ExtrapolatedClock') {
+      // Deltas may carry only some fields, so merge onto the last known clock
+      const prev = this.sessionState.clock;
+      const remaining = data.Remaining ?? prev?.remaining;
+      const utc = data.Utc ?? prev?.utc;
+      if (remaining && utc) {
+        this.sessionState.clock = {
+          remaining: String(remaining),
+          utc: String(utc),
+          running: data.Extrapolating !== undefined ? !!data.Extrapolating : !!prev?.running,
+        };
+      }
     } else if (topic === 'WeatherData') {
       const num = (v: unknown) => {
         const n = parseFloat(String(v ?? ''));

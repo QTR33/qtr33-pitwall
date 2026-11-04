@@ -28,5 +28,6 @@ export const CONFIG = {
     'SessionInfo',
     'LapCount',
     'WeatherData',
+    'ExtrapolatedClock',
   ],
 };

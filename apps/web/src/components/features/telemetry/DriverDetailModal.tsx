@@ -37,7 +37,7 @@ export const DriverDetailModal: React.FC<DriverDetailModalProps> = ({
   const carNumber = driver.carNumber || driver.number;
   const driverName =
     driver.name || (driver as any).FullName || (driver as any).BroadcastName || `Car ${carNumber}`;
-  const driverTeam = driver.team || (driver as any).TeamName || 'Independent';
+  const driverTeam = driver.team || (driver as any).TeamName || '';
   const gapValue = driver.GapToLeader || (driver as any).TimeDiffToFastest;
   const isLeader = String(pos) === '1';
   const bestColor = getTimingTextColor(
@@ -62,7 +62,7 @@ export const DriverDetailModal: React.FC<DriverDetailModalProps> = ({
       onClose={onClose}
       drawer={true}
       title={driverName}
-      subTitle={`${driverTeam} · Car ${carNumber}`}
+      subTitle={[driverTeam, `Car ${carNumber}`].filter(Boolean).join(' · ')}
     >
       <div className="space-y-10">
         {/* Position is the drawer's one bold element */}

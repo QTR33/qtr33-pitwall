@@ -116,6 +116,10 @@ export interface SessionState {
   circuitName: string;
   totalLaps: number;
   currentLap: number;
+  /** Kind of session (SessionInfo.Type; sprints count as race / qualifying); absent until named */
+  sessionKind?: 'race' | 'qualifying' | 'practice';
+  /** Official session clock (ExtrapolatedClock): `remaining` (H:MM:SS) as of `utc`, counting down while `running` */
+  clock?: { remaining: string; utc: string; running: boolean };
   clockTime?: string;
   airTemp?: number;
   trackTemp?: number;

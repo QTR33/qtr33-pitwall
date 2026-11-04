@@ -14,6 +14,7 @@ export const F1_TOPICS = [
   'SessionInfo',
   'LapCount',
   'WeatherData',
+  'ExtrapolatedClock',
 ];
 
 // F1 sends a Heartbeat every few seconds; this much silence means the subscription is dead

@@ -14,7 +14,8 @@ export function formatInterval(
   interval?: { Value?: string; Catching?: boolean } | string,
   isLeader = false
 ): { text: string; catching: boolean } {
-  if (isLeader) return { text: 'Leader', catching: false };
+  // The Gap cell already says "Leader"; there is no car ahead to measure an interval to
+  if (isLeader) return { text: '', catching: false };
   if (!interval) return { text: '—', catching: false };
 
   if (typeof interval === 'string') {
@@ -44,6 +45,22 @@ export function formatSpeed(speed?: { Value?: string } | string): string {
 export function formatSectorTime(time?: string): string {
   if (!time) return '—';
   return time;
+}
+
+/** Seconds in an F1 clock value ("1:02:03", "45:12"); null when unreadable */
+export function parseClockSeconds(value: string): number | null {
+  const parts = value.split(':').map(Number);
+  if (parts.length < 2 || parts.length > 3 || parts.some((n) => !Number.isFinite(n))) return null;
+  return parts.reduce((total, n) => total * 60 + n, 0);
+}
+
+/** Countdown as "45:12", or "1:02:03" from an hour up */
+export function formatCountdown(totalSeconds: number): string {
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const hours = Math.floor(s / 3600);
+  const mm = String(Math.floor((s % 3600) / 60)).padStart(hours ? 2 : 1, '0');
+  const ss = String(s % 60).padStart(2, '0');
+  return hours ? `${hours}:${mm}:${ss}` : `${mm}:${ss}`;
 }
 
 /** "24 Jul 2026" in the viewer's locale; empty when the timestamp is unreadable */

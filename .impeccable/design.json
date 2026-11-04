@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-04T15:28:50.636Z",
+  "generatedAt": "2026-11-04T15:37:06.134Z",
   "title": "Design System: QTR33 Pitwall",
   "extensions": {
     "colorMeta": {
@@ -846,7 +846,7 @@
   ],
   "narrative": {
     "northStar": "The Pit Wall Monitor",
-    "overview": "QTR33 Pitwall should read like the screen a race engineer watches on the pit wall: dark, as dense as the job needs and no denser, with every pixel there so the state of the race reads in one glance. The fan has the broadcast in front of them and looks across for a second at a time. The interface has to answer in that second, then let them look back.\n\nThe system is precise and restrained. Surfaces are flat, sections are separated by whitespace and 1px hairlines, and components carry no fills, shadows or chrome of their own. Color is held back for two jobs: one interface accent, Start Light Red, and the timing-data colors that follow official convention (purple for overall fastest, green for personal best, yellow for timed, plus tyre compounds and track flags). With that much restraint, any color on screen means something.\n\nNumbers are the hero. Every timing value is set in a tabular monospace so columns stay aligned while values change several times a second, and each screen has exactly one loud number: the current lap on the main view, the car's position in the driver drawer. Dark is the default theme; the light theme is a full counterpart built from the same tokens, not an inverted afterthought.",
+    "overview": "QTR33 Pitwall should read like the screen a race engineer watches on the pit wall: dark, as dense as the job needs and no denser, with every pixel there so the state of the race reads in one glance. The fan has the broadcast in front of them and looks across for a second at a time. The interface has to answer in that second, then let them look back.\n\nThe system is precise and restrained. Surfaces are flat, sections are separated by whitespace and 1px hairlines, and components carry no fills, shadows or chrome of their own. Color is held back for two jobs: one interface accent, Start Light Red, and the timing-data colors that follow official convention (purple for overall fastest, green for personal best, yellow for timed, plus tyre compounds and track flags). With that much restraint, any color on screen means something.\n\nNumbers are the hero. Every timing value is set in a tabular monospace so columns stay aligned while values change several times a second, and each screen has exactly one loud number: on the main view, laps (current/total) in a race and time remaining on the official clock in practice and qualifying; in the driver drawer, the car's position. Dark is the default theme; the light theme is a full counterpart built from the same tokens, not an inverted afterthought.",
     "keyCharacteristics": [
       "Flat, hairline-separated layout; no shadows, gradients, blur or glow.",
       "One interface accent (Start Light Red); all other color is timing data.",
@@ -910,7 +910,8 @@
     "dos": [
       "Do use the token names (`paper`, `raise`, `ink`, `mute`, `rule`, `signal`, data tokens) through Tailwind classes; add new tokens to both theme blocks in `index.css` and to `tailwind.config.js`.",
       "Do set every timing numeral in `.num` (IBM Plex Mono, tabular).",
-      "Do give each screen exactly one `text-hero` number: the lap on the main view, the position in the driver drawer.",
+      "Do give each screen exactly one `text-hero` number: laps or time remaining on the main view, the position in the driver drawer.",
+      "Do say \"Leader\" once on P1 (in Gap) and leave its Interval empty.",
       "Do present single values in the drawer as Stats (Label over Numeral Large) and put units in the section heading.",
       "Do separate groups with whitespace and 1px `rule` hairlines.",
       "Do color times by meaning only: `best` for overall fastest, `pb` for personal best, `ink` otherwise.",
@@ -918,6 +919,7 @@
       "Do check both themes for WCAG AA text contrast before shipping."
     ],
     "donts": [
+      "Don't fill unknown facts with defaults: a missing team, total or session name stays empty or reads \"—\".",
       "Don't hard-code colors or use `dark:` variants (the `#E10600` team-color fallback in `DriverRow.tsx` and the `bg-black/50` scrim are existing exceptions to remove, not patterns to copy).",
       "Don't add shadows, gradients, blur or glow.",
       "Don't use data colors as box fills or backgrounds.",

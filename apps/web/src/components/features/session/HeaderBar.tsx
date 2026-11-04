@@ -1,8 +1,9 @@
 import React from 'react';
 import { LiveTimingState, RacingSeriesId, TimingMode } from '@livetiming/shared';
 import { FlagBanner } from './FlagBanner.js';
-import { SessionClock } from './SessionClock.js';
+import { WeatherReadout } from './WeatherReadout.js';
 import { LapCounter } from './LapCounter.js';
+import { SessionTimer } from './SessionTimer.js';
 import { BrandMark } from './BrandMark.js';
 import { LastUpdated } from './LastUpdated.js';
 import { FeedNotice } from './FeedNotice.js';
@@ -48,6 +49,8 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
   const trackStatus = state.session.trackStatus || 'GREEN';
   const flagStyle = getTrackFlagStyle(trackStatus);
   const pill = getFeedPill(state);
+  const isTimedSession =
+    state.session.sessionKind === 'practice' || state.session.sessionKind === 'qualifying';
   const linkDown =
     isLive && (state.feedStatus === 'reconnecting' || state.feedStatus === 'connecting');
 
@@ -105,9 +108,17 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
           )}
         </div>
 
-        {/* Lap counter — the one loud element */}
+        {/* The one loud element answers "how far along is this session": laps in a race,
+            time left in practice and qualifying, where laps are per car, not per session */}
         <div className="order-3 col-span-2 md:order-none md:col-span-1">
-          <LapCounter session={state.session} drivers={state.drivers} />
+          {isTimedSession ? (
+            <SessionTimer
+              session={state.session}
+              referenceTime={isLive ? undefined : state.replay?.currentTimestamp}
+            />
+          ) : (
+            <LapCounter session={state.session} drivers={state.drivers} />
+          )}
         </div>
 
         {/* Status & controls */}
@@ -138,7 +149,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
           </div>
           <div className="flex items-center gap-3">
             <FlagBanner flag={trackStatus} />
-            <SessionClock session={state.session} />
+            <WeatherReadout session={state.session} />
           </div>
         </div>
       </div>

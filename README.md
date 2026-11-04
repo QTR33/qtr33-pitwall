@@ -117,7 +117,7 @@ livetiming-dashboard/
 │       │   │   │   ├── StatusPill.tsx  # Pulsing live & flag indicators
 │       │   │   │   └── Tooltip.tsx     # Telemetry metric hover tips
 │       │   │   └── features/           # Domain feature components
-│       │   │       ├── session/        # HeaderBar, SeriesSelector, SessionClock, FlagBanner
+│       │   │       ├── session/        # HeaderBar, LapCounter, SessionTimer, FlagBanner, FeedNotice
 │       │   │       ├── timing/         # TimingTable, DriverRow, SectorSegment, TyreBadge, SpeedTrapCell
 │       │   │       ├── race-control/   # RaceControlFeed
 │       │   │       ├── telemetry/      # DriverDetailModal, StintHistoryTable, MiniSectorMatrix
