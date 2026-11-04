@@ -64,10 +64,17 @@ export default {
           from: { opacity: '0' },
           to: { opacity: '1' },
         },
+        // Lub-dub double beat, then rest; ends at full opacity so reduced motion holds it solid
+        heartbeat: {
+          '0%, 40%, 100%': { opacity: '1' },
+          '12%, 32%': { opacity: '0.25' },
+          '20%': { opacity: '0.9' },
+        },
       },
       animation: {
         'drawer-in': 'drawer-in 180ms ease-out',
         'fade-in': 'fade-in 180ms ease-out',
+        heartbeat: 'heartbeat 1.2s ease-in-out infinite',
       },
     },
   },

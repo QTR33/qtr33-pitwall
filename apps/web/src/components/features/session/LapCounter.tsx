@@ -8,12 +8,11 @@ export interface LapCounterProps {
 
 // The page's single bold element: current lap at hero size
 export const LapCounter: React.FC<LapCounterProps> = ({ session, drivers = [] }) => {
-  // Current lap: from leader driver, else max laps completed, else session.currentLap
+  // Current lap: session.currentLap (official LapCount when live), else leader / max laps completed
   const leaderDriver = drivers.find((d) => d.Position === '1' || d.Line === 1) || drivers[0];
   const leaderLaps = leaderDriver?.NumberOfLaps || 0;
   const maxDriverLaps = drivers.reduce((max, d) => Math.max(max, d.NumberOfLaps || 0), 0);
-  const currentLap =
-    leaderLaps > 0 ? leaderLaps : maxDriverLaps > 0 ? maxDriverLaps : session.currentLap || 1;
+  const currentLap = session.currentLap || leaderLaps || maxDriverLaps || 1;
   const totalLaps =
     session.totalLaps || (session.series === 'wec' ? 160 : session.series === 'indycar' ? 200 : 58);
 

@@ -14,7 +14,7 @@ export function formatInterval(
   interval?: { Value?: string; Catching?: boolean } | string,
   isLeader = false
 ): { text: string; catching: boolean } {
-  if (isLeader) return { text: '—', catching: false };
+  if (isLeader) return { text: 'Leader', catching: false };
   if (!interval) return { text: '—', catching: false };
 
   if (typeof interval === 'string') {

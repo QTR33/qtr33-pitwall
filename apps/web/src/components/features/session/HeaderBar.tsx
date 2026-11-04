@@ -42,8 +42,14 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, isConnected, onSetM
 
   return (
     <header className="z-30 border-b border-rule bg-paper md:sticky md:top-0">
-      {/* Full-width alert rule — only present when the track is not clear */}
-      {flagStyle.alert && <div className={`h-0.5 w-full ${flagStyle.fill}`} aria-hidden="true" />}
+      {/* Full-width rule in the track-status color (green, yellow, SC/VSC, red);
+          beats during caution periods */}
+      {flagStyle.alert && (
+        <div
+          className={`h-0.5 w-full ${flagStyle.fill} ${flagStyle.pulse ? 'animate-heartbeat' : ''}`}
+          aria-hidden="true"
+        />
+      )}
 
       <div className="mx-auto grid max-w-[1600px] grid-cols-[1fr_auto] items-center gap-x-6 gap-y-4 px-4 py-4 md:grid-cols-[1fr_auto_1fr] md:px-8">
         {/* Brand & session */}

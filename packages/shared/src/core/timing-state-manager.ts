@@ -82,6 +82,8 @@ export class TimingStateManager {
   private sessionState: SessionState;
   private raceControlMessages: RaceControlMessage[] = [];
   private messageListeners: Array<(state: LiveTimingState) => void> = [];
+  // Once the official LapCount topic arrives it owns the lap counter
+  private hasLapCount = false;
 
   constructor(series: RacingSeriesId = 'f1') {
     this.series = series;
@@ -234,7 +236,7 @@ export class TimingStateManager {
         }
       }
 
-      // Dynamically update session current lap based on leader / max completed laps
+      // Without LapCount (e.g. older recordings), estimate the lap from leader / max completed laps
       let maxLaps = 0;
       for (const carNum in this.driversState) {
         const d = this.driversState[carNum];
@@ -242,14 +244,18 @@ export class TimingStateManager {
           typeof d.NumberOfLaps === 'number'
             ? d.NumberOfLaps
             : parseInt(String(d.NumberOfLaps || 0), 10);
-        if ((d.Position === '1' || (d as any).Line === 1) && laps > 0) {
+        if (!this.hasLapCount && (d.Position === '1' || (d as any).Line === 1) && laps > 0) {
           this.sessionState.currentLap = laps;
         }
         if (laps > maxLaps) {
           maxLaps = laps;
         }
       }
-      if ((!this.sessionState.currentLap || this.sessionState.currentLap === 1) && maxLaps > 0) {
+      if (
+        !this.hasLapCount &&
+        (!this.sessionState.currentLap || this.sessionState.currentLap === 1) &&
+        maxLaps > 0
+      ) {
         this.sessionState.currentLap = maxLaps;
       }
 
@@ -340,6 +346,31 @@ export class TimingStateManager {
     } else if (topic === 'TrackStatus') {
       const flag = normalizeTrackFlag(data.Status) ?? normalizeTrackFlag(data.Message);
       if (flag) this.sessionState.trackStatus = flag;
+    } else if (topic === 'LapCount') {
+      // Official race lap counter: CurrentLap is the lap the leader is on, not laps completed
+      const current = parseInt(String(data.CurrentLap ?? ''), 10);
+      const total = parseInt(String(data.TotalLaps ?? ''), 10);
+      if (current > 0) {
+        this.sessionState.currentLap = current;
+        this.hasLapCount = true;
+      }
+      if (total > 0) this.sessionState.totalLaps = total;
+    } else if (topic === 'SessionInfo') {
+      if (data.Meeting?.Name) this.sessionState.sessionName = data.Meeting.Name;
+      if (data.Meeting?.Circuit?.ShortName) {
+        this.sessionState.circuitName = data.Meeting.Circuit.ShortName;
+      }
+      if (data.Name) this.sessionState.sessionType = data.Name;
+    } else if (topic === 'WeatherData') {
+      const num = (v: unknown) => {
+        const n = parseFloat(String(v ?? ''));
+        return Number.isFinite(n) ? n : undefined;
+      };
+      this.sessionState.airTemp = num(data.AirTemp) ?? this.sessionState.airTemp;
+      this.sessionState.trackTemp = num(data.TrackTemp) ?? this.sessionState.trackTemp;
+      this.sessionState.humidity = num(data.Humidity) ?? this.sessionState.humidity;
+      this.sessionState.windSpeed = num(data.WindSpeed) ?? this.sessionState.windSpeed;
+      if (data.Rainfall !== undefined) this.sessionState.rainfall = String(data.Rainfall) === '1';
     }
 
     // Determine leader fastest lap across all drivers
@@ -423,5 +454,6 @@ export class TimingStateManager {
   public resetState() {
     this.driversState = {};
     this.raceControlMessages = [];
+    this.hasLapCount = false;
   }
 }

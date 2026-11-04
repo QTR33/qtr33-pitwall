@@ -25,8 +25,10 @@ function getCategory(msg: RaceControlMessage): { label: string; variant: BadgePr
   return { label: 'Notice', variant: 'default' };
 }
 
+// F1 sends Utc without a zone suffix ("2026-10-11T12:42:29"), which Date would read as local time
 function formatUtcTime(utc: string) {
-  const d = new Date(utc);
+  const hasZone = /(Z|[+-]\d{2}:?\d{2})$/i.test(utc);
+  const d = new Date(hasZone ? utc : `${utc}Z`);
   if (isNaN(d.getTime())) return utc;
   return d.toLocaleTimeString([], {
     hour: '2-digit',

@@ -12,8 +12,10 @@ export interface TrackFlagStyle {
   fill: string;
   /** Which flag to draw */
   glyph: TrackFlagGlyph;
-  /** Whether the state is abnormal and should raise the full-width alert rule */
+  /** Whether to raise the full-width rule across the top of the header */
   alert: boolean;
+  /** Whether the rule beats like a heart — caution periods only (yellow, SC, VSC) */
+  pulse: boolean;
 }
 
 export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
@@ -25,6 +27,7 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         fill: 'bg-flag-yellow',
         glyph: 'yellow',
         alert: true,
+        pulse: true,
       };
     case 'DOUBLE_YELLOW':
       return {
@@ -33,6 +36,7 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         fill: 'bg-flag-yellow',
         glyph: 'double-yellow',
         alert: true,
+        pulse: true,
       };
     case 'VSC':
       return {
@@ -41,6 +45,7 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         fill: 'bg-flag-yellow',
         glyph: 'vsc',
         alert: true,
+        pulse: true,
       };
     case 'SC':
       return {
@@ -49,6 +54,7 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         fill: 'bg-flag-yellow',
         glyph: 'sc',
         alert: true,
+        pulse: true,
       };
     case 'RED':
       return {
@@ -57,6 +63,7 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         fill: 'bg-flag-red',
         glyph: 'red',
         alert: true,
+        pulse: false,
       };
     case 'CHEQUERED':
       return {
@@ -65,14 +72,17 @@ export function getTrackFlagStyle(flag?: TrackFlag | string): TrackFlagStyle {
         fill: 'bg-ink',
         glyph: 'chequered',
         alert: false,
+        pulse: false,
       };
     default:
       return {
-        label: 'Track clear',
-        text: 'text-ink',
+        label: 'Green flag',
+        // pb green is the AA-contrast text variant of flag-green in both themes
+        text: 'text-pb',
         fill: 'bg-flag-green',
         glyph: 'green',
-        alert: false,
+        alert: true,
+        pulse: false,
       };
   }
 }

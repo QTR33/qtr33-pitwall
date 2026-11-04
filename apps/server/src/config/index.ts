@@ -13,7 +13,7 @@ export const CONFIG = {
   LOGS_DIR: process.env.LOGS_DIR
     ? path.resolve(process.env.LOGS_DIR)
     : path.join(REPO_ROOT, 'logs'),
-  DEFAULT_MODE: 'replay' as TimingMode, // Start in replay so dashboard is immediately rich with data out of the box
+  DEFAULT_MODE: 'live' as TimingMode, // Start live; the adapter falls back to replay when no session is on track
   F1_SIGNALR_URL: 'https://livetiming.formula1.com/signalrcore',
   F1_TOPICS: [
     'Heartbeat',
@@ -24,5 +24,8 @@ export const CONFIG = {
     'TimingAppData',
     'SessionStatus',
     'TrackStatus',
+    'SessionInfo',
+    'LapCount',
+    'WeatherData',
   ],
 };
