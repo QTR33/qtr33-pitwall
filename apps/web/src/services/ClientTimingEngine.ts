@@ -6,6 +6,7 @@ import {
   TimingMode,
   f1Drivers2026,
 } from '@livetiming/shared';
+import { logger } from './logger.js';
 
 // WEC Hypercar 2026 Grid
 const WEC_DRIVERS = [
@@ -246,7 +247,7 @@ export class ClientTimingEngine {
   constructor() {
     this.manager = new TimingStateManager('f1');
     this.initializeGrid('f1');
-    console.log(
+    logger.info(
       '%c🏎️ PITWALL LIVE TIMING %c [MODE: LIVE] Client Telemetry Engine initialized',
       'background: #E10600; color: white; font-weight: bold; padding: 2px 6px; border-radius: 4px;',
       'background: #0f172a; color: #38bdf8; font-weight: bold; padding: 2px 6px; border-radius: 4px;'
@@ -267,7 +268,7 @@ export class ClientTimingEngine {
       try {
         listener(snapshot);
       } catch (e) {
-        console.error('[ClientEngine] Error in listener:', e);
+        logger.error('[ClientEngine] Error in listener:', e);
       }
     }
   }
@@ -298,13 +299,13 @@ export class ClientTimingEngine {
     this.replayState.isActive = mode === 'replay';
     if (mode === 'live') {
       this.replayState.isPaused = false;
-      console.log(
+      logger.info(
         '%c🔴 CONNECTION STATUS %c [LIVE STREAM MODE ACTIVE] Real-time telemetry feed connected',
         'background: #E10600; color: white; font-weight: bold; padding: 2px 6px; border-radius: 4px;',
         'background: #0f172a; color: #22c55e; font-weight: bold; padding: 2px 6px; border-radius: 4px;'
       );
     } else {
-      console.log(
+      logger.info(
         '%c⏪ REPLAY ENGINE %c [REPLAY / SIMULATION MODE ACTIVE] Multiplier: ' +
           this.replayState.speedMultiplier +
           'x',
@@ -320,7 +321,7 @@ export class ClientTimingEngine {
     this.manager.resetState();
     this.manager.setSeries(series);
     this.initializeGrid(series);
-    console.log(
+    logger.info(
       '%c🏁 SERIES SWITCHED %c Active Series: [' + series.toUpperCase() + ']',
       'background: #f59e0b; color: #000; font-weight: bold; padding: 2px 6px; border-radius: 4px;',
       'background: #0f172a; color: #fbbf24; font-weight: bold; padding: 2px 6px; border-radius: 4px;'
@@ -330,13 +331,13 @@ export class ClientTimingEngine {
 
   public setSpeed(speed: number) {
     this.replayState.speedMultiplier = speed;
-    console.log(`[Replay Engine] Playback speed updated to: ${speed}x`);
+    logger.info(`[Replay Engine] Playback speed updated to: ${speed}x`);
     this.notify();
   }
 
   public togglePlayPause() {
     this.replayState.isPaused = !this.replayState.isPaused;
-    console.log(`[Replay Engine] State: ${this.replayState.isPaused ? 'PAUSED ⏸️' : 'PLAYING ▶️'}`);
+    logger.info(`[Replay Engine] State: ${this.replayState.isPaused ? 'PAUSED ⏸️' : 'PLAYING ▶️'}`);
     this.notify();
   }
 
@@ -650,15 +651,4 @@ export class ClientTimingEngine {
       });
     }
   }
-}
-
-// Global Singleton for Client Engine
-let clientEngineInstance: ClientTimingEngine | null = null;
-
-export function getClientTimingEngine(): ClientTimingEngine {
-  if (!clientEngineInstance) {
-    clientEngineInstance = new ClientTimingEngine();
-    clientEngineInstance.start();
-  }
-  return clientEngineInstance;
 }

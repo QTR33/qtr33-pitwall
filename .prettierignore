@@ -8,3 +8,4 @@ data/
 logs/
 signal.log
 final-timing-state.json
+apps/web/public/replay/

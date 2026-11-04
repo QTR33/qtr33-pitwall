@@ -7,10 +7,12 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "typecheck": "tsc --noEmit",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "replay:build": "node scripts/build-replay.mjs"
   },
   "dependencies": {
     "@livetiming/shared": "*",
+    "@microsoft/signalr": "^10.0.0",
     "lucide-react": "^1.16.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

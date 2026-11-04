@@ -13,6 +13,7 @@
     "dev:web": "yarn --cwd apps/web dev",
     "build": "yarn --cwd packages/shared build && yarn --cwd apps/server build && yarn --cwd apps/web build",
     "start": "yarn --cwd apps/server start",
+    "replay:build": "yarn --cwd apps/web replay:build",
     "typecheck": "yarn --cwd packages/shared typecheck && yarn --cwd apps/server typecheck && yarn --cwd apps/web typecheck",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

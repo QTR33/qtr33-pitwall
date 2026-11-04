@@ -1,25 +1,24 @@
 import { LiveTimingState, RacingSeriesId, ClientCommand, TimingMode } from '@livetiming/shared';
-import { getClientTimingEngine } from './ClientTimingEngine.js';
+import { logger } from './logger.js';
+import type { TimingFeed } from './TimingFeed.js';
 
-const SERVER_URL = (
-  import.meta.env.VITE_SERVER_URL ||
-  `${window.location.protocol}//${window.location.hostname || 'localhost'}:3001`
-).replace(/\/$/, '');
-const WS_URL = `${SERVER_URL.replace(/^http/, 'ws')}/ws`;
+const RECONNECT_DELAY_MS = 3000;
 
-export class WebSocketClient {
+/** Streams timing state from the optional apps/server backend (enabled by VITE_SERVER_URL). */
+export class WebSocketClient implements TimingFeed {
+  private readonly wsUrl: string;
   private ws: WebSocket | null = null;
   private isConnected = false;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
-  private listeners: Array<(state: LiveTimingState, isLiveServer: boolean) => void> = [];
-  private currentServerState: LiveTimingState | null = null;
-  private useServerFeed = false;
+  private listeners: Array<(state: LiveTimingState) => void> = [];
+  private currentState: LiveTimingState | null = null;
 
-  constructor() {
+  constructor(private readonly serverUrl: string) {
+    this.wsUrl = `${serverUrl.replace(/^http/, 'ws')}/ws`;
     this.connect();
   }
 
-  public connect() {
+  private connect() {
     if (
       this.ws &&
       (this.ws.readyState === WebSocket.CONNECTING || this.ws.readyState === WebSocket.OPEN)
@@ -28,41 +27,31 @@ export class WebSocketClient {
     }
 
     try {
-      this.ws = new WebSocket(WS_URL);
+      this.ws = new WebSocket(this.wsUrl);
 
       this.ws.onopen = () => {
         this.isConnected = true;
-        this.useServerFeed = true;
-        console.log(
-          '%c🛰️ LIVE TIMING WEBSOCKET %c Connected to backend server: ' + WS_URL,
-          'background: #10b981; color: white; font-weight: bold; padding: 2px 6px; border-radius: 4px;',
-          'background: #0f172a; color: #34d399; font-weight: bold; padding: 2px 6px; border-radius: 4px;'
-        );
+        logger.info('[WS Client] Connected to backend server:', this.wsUrl);
       };
 
       this.ws.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data);
           if (message.type === 'STATE_UPDATE' && message.payload) {
-            this.currentServerState = message.payload;
-            if (this.currentServerState) {
-              this.notify(this.currentServerState, true);
-            }
+            this.currentState = message.payload as LiveTimingState;
+            this.notify(this.currentState);
           }
         } catch (err) {
-          console.error('[WS Client] Error parsing incoming message:', err);
+          logger.error('[WS Client] Error parsing incoming message:', err);
         }
       };
 
       this.ws.onclose = () => {
-        const wasConnected = this.isConnected;
+        if (this.isConnected) {
+          logger.warn(`[WS Client] Connection lost, retrying in ${RECONNECT_DELAY_MS / 1000}s...`);
+        }
         this.isConnected = false;
         this.ws = null;
-        if (wasConnected) {
-          console.warn(
-            '[WS Client] Connection lost. Falling back to local engine & retrying in 3s...'
-          );
-        }
         this.scheduleReconnect();
       };
 
@@ -79,67 +68,30 @@ export class WebSocketClient {
     this.reconnectTimer = setTimeout(() => {
       this.reconnectTimer = null;
       this.connect();
-    }, 3000);
+    }, RECONNECT_DELAY_MS);
   }
 
-  public subscribe(listener: (state: LiveTimingState, isLiveServer: boolean) => void) {
+  public subscribe(listener: (state: LiveTimingState) => void) {
     this.listeners.push(listener);
-
-    // Initial delivery: either latest server state or fallback to local client engine
-    if (this.isConnected && this.currentServerState) {
-      listener(this.currentServerState, true);
-    } else {
-      listener(getClientTimingEngine().getState(), false);
-    }
-
-    // Also subscribe to local client engine in case server is not running
-    const unsubLocal = getClientTimingEngine().subscribe((localState) => {
-      if (!this.isConnected) {
-        this.notify(localState, false);
-      }
-    });
-
+    if (this.currentState) listener(this.currentState);
     return () => {
       this.listeners = this.listeners.filter((l) => l !== listener);
-      unsubLocal();
     };
   }
 
-  private notify(state: LiveTimingState, isLiveServer: boolean) {
+  private notify(state: LiveTimingState) {
     for (const listener of this.listeners) {
       try {
-        listener(state, isLiveServer);
+        listener(state);
       } catch (e) {
-        console.error('[WS Client] Error in listener:', e);
+        logger.error('[WS Client] Error in listener:', e);
       }
     }
   }
 
   private sendCommand(command: ClientCommand) {
-    if (this.isConnected && this.ws && this.ws.readyState === WebSocket.OPEN) {
+    if (this.isConnected && this.ws?.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(command));
-    }
-    // Also always inform local engine for seamless parity
-    const engine = getClientTimingEngine();
-    switch (command.type) {
-      case 'SET_MODE':
-        engine.setMode(command.payload);
-        break;
-      case 'SET_SPEED':
-        engine.setSpeed(command.payload);
-        break;
-      case 'TOGGLE_PLAY_PAUSE':
-        engine.togglePlayPause();
-        break;
-      case 'SEEK_REPLAY':
-        engine.seek(command.payload);
-        break;
-      case 'RESTART_REPLAY':
-        engine.restart();
-        break;
-      case 'SET_SERIES':
-        engine.setSeries(command.payload);
-        break;
     }
   }
 
@@ -163,31 +115,12 @@ export class WebSocketClient {
     this.sendCommand({ type: 'RESTART_REPLAY' });
   }
 
-  public async setSeries(series: RacingSeriesId) {
-    this.sendCommand({ type: 'SET_SERIES', payload: series });
-    // Also hit HTTP endpoint if server is online
-    if (this.isConnected) {
-      try {
-        await fetch(`${SERVER_URL}/api/series/switch`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ seriesId: series }),
-        });
-      } catch (e) {
-        console.warn('[WS Client] Failed calling switch API:', e);
-      }
-    }
+  public setSeries(series: RacingSeriesId) {
+    if (!this.isConnected) return;
+    fetch(`${this.serverUrl}/api/series/switch`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ seriesId: series }),
+    }).catch((e) => logger.warn('[WS Client] Failed calling switch API:', e));
   }
-
-  public getIsConnected(): boolean {
-    return this.isConnected;
-  }
-}
-
-let wsClientInstance: WebSocketClient | null = null;
-export function getWebSocketClient(): WebSocketClient {
-  if (!wsClientInstance) {
-    wsClientInstance = new WebSocketClient();
-  }
-  return wsClientInstance;
 }

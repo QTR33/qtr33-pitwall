@@ -56,6 +56,14 @@ export class F1SeriesAdapter implements SeriesProvider {
       console.log('🔴 [MODE: LIVE] Connecting to official F1 Live SignalR stream...');
       console.log('======================================================');
       this.replayer.stop();
+      if (!CONFIG.F1_SIGNALR_URL) {
+        console.warn(
+          '⚠️ [F1 Adapter] F1_SIGNALR_URL is not set, live timing is off. Starting replay.'
+        );
+        this.currentMode = 'replay';
+        this.replayer.start();
+        return;
+      }
       try {
         await this.connection.connect();
         console.log('✅ [MODE: LIVE] Successfully connected to live F1 telemetry stream!\n');

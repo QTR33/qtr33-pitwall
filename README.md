@@ -177,26 +177,26 @@ yarn install
 
 ### 2. Start Development Environment
 
-Run both the backend telemetry server and the frontend Vite web application concurrently:
+The web dashboard runs entirely in the browser: it connects straight to the official F1 SignalR hub, and when no session is on track it plays the recording in `apps/web/public/replay/f1.json`. The backend server is optional.
 
 ```bash
-yarn dev
+cp apps/web/.env.example apps/web/.env.development   # then set the variables below
+yarn dev:web
 ```
 
-The application will be available at:
+The dashboard is at [http://localhost:5173](http://localhost:5173). `yarn dev` also starts the optional backend on [http://localhost:3001](http://localhost:3001), which records the raw feed to `logs/`.
 
-- 🌐 **Web Dashboard**: [http://localhost:5173](http://localhost:5173)
-- 📡 **Telemetry Server API**: [http://localhost:3001/api/state](http://localhost:3001/api/state)
-- 🔌 **WebSocket Stream**: `ws://localhost:3001/ws`
+Web environment variables (`apps/web/.env.development`, `apps/web/.env.production`, or your static host's build settings):
 
-Optional environment variables:
+| Variable              | Description                                                                                   |
+| :-------------------- | :-------------------------------------------------------------------------------------------- |
+| `VITE_APP_ENV`        | `development` logs to the browser console, `production` logs nothing. Defaults to Vite's mode |
+| `VITE_F1_SIGNALR_URL` | F1 SignalR Core hub. Empty = replay only                                                      |
+| `VITE_SERVER_URL`     | Optional. Stream from `apps/server` (e.g. `http://localhost:3001`) instead of F1 directly     |
 
-| Variable          | Used by | Default                                   |
-| :---------------- | :------ | :---------------------------------------- |
-| `PORT`            | server  | `3001`                                    |
-| `DATA_DIR`        | server  | `<repo>/data`                             |
-| `LOGS_DIR`        | server  | `<repo>/logs`                             |
-| `VITE_SERVER_URL` | web     | `<current protocol>//<current host>:3001` |
+Server environment variables (`apps/server/.env`, see `apps/server/.env.example`): `F1_SIGNALR_URL` (F1 SignalR Core hub; empty = replay only), `PORT` (default `3001`), `DATA_DIR` (`<repo>/data`), `LOGS_DIR` (`<repo>/logs`).
+
+`yarn build` produces a static site in `apps/web/dist/` that can be deployed to any static host.
 
 ### 3. Individual Component Scripts
 
@@ -205,6 +205,7 @@ Optional environment variables:
 | `yarn dev:server`   | Starts backend server with hot-reload (`tsx watch`) |
 | `yarn dev:web`      | Starts frontend Vite development server             |
 | `yarn build`        | Compiles TypeScript and builds production bundles   |
+| `yarn replay:build` | Converts `data/f1/signal.log` into the web replay   |
 | `yarn typecheck`    | Type-checks shared, server and web (`tsc --noEmit`) |
 | `yarn lint`         | Runs ESLint across all packages and applications    |
 | `yarn format`       | Formats all code using Prettier                     |

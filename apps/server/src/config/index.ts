@@ -14,7 +14,8 @@ export const CONFIG = {
     ? path.resolve(process.env.LOGS_DIR)
     : path.join(REPO_ROOT, 'logs'),
   DEFAULT_MODE: 'live' as TimingMode, // Start live; the adapter falls back to replay when no session is on track
-  F1_SIGNALR_URL: 'https://livetiming.formula1.com/signalrcore',
+  // Official F1 SignalR Core hub; empty disables live timing and the server runs the replay
+  F1_SIGNALR_URL: (process.env.F1_SIGNALR_URL ?? '').trim(),
   F1_TOPICS: [
     'Heartbeat',
     'DriverList',
