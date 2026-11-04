@@ -35,6 +35,8 @@ This repository is a production-grade **Yarn Monorepo** for motorsport real-time
 4. **Component Hierarchy**:
    - Put low-level design primitives (`Button`, `Badge`, `Card`, `Modal`, `Tabs`, `StatusPill`, `Tooltip`) inside `apps/web/src/components/common/`.
    - Put domain-specific features inside `apps/web/src/components/features/<domain>/` (`session/`, `timing/`, `race-control/`, `telemetry/`, `playback/`).
+5. **Branch Naming**:
+   - Before installing or working with a Claude skill, branch off `main` as `skill/<skill-name>` — the skill's own name in lowercase kebab-case (e.g. `skill/impeccable`, `skill/frontend-design`).
 
 ---
 
