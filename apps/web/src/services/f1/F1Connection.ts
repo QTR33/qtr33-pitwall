@@ -20,7 +20,10 @@ export const F1_TOPICS = [
 // F1 sends a Heartbeat every few seconds; this much silence means the subscription is dead
 const FEED_SILENCE_LIMIT_MS = 60_000;
 const WATCHDOG_INTERVAL_MS = 15_000;
+// Retries after SignalR's own reconnect gives up back off 5s → 10s → 20s → 30s; a browser
+// "online" or tab-visible event skips the wait (see retryNow)
 const RECONNECT_DELAY_MS = 5_000;
+const RECONNECT_DELAY_MAX_MS = 30_000;
 
 /** Browser connection to the official F1 live timing SignalR hub. */
 export class F1Connection {
@@ -33,6 +36,7 @@ export class F1Connection {
   private lastSessionActivityAt = 0;
   private watchdogTimer: ReturnType<typeof setInterval> | null = null;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private reconnectAttempt = 0;
   private status: FeedStatus = 'offline';
   private onStatusChange: ((status: FeedStatus) => void) | null = null;
 
@@ -58,9 +62,13 @@ export class F1Connection {
   public async connect(): Promise<void> {
     if (this.isConnected) return;
     this.stopRequested = false;
-    this.lastSessionActivityAt = 0;
-    // A retry after a drop stays 'reconnecting' until data flows again
-    if (this.status !== 'reconnecting') this.setStatus('connecting');
+    // A fresh connect measures only what this subscription reports. A retry after a drop keeps
+    // the session's last activity: that gap is our outage, not the session ending, and clearing
+    // it would let the live check give up on a race that is still running
+    if (this.status !== 'reconnecting') {
+      this.lastSessionActivityAt = 0;
+      this.setStatus('connecting');
+    }
 
     try {
       logger.info('[F1 Live] Connecting to F1 SignalR:', this.url);
@@ -115,6 +123,7 @@ export class F1Connection {
 
       await this.subscribe();
       this.startWatchdog();
+      this.reconnectAttempt = 0;
       this.setStatus('connected');
     } catch (err) {
       this.isConnected = false;
@@ -174,13 +183,40 @@ export class F1Connection {
   private scheduleReconnect() {
     if (this.reconnectTimer) return;
     this.stopWatchdog();
-    logger.info(`[F1 Live] Retrying in ${RECONNECT_DELAY_MS / 1000}s...`);
-    this.reconnectTimer = setTimeout(() => {
-      this.reconnectTimer = null;
-      if (this.stopRequested) return;
-      this.connection = null;
-      this.connect().catch(() => this.scheduleReconnect());
-    }, RECONNECT_DELAY_MS);
+    const delay = Math.min(RECONNECT_DELAY_MS * 2 ** this.reconnectAttempt, RECONNECT_DELAY_MAX_MS);
+    this.reconnectAttempt++;
+    logger.info(`[F1 Live] Retrying in ${delay / 1000}s...`);
+    this.reconnectTimer = setTimeout(() => this.reconnectNow(), delay);
+  }
+
+  private reconnectNow() {
+    this.reconnectTimer = null;
+    if (this.stopRequested) return;
+    this.connection = null;
+    this.connect().catch(() => this.scheduleReconnect());
+  }
+
+  /**
+   * The browser is back online, or the tab is visible again: retry at once instead of waiting
+   * out the backoff. A link that is still up just has its status confirmed.
+   */
+  public retryNow() {
+    if (this.stopRequested) return;
+    if (this.connection?.state === signalR.HubConnectionState.Connected) {
+      if (this.status === 'reconnecting') this.setStatus('connected');
+      return;
+    }
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectAttempt = 0;
+      this.reconnectNow();
+    }
+    // Otherwise SignalR's own automatic reconnect is mid-attempt; let it finish
+  }
+
+  /** The browser lost its network: say so now rather than when the socket finally times out. */
+  public notifyOffline() {
+    if (!this.stopRequested && this.status === 'connected') this.setStatus('reconnecting');
   }
 
   public async disconnect(): Promise<void> {

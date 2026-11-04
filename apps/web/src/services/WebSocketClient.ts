@@ -16,6 +16,15 @@ export class WebSocketClient implements TimingFeed {
   constructor(private readonly serverUrl: string) {
     this.wsUrl = `${serverUrl.replace(/^http/, 'ws')}/ws`;
     this.connect();
+    // Back online: retry at once instead of waiting out the reconnect delay
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', () => {
+        if (!this.reconnectTimer) return;
+        clearTimeout(this.reconnectTimer);
+        this.reconnectTimer = null;
+        this.connect();
+      });
+    }
   }
 
   private connect() {

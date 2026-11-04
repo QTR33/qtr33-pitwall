@@ -16,6 +16,8 @@ const SESSION_ACTIVITY_WINDOW_MS = 5 * 60_000;
 const LIVE_CHECK_INTERVAL_MS = 60_000;
 // While replaying in place of live: how often to look for a session that has started
 const LIVE_RETRY_INTERVAL_MS = 5 * 60_000;
+// Returning to the tab probes for a live session at once, but no more often than this
+const VISIBLE_PROBE_MIN_GAP_MS = 30_000;
 
 /**
  * Client-side F1 feed: streams the official live timing straight from F1 when a session is
@@ -35,6 +37,8 @@ export class F1Feed {
   private mode: TimingMode = 'replay';
   // True until the first live probe settles, so the screen says it is connecting, not replaying
   private firstProbe = true;
+  private probing = false;
+  private lastProbeAt = 0;
   private running = false;
   // Bumped on every mode change so a slow live probe can tell it was superseded
   private modeRun = 0;
@@ -87,15 +91,46 @@ export class F1Feed {
   public start(): void {
     if (this.running) return;
     this.running = true;
+    this.watchBrowser(true);
     void this.setMode(this.requestedMode);
   }
 
   public async stop(): Promise<void> {
     this.running = false;
+    this.watchBrowser(false);
     this.modeRun++;
     this.clearModeTimer();
     this.replayer.stop();
     await this.disconnectLive();
+  }
+
+  // The browser knows about a lost or restored network (and a sleeping tab) before any timer does
+  private watchBrowser(on: boolean) {
+    if (typeof window === 'undefined') return;
+    const method = on ? 'addEventListener' : 'removeEventListener';
+    window[method]('online', this.handleOnline);
+    window[method]('offline', this.handleOffline);
+    document[method]('visibilitychange', this.handleVisible);
+  }
+
+  private readonly handleOffline = () => {
+    if (this.mode === 'live') this.connection?.notifyOffline();
+  };
+
+  private readonly handleOnline = () => this.resume(0);
+
+  private readonly handleVisible = () => {
+    if (document.visibilityState === 'visible') this.resume(VISIBLE_PROBE_MIN_GAP_MS);
+  };
+
+  /** Network or tab is back: reconnect a live feed now, or look for a session now */
+  private resume(minProbeGapMs: number) {
+    if (!this.running || this.firstProbe || this.requestedMode !== 'live') return;
+    if (this.mode === 'live') {
+      this.connection?.retryNow();
+    } else if (Date.now() - this.lastProbeAt >= minProbeGapMs) {
+      void this.probeLive();
+    }
   }
 
   public async setMode(mode: TimingMode): Promise<void> {
@@ -161,7 +196,10 @@ export class F1Feed {
     this.notify();
 
     this.modeTimer = setInterval(() => {
-      if (this.connection?.hasRecentSessionActivity(SESSION_ACTIVITY_WINDOW_MS)) return;
+      // Silence while our own link is down is an outage, not the session ending: stay live,
+      // say "Reconnecting", and let the connection keep retrying until data flows again
+      if (this.connection?.getStatus() !== 'connected') return;
+      if (this.connection.hasRecentSessionActivity(SESSION_ACTIVITY_WINDOW_MS)) return;
       logger.info('[F1] Session has ended, showing the replay');
       this.clearModeTimer();
       void this.disconnectLive();
@@ -177,16 +215,26 @@ export class F1Feed {
     this.notify();
 
     if (this.requestedMode !== 'live' || !this.connection) return;
+    this.modeTimer = setInterval(() => void this.probeLive(), LIVE_RETRY_INTERVAL_MS);
+  }
+
+  /** While replaying in place of live: check once whether a session has started, and go live */
+  private async probeLive() {
+    if (this.probing || this.mode !== 'replay') return;
+    this.probing = true;
+    this.lastProbeAt = Date.now();
     const run = this.modeRun;
-    this.modeTimer = setInterval(async () => {
-      if (run !== this.modeRun) return;
+    try {
       const live = await this.tryLive();
-      if (run !== this.modeRun) return;
+      // A newer setMode()/stop() took over while the probe ran
+      if (run !== this.modeRun || this.mode !== 'replay') return;
       if (live) {
         this.clearModeTimer();
         this.enterLive();
       }
-    }, LIVE_RETRY_INTERVAL_MS);
+    } finally {
+      this.probing = false;
+    }
   }
 
   private clearModeTimer() {
