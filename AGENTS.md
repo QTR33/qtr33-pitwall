@@ -30,7 +30,7 @@ This repository is a production-grade **Yarn Monorepo** for motorsport real-time
    - Design language is **minimalism**. All tokens live in `apps/web/src/index.css` (per-theme RGB CSS variables) and are mapped in `tailwind.config.js`. Never hard-code colors or use `dark:` variants — tokens swap with the theme class on `<html>`.
    - Interface tokens: `paper`, `raise`, `ink`, `mute`, `rule`, `signal` (the only accent). Data tokens: `best` (overall fastest), `pb` (personal best), `warn`, `danger`, `compound-*`. Data colors only encode timing meaning — as text color or thin bars, never as box fills.
    - Type: IBM Plex Sans (UI) + IBM Plex Mono (`.num` for all timing numerals). Sizes: `text-label` / `text-data` / `text-ui` / `text-title` / `text-hero`. Weights 400 and 600 only.
-   - No shadows, gradients, blur or glow. Separate content with whitespace and 1px `rule` hairlines. Only the LIVE dot may animate; respect `prefers-reduced-motion`.
+   - No shadows, gradients, blur or glow. Separate content with whitespace and 1px `rule` hairlines. Only the LIVE dot and the track-status alert rule during caution periods (yellow, SC, VSC) may animate; respect `prefers-reduced-motion`.
    - Keep keyboard focus visible (global `:focus-visible` ring) and text contrast ≥ WCAG AA in both themes.
 4. **Component Hierarchy**:
    - Put low-level design primitives (`Button`, `Badge`, `Card`, `Modal`, `Tabs`, `StatusPill`, `Tooltip`) inside `apps/web/src/components/common/`.

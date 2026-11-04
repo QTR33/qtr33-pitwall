@@ -1,0 +1,930 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T15:28:50.636Z",
+  "title": "Design System: QTR33 Pitwall",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Monitor Black",
+        "canonical": "rgb(14 15 17) /* --paper in :root, html.dark */",
+        "oklch": "oklch(16.8% 0.004 264.4)",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#252628",
+          "#444547",
+          "#656669",
+          "#88898C",
+          "#ADAEB0",
+          "#D0D1D2",
+          "#EEEEEF"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Readout White",
+        "canonical": "rgb(236 236 236) /* --ink in :root, html.dark */",
+        "oklch": "oklch(94.3% 0.000 89.9)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#454545",
+          "#666666",
+          "#898989",
+          "#AEAEAE",
+          "#D1D1D1",
+          "#EEEEEE"
+        ]
+      },
+      "mute": {
+        "role": "neutral",
+        "displayName": "Dimmed Readout",
+        "canonical": "rgb(139 144 153) /* --mute in :root, html.dark */",
+        "oklch": "oklch(65.2% 0.015 262.4)",
+        "tonalRamp": [
+          "#0A0B0E",
+          "#23272D",
+          "#41454D",
+          "#62666F",
+          "#848992",
+          "#AAAEB6",
+          "#CFD1D5",
+          "#EDEEF0"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "rgb(36 38 42) /* --rule in :root, html.dark */",
+        "oklch": "oklch(26.8% 0.008 264.4)",
+        "tonalRamp": [
+          "#0A0B0D",
+          "#25262A",
+          "#434549",
+          "#64666B",
+          "#87898E",
+          "#ACAEB2",
+          "#D0D1D3",
+          "#EEEEEF"
+        ]
+      },
+      "raise": {
+        "role": "neutral",
+        "displayName": "Raised Panel",
+        "canonical": "rgb(23 24 27) /* --raise in :root, html.dark */",
+        "oklch": "oklch(20.9% 0.006 271.1)",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#252629",
+          "#444548",
+          "#65666A",
+          "#88898D",
+          "#ADAEB1",
+          "#D0D1D3",
+          "#EEEEEF"
+        ]
+      },
+      "signal": {
+        "role": "primary",
+        "displayName": "Start Light Red",
+        "canonical": "rgb(255 59 48) /* --signal in :root, html.dark */",
+        "oklch": "oklch(65.4% 0.232 28.7)",
+        "tonalRamp": [
+          "#2B0000",
+          "#6A0000",
+          "#9E0000",
+          "#CA0000",
+          "#F63027",
+          "#FF7867",
+          "#FFB7AA",
+          "#FFE6E1"
+        ]
+      },
+      "best": {
+        "role": "data",
+        "displayName": "Fastest Purple",
+        "canonical": "rgb(192 132 252) /* --best in :root, html.dark */",
+        "oklch": "oklch(72.2% 0.177 305.5)",
+        "tonalRamp": [
+          "#140026",
+          "#39005F",
+          "#5D198E",
+          "#7F42B5",
+          "#A367DD",
+          "#C395F5",
+          "#DDC4FB",
+          "#F3EAFE"
+        ]
+      },
+      "pb": {
+        "role": "data",
+        "displayName": "Personal Best Green",
+        "canonical": "rgb(74 222 128) /* --pb in :root, html.dark */",
+        "oklch": "oklch(80.0% 0.182 151.7)",
+        "tonalRamp": [
+          "#001300",
+          "#003800",
+          "#005C00",
+          "#008127",
+          "#00A64C",
+          "#5CC87E",
+          "#A9E1B7",
+          "#E1F5E5"
+        ]
+      },
+      "warn": {
+        "role": "data",
+        "displayName": "Timed Amber",
+        "canonical": "rgb(227 192 74) /* --warn in :root, html.dark */",
+        "oklch": "oklch(81.7% 0.139 92.3)",
+        "tonalRamp": [
+          "#150800",
+          "#3B2000",
+          "#5F3F00",
+          "#826100",
+          "#A78500",
+          "#C7AC55",
+          "#DFD1A3",
+          "#F4EEDE"
+        ]
+      },
+      "danger": {
+        "role": "data",
+        "displayName": "Alarm Red",
+        "canonical": "rgb(248 113 113) /* --danger in :root, html.dark */",
+        "oklch": "oklch(71.1% 0.166 22.2)",
+        "tonalRamp": [
+          "#240000",
+          "#590000",
+          "#880016",
+          "#B12F37",
+          "#DB5759",
+          "#F78A87",
+          "#FEBEBB",
+          "#FFE8E6"
+        ]
+      },
+      "seg-best": {
+        "role": "data",
+        "displayName": "Mini-sector Purple",
+        "canonical": "rgb(192 132 252) /* --seg-best in :root, html.dark */",
+        "oklch": "oklch(72.2% 0.177 305.5)",
+        "tonalRamp": [
+          "#140026",
+          "#39005F",
+          "#5D198E",
+          "#7F42B5",
+          "#A367DD",
+          "#C395F5",
+          "#DDC4FB",
+          "#F3EAFE"
+        ]
+      },
+      "seg-pb": {
+        "role": "data",
+        "displayName": "Mini-sector Green",
+        "canonical": "rgb(74 222 128) /* --seg-pb in :root, html.dark */",
+        "oklch": "oklch(80.0% 0.182 151.7)",
+        "tonalRamp": [
+          "#001300",
+          "#003800",
+          "#005C00",
+          "#008127",
+          "#00A64C",
+          "#5CC87E",
+          "#A9E1B7",
+          "#E1F5E5"
+        ]
+      },
+      "seg-warn": {
+        "role": "data",
+        "displayName": "Mini-sector Amber",
+        "canonical": "rgb(227 192 74) /* --seg-warn in :root, html.dark */",
+        "oklch": "oklch(81.7% 0.139 92.3)",
+        "tonalRamp": [
+          "#150800",
+          "#3B2000",
+          "#5F3F00",
+          "#826100",
+          "#A78500",
+          "#C7AC55",
+          "#DFD1A3",
+          "#F4EEDE"
+        ]
+      },
+      "flag-green": {
+        "role": "data",
+        "displayName": "Green Flag",
+        "canonical": "rgb(74 222 128) /* --flag-green in :root, html.dark */",
+        "oklch": "oklch(80.0% 0.182 151.7)",
+        "tonalRamp": [
+          "#001300",
+          "#003800",
+          "#005C00",
+          "#008127",
+          "#00A64C",
+          "#5CC87E",
+          "#A9E1B7",
+          "#E1F5E5"
+        ]
+      },
+      "flag-yellow": {
+        "role": "data",
+        "displayName": "Yellow Flag",
+        "canonical": "rgb(250 204 21) /* --flag-yellow in :root, html.dark */",
+        "oklch": "oklch(86.1% 0.173 91.9)",
+        "tonalRamp": [
+          "#180700",
+          "#401C00",
+          "#663B00",
+          "#8A5E00",
+          "#AF8200",
+          "#CDAA30",
+          "#E3D096",
+          "#F5EEDA"
+        ]
+      },
+      "flag-red": {
+        "role": "data",
+        "displayName": "Red Flag",
+        "canonical": "rgb(248 113 113) /* --flag-red in :root, html.dark */",
+        "oklch": "oklch(71.1% 0.166 22.2)",
+        "tonalRamp": [
+          "#240000",
+          "#590000",
+          "#880016",
+          "#B12F37",
+          "#DB5759",
+          "#F78A87",
+          "#FEBEBB",
+          "#FFE8E6"
+        ]
+      },
+      "compound-soft": {
+        "role": "data",
+        "displayName": "Soft Compound",
+        "canonical": "rgb(255 45 85) /* --compound-soft in :root, html.dark */",
+        "oklch": "oklch(65.0% 0.238 17.9)",
+        "tonalRamp": [
+          "#2C0000",
+          "#6A0000",
+          "#9F0006",
+          "#CB002D",
+          "#F8224F",
+          "#FF727F",
+          "#FFB4B7",
+          "#FFE5E5"
+        ]
+      },
+      "compound-medium": {
+        "role": "data",
+        "displayName": "Medium Compound",
+        "canonical": "rgb(255 195 0) /* --compound-medium in :root, html.dark */",
+        "oklch": "oklch(84.8% 0.174 86.1)",
+        "tonalRamp": [
+          "#1A0500",
+          "#451800",
+          "#6D3600",
+          "#915900",
+          "#B77E00",
+          "#D5A730",
+          "#E8CE96",
+          "#F7EEDA"
+        ]
+      },
+      "compound-hard": {
+        "role": "data",
+        "displayName": "Hard Compound",
+        "canonical": "rgb(240 240 240) /* --compound-hard in :root, html.dark */",
+        "oklch": "oklch(95.5% 0.000 89.9)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262626",
+          "#454545",
+          "#666666",
+          "#898989",
+          "#AEAEAE",
+          "#D1D1D1",
+          "#EEEEEE"
+        ]
+      },
+      "compound-inter": {
+        "role": "data",
+        "displayName": "Intermediate Compound",
+        "canonical": "rgb(76 192 56) /* --compound-inter in :root, html.dark */",
+        "oklch": "oklch(71.5% 0.202 141.0)",
+        "tonalRamp": [
+          "#001300",
+          "#003600",
+          "#005B00",
+          "#007F00",
+          "#2BA50E",
+          "#6FC761",
+          "#B1E0A9",
+          "#E3F4E0"
+        ]
+      },
+      "compound-wet": {
+        "role": "data",
+        "displayName": "Wet Compound",
+        "canonical": "rgb(59 155 255) /* --compound-wet in :root, html.dark */",
+        "oklch": "oklch(68.2% 0.172 252.6)",
+        "tonalRamp": [
+          "#00072C",
+          "#001E6B",
+          "#00409C",
+          "#0065C4",
+          "#278AED",
+          "#6AB2FF",
+          "#ADD5FF",
+          "#E2F0FF"
+        ]
+      },
+      "paper-light": {
+        "role": "neutral",
+        "displayName": "Sheet White (light theme)",
+        "canonical": "rgb(250 250 248) /* --paper in html.light */",
+        "oklch": "oklch(98.5% 0.003 106.4)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#262625",
+          "#454543",
+          "#666664",
+          "#898987",
+          "#AEAEAC",
+          "#D1D1D0",
+          "#EEEEEE"
+        ]
+      },
+      "ink-light": {
+        "role": "neutral",
+        "displayName": "Ink Black (light theme)",
+        "canonical": "rgb(20 21 23) /* --ink in html.light */",
+        "oklch": "oklch(19.5% 0.004 264.5)",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#252628",
+          "#444547",
+          "#656669",
+          "#88898C",
+          "#ADAEB0",
+          "#D0D1D2",
+          "#EEEEEF"
+        ]
+      },
+      "mute-light": {
+        "role": "neutral",
+        "displayName": "Dimmed Readout (light theme)",
+        "canonical": "rgb(94 99 107) /* --mute in html.light */",
+        "oklch": "oklch(49.8% 0.014 259.8)",
+        "tonalRamp": [
+          "#090B0E",
+          "#23272D",
+          "#41454D",
+          "#61666E",
+          "#848992",
+          "#AAAEB5",
+          "#CED1D5",
+          "#EDEEF0"
+        ]
+      },
+      "rule-light": {
+        "role": "neutral",
+        "displayName": "Hairline (light theme)",
+        "canonical": "rgb(228 228 224) /* --rule in html.light */",
+        "oklch": "oklch(91.8% 0.005 106.5)",
+        "tonalRamp": [
+          "#0B0B0A",
+          "#272724",
+          "#454542",
+          "#666663",
+          "#898986",
+          "#AEAEAB",
+          "#D1D1CF",
+          "#EEEEEE"
+        ]
+      },
+      "raise-light": {
+        "role": "neutral",
+        "displayName": "Raised Panel (light theme)",
+        "canonical": "rgb(241 241 237) /* --raise in html.light */",
+        "oklch": "oklch(95.7% 0.005 106.5)",
+        "tonalRamp": [
+          "#0B0B0A",
+          "#272724",
+          "#454542",
+          "#666663",
+          "#898986",
+          "#AEAEAB",
+          "#D1D1CF",
+          "#EEEEEE"
+        ]
+      },
+      "signal-light": {
+        "role": "primary",
+        "displayName": "Start Light Red (light theme)",
+        "canonical": "rgb(215 15 15) /* --signal in html.light */",
+        "oklch": "oklch(55.6% 0.222 28.7)",
+        "tonalRamp": [
+          "#2A0000",
+          "#670000",
+          "#9B0000",
+          "#C60000",
+          "#F2392E",
+          "#FF7B6A",
+          "#FFB8AC",
+          "#FFE6E1"
+        ]
+      },
+      "best-light": {
+        "role": "data",
+        "displayName": "Fastest Purple (light theme)",
+        "canonical": "rgb(126 34 206) /* --best in html.light */",
+        "oklch": "oklch(49.6% 0.237 301.9)",
+        "tonalRamp": [
+          "#160031",
+          "#3D0076",
+          "#6000AA",
+          "#8229D3",
+          "#A656FD",
+          "#C58CFF",
+          "#DEC1FF",
+          "#F3E9FF"
+        ]
+      },
+      "pb-light": {
+        "role": "data",
+        "displayName": "Personal Best Green (light theme)",
+        "canonical": "rgb(21 128 61) /* --pb in html.light */",
+        "oklch": "oklch(52.7% 0.137 150.1)",
+        "tonalRamp": [
+          "#001200",
+          "#003400",
+          "#005715",
+          "#097B38",
+          "#3FA05B",
+          "#79C289",
+          "#B5DDBC",
+          "#E5F3E7"
+        ]
+      },
+      "warn-light": {
+        "role": "data",
+        "displayName": "Timed Amber (light theme)",
+        "canonical": "rgb(138 97 0) /* --warn in html.light */",
+        "oklch": "oklch(52.2% 0.108 79.7)",
+        "tonalRamp": [
+          "#160700",
+          "#3D1E00",
+          "#633C00",
+          "#865D00",
+          "#AC8132",
+          "#CBA86D",
+          "#E2CEAE",
+          "#F5EDE2"
+        ]
+      },
+      "danger-light": {
+        "role": "data",
+        "displayName": "Alarm Red (light theme)",
+        "canonical": "rgb(200 30 30) /* --danger in html.light */",
+        "oklch": "oklch(53.5% 0.203 27.6)",
+        "tonalRamp": [
+          "#280000",
+          "#620000",
+          "#940000",
+          "#BF0E14",
+          "#EA463D",
+          "#FF8173",
+          "#FFBBB0",
+          "#FFE7E3"
+        ]
+      },
+      "seg-best-light": {
+        "role": "data",
+        "displayName": "Mini-sector Purple (light theme)",
+        "canonical": "rgb(147 51 234) /* --seg-best in html.light */",
+        "oklch": "oklch(55.8% 0.252 302.3)",
+        "tonalRamp": [
+          "#170033",
+          "#3F007B",
+          "#6300B0",
+          "#851BD9",
+          "#A94FFF",
+          "#C788FF",
+          "#DFBFFF",
+          "#F3E9FF"
+        ]
+      },
+      "seg-pb-light": {
+        "role": "data",
+        "displayName": "Mini-sector Green (light theme)",
+        "canonical": "rgb(22 163 74) /* --seg-pb in html.light */",
+        "oklch": "oklch(62.7% 0.170 149.2)",
+        "tonalRamp": [
+          "#001300",
+          "#003600",
+          "#005B00",
+          "#007F26",
+          "#18A44B",
+          "#6AC67E",
+          "#AFE0B6",
+          "#E3F4E5"
+        ]
+      },
+      "seg-warn-light": {
+        "role": "data",
+        "displayName": "Mini-sector Amber (light theme)",
+        "canonical": "rgb(224 168 0) /* --seg-warn in html.light */",
+        "oklch": "oklch(76.3% 0.157 84.4)",
+        "tonalRamp": [
+          "#190600",
+          "#431900",
+          "#6A3700",
+          "#8F5A00",
+          "#B57E00",
+          "#D3A745",
+          "#E7CE9D",
+          "#F6EEDC"
+        ]
+      },
+      "flag-green-light": {
+        "role": "data",
+        "displayName": "Green Flag (light theme)",
+        "canonical": "rgb(22 163 74) /* --flag-green in html.light */",
+        "oklch": "oklch(62.7% 0.170 149.2)",
+        "tonalRamp": [
+          "#001300",
+          "#003600",
+          "#005B00",
+          "#007F26",
+          "#18A44B",
+          "#6AC67E",
+          "#AFE0B6",
+          "#E3F4E5"
+        ]
+      },
+      "flag-yellow-light": {
+        "role": "data",
+        "displayName": "Yellow Flag (light theme)",
+        "canonical": "rgb(234 179 8) /* --flag-yellow in html.light */",
+        "oklch": "oklch(79.5% 0.162 86.0)",
+        "tonalRamp": [
+          "#190600",
+          "#431A00",
+          "#6A3800",
+          "#8E5B00",
+          "#B47F00",
+          "#D2A73F",
+          "#E6CE9B",
+          "#F6EEDB"
+        ]
+      },
+      "flag-red-light": {
+        "role": "data",
+        "displayName": "Red Flag (light theme)",
+        "canonical": "rgb(220 38 38) /* --flag-red in html.light */",
+        "oklch": "oklch(57.7% 0.215 27.3)",
+        "tonalRamp": [
+          "#290000",
+          "#650000",
+          "#980000",
+          "#C40009",
+          "#EF3D38",
+          "#FF7D70",
+          "#FFB9AF",
+          "#FFE6E2"
+        ]
+      },
+      "compound-soft-light": {
+        "role": "data",
+        "displayName": "Soft Compound (light theme)",
+        "canonical": "rgb(214 0 42) /* --compound-soft in html.light */",
+        "oklch": "oklch(55.3% 0.223 23.4)",
+        "tonalRamp": [
+          "#2A0000",
+          "#670000",
+          "#9B0000",
+          "#C6001C",
+          "#F33542",
+          "#FF7976",
+          "#FFB7B2",
+          "#FFE6E3"
+        ]
+      },
+      "compound-medium-light": {
+        "role": "data",
+        "displayName": "Medium Compound (light theme)",
+        "canonical": "rgb(148 106 0) /* --compound-medium in html.light */",
+        "oklch": "oklch(55.3% 0.114 81.2)",
+        "tonalRamp": [
+          "#160700",
+          "#3E1E00",
+          "#633C00",
+          "#875D00",
+          "#AC8129",
+          "#CCA869",
+          "#E2CEAC",
+          "#F5EEE1"
+        ]
+      },
+      "compound-hard-light": {
+        "role": "data",
+        "displayName": "Hard Compound (light theme)",
+        "canonical": "rgb(82 86 94) /* --compound-hard in html.light */",
+        "oklch": "oklch(45.2% 0.014 264.4)",
+        "tonalRamp": [
+          "#0A0B0E",
+          "#23262D",
+          "#41454D",
+          "#62666E",
+          "#858992",
+          "#AAAEB5",
+          "#CFD1D5",
+          "#EEEEF0"
+        ]
+      },
+      "compound-inter-light": {
+        "role": "data",
+        "displayName": "Intermediate Compound (light theme)",
+        "canonical": "rgb(46 125 30) /* --compound-inter in html.light */",
+        "oklch": "oklch(52.1% 0.150 140.7)",
+        "tonalRamp": [
+          "#001100",
+          "#003300",
+          "#005600",
+          "#2A7A1A",
+          "#509F42",
+          "#83C178",
+          "#BADDB3",
+          "#E6F3E4"
+        ]
+      },
+      "compound-wet-light": {
+        "role": "data",
+        "displayName": "Wet Compound (light theme)",
+        "canonical": "rgb(0 98 168) /* --compound-wet in html.light */",
+        "oklch": "oklch(48.7% 0.135 249.3)",
+        "tonalRamp": [
+          "#000A25",
+          "#00255C",
+          "#004589",
+          "#0F69AF",
+          "#3E8ED7",
+          "#76B3F0",
+          "#B3D5F8",
+          "#E4F0FD"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Hero Numeral",
+        "purpose": "The one hero number per screen (text-hero): current lap on the main view, position in the driver drawer."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Dialog titles and the sidebar fastest-lap time (text-title)."
+      },
+      "body-large": {
+        "displayName": "Body Large",
+        "purpose": "Wordmark and featured driver name (text-ui)."
+      },
+      "numeral-large": {
+        "displayName": "Numeral Large",
+        "purpose": "Row position, drawer stat values and drawer sector times (.num text-ui)."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default size for the whole app (text-data)."
+      },
+      "numeral": {
+        "displayName": "Timing Numeral",
+        "purpose": "Every time, gap, interval, speed and clock (.num, tabular)."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase column headers, section titles and badges (.label)."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "state-transition",
+        "value": "150ms (Tailwind default ease)",
+        "purpose": "Color transitions on hover and active state changes."
+      },
+      {
+        "name": "fade-in",
+        "value": "fade-in 180ms ease-out",
+        "purpose": "Dialog scrim and centered dialog entry."
+      },
+      {
+        "name": "drawer-in",
+        "value": "drawer-in 180ms ease-out (translateX 24px to 0, opacity 0 to 1)",
+        "purpose": "Right-side drawer entry."
+      },
+      {
+        "name": "live-ping",
+        "value": "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
+        "purpose": "The LIVE dot halo. One of the two continuous animations."
+      },
+      {
+        "name": "heartbeat",
+        "value": "heartbeat 1.2s ease-in-out infinite",
+        "purpose": "Track-status alert rule during yellow, SC and VSC. The other continuous animation."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one filled action, e.g. Play / Pause in the replay toolbar.",
+      "html": "<button class=\"ds-btn-primary\">Play</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 4px; font: 600 13px/20px 'IBM Plex Sans', system-ui, sans-serif; cursor: pointer; transition: color 150ms, background-color 150ms, border-color 150ms; background: rgb(var(--ink)); color: rgb(var(--paper)); border: none; } .ds-btn-primary:hover { background: rgb(var(--ink) / 0.85); } .ds-btn-primary:focus-visible { outline: 2px solid rgb(var(--signal)); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Default button: hairline border, no fill.",
+      "html": "<button class=\"ds-btn-secondary\">Restart</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 4px; font: 600 13px/20px 'IBM Plex Sans', system-ui, sans-serif; cursor: pointer; transition: color 150ms, background-color 150ms, border-color 150ms; background: transparent; color: rgb(var(--ink)); border: 1px solid rgb(var(--rule)); } .ds-btn-secondary:hover { border-color: rgb(var(--mute)); } .ds-btn-secondary:focus-visible { outline: 2px solid rgb(var(--signal)); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Text-only control for close, restart and theme toggle.",
+      "html": "<button class=\"ds-btn-ghost\">Close</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 4px; font: 600 13px/20px 'IBM Plex Sans', system-ui, sans-serif; cursor: pointer; transition: color 150ms, background-color 150ms, border-color 150ms; background: transparent; color: rgb(var(--mute)); border: none; } .ds-btn-ghost:hover { color: rgb(var(--ink)); } .ds-btn-ghost:focus-visible { outline: 2px solid rgb(var(--signal)); outline-offset: 2px; }"
+    },
+    {
+      "name": "Tabs",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "Text tabs on a hairline; the active tab takes a 2px Start Light Red underline.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button class=\"ds-tab ds-tab-active\" role=\"tab\" aria-selected=\"true\">Timing</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Race control</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Telemetry</button></div>",
+      "css": ".ds-tabs { display: flex; gap: 20px; border-bottom: 1px solid rgb(var(--rule)); } .ds-tab { margin-bottom: -1px; padding: 8px 0; background: none; border: none; border-bottom: 2px solid transparent; color: rgb(var(--mute)); font: 600 13px/20px 'IBM Plex Sans', system-ui, sans-serif; cursor: pointer; transition: color 150ms; } .ds-tab:hover { color: rgb(var(--ink)); } .ds-tab-active { color: rgb(var(--ink)); border-bottom-color: rgb(var(--signal)); } .ds-tab:focus-visible { outline: 2px solid rgb(var(--signal)); outline-offset: 2px; }"
+    },
+    {
+      "name": "Data Badges",
+      "kind": "chip",
+      "refersTo": "label",
+      "description": "Uppercase labels whose color carries the meaning; no fill, no border.",
+      "html": "<span class=\"ds-badges\"><span class=\"ds-badge ds-badge-pb\">Green</span><span class=\"ds-badge ds-badge-warn\">Safety car</span><span class=\"ds-badge ds-badge-danger\">Red flag</span><span class=\"ds-badge ds-badge-best\">Fastest</span><span class=\"ds-badge\">Notice</span></span>",
+      "css": ".ds-badges { display: inline-flex; gap: 16px; } .ds-badge { font: 600 11px/16px 'IBM Plex Sans', system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--mute)); } .ds-badge-pb { color: rgb(var(--pb)); } .ds-badge-warn { color: rgb(var(--warn)); } .ds-badge-danger { color: rgb(var(--danger)); } .ds-badge-best { color: rgb(var(--best)); }"
+    },
+    {
+      "name": "Live Status",
+      "kind": "custom",
+      "refersTo": "signal",
+      "description": "The LIVE dot: one of only two continuously animated elements.",
+      "html": "<span class=\"ds-status\" role=\"status\"><span class=\"ds-status-dot\"></span>Live</span>",
+      "css": ".ds-status { display: inline-flex; align-items: center; gap: 8px; color: rgb(var(--ink)); font: 600 13px/20px 'IBM Plex Sans', system-ui, sans-serif; } .ds-status-dot { position: relative; width: 8px; height: 8px; border-radius: 9999px; background: rgb(var(--signal)); } .ds-status-dot::after { content: ''; position: absolute; inset: 0; border-radius: 9999px; background: rgb(var(--signal)); opacity: 0.6; animation: ds-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; } @keyframes ds-ping { 75%, 100% { transform: scale(2); opacity: 0; } } @media (prefers-reduced-motion: reduce) { .ds-status-dot::after { animation: none; } }"
+    },
+    {
+      "name": "Section Card",
+      "kind": "card",
+      "refersTo": "label",
+      "description": "A titled section, not a surface: label over a hairline, count on the right.",
+      "html": "<section class=\"ds-card\"><div class=\"ds-card-head\"><h2 class=\"ds-card-title\">Fastest lap</h2><span class=\"ds-card-count\">Lap 42</span></div><div class=\"ds-card-body\"><span class=\"ds-card-name\">Driver Name</span><span class=\"ds-card-time\">1:21.374</span></div></section>",
+      "css": ".ds-card { width: 320px; font-family: 'IBM Plex Sans', system-ui, sans-serif; } .ds-card-head { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid rgb(var(--rule)); } .ds-card-title { margin: 0; font: 600 11px/16px 'IBM Plex Sans', system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--mute)); } .ds-card-count { font: 400 11px/16px 'IBM Plex Mono', ui-monospace, Consolas, monospace; color: rgb(var(--mute)); } .ds-card-body { display: flex; justify-content: space-between; align-items: baseline; padding-top: 12px; } .ds-card-name { font: 600 15px/22px 'IBM Plex Sans', system-ui, sans-serif; color: rgb(var(--ink)); } .ds-card-time { font: 400 20px/28px 'IBM Plex Mono', ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; color: rgb(var(--best)); }"
+    },
+    {
+      "name": "Timing Row",
+      "kind": "custom",
+      "refersTo": "timing-row",
+      "description": "Signature component: one car in the timing tower, with team bar, colored times, mini-sectors and tyre ring.",
+      "html": "<table class=\"ds-tower\"><tbody><tr class=\"ds-row ds-row-selected\"><td class=\"ds-pos\">1</td><td><span class=\"ds-driver\"><span class=\"ds-team\"></span><span class=\"ds-carno\">1</span><span class=\"ds-name\">Driver Name</span><span class=\"ds-code\">DRV</span></span></td><td class=\"ds-num ds-mute\">Leader</td><td class=\"ds-num\"><span class=\"ds-sector\"><span class=\"ds-best\">28.114</span><span class=\"ds-bars\"><i class=\"ds-seg-best\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-best\"></i><i class=\"ds-seg-rule\"></i></span></span></td><td class=\"ds-num ds-pb\">1:21.902</td><td><span class=\"ds-tyre\">M</span> <span class=\"ds-num ds-mute\">12</span></td></tr><tr class=\"ds-row\"><td class=\"ds-pos\">2</td><td><span class=\"ds-driver\"><span class=\"ds-team ds-team-2\"></span><span class=\"ds-carno\">44</span><span class=\"ds-name\">Second Driver</span><span class=\"ds-code\">SEC</span></span></td><td class=\"ds-num\">+2.418</td><td class=\"ds-num\"><span class=\"ds-sector\"><span class=\"ds-ink\">28.390</span><span class=\"ds-bars\"><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-rule\"></i><i class=\"ds-seg-rule\"></i></span></span></td><td class=\"ds-num ds-ink\">1:22.140</td><td><span class=\"ds-tyre ds-tyre-hard\">H</span> <span class=\"ds-num ds-mute\">3</span></td></tr></tbody></table>",
+      "css": ".ds-tower { border-collapse: collapse; font: 400 13px/20px 'IBM Plex Sans', system-ui, sans-serif; color: rgb(var(--ink)); } .ds-row { border-bottom: 1px solid rgb(var(--rule)); background: rgb(var(--paper)); transition: background-color 150ms; cursor: pointer; } .ds-row:hover, .ds-row-selected { background: rgb(var(--raise)); } .ds-row td { padding: 10px 12px; vertical-align: middle; } .ds-row td.ds-num { text-align: right; } .ds-pos { border-left: 2px solid transparent; font: 600 15px/22px 'IBM Plex Mono', ui-monospace, Consolas, monospace; text-align: right; } .ds-row-selected .ds-pos { border-left-color: rgb(var(--signal)); } .ds-driver { display: inline-flex; align-items: center; gap: 8px; } .ds-team { width: 3px; height: 28px; border-radius: 9999px; background: #3671C6; } .ds-team-2 { background: #27F4D2; } .ds-carno { width: 20px; text-align: right; font: 400 11px/16px 'IBM Plex Mono', ui-monospace, Consolas, monospace; color: rgb(var(--mute)); } .ds-name { font-weight: 600; } .ds-code { font: 400 11px/16px 'IBM Plex Mono', ui-monospace, Consolas, monospace; color: rgb(var(--mute)); } .ds-num { font-family: 'IBM Plex Mono', ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; } .ds-mute { color: rgb(var(--mute)); } .ds-ink { color: rgb(var(--ink)); } .ds-best { color: rgb(var(--best)); } .ds-pb { color: rgb(var(--pb)); } .ds-sector { display: inline-flex; flex-direction: column; align-items: flex-end; gap: 4px; } .ds-bars { display: flex; gap: 2px; width: 64px; height: 3px; } .ds-bars i { display: block; flex: 1; } .ds-seg-best { background: rgb(var(--seg-best)); } .ds-seg-pb { background: rgb(var(--seg-pb)); } .ds-seg-warn { background: rgb(var(--seg-warn)); } .ds-seg-rule { background: rgb(var(--rule)); } .ds-tyre { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; box-sizing: border-box; border-radius: 9999px; border: 1.5px solid rgb(var(--compound-medium)); color: rgb(var(--compound-medium)); font: 600 11px/16px 'IBM Plex Mono', ui-monospace, Consolas, monospace; } .ds-tyre-hard { border-color: rgb(var(--compound-hard)); color: rgb(var(--compound-hard)); }"
+    },
+    {
+      "name": "Drawer Stat Group",
+      "kind": "custom",
+      "refersTo": "stat-value",
+      "description": "Driver drawer position block: the drawer hero P{position} beside Label-over-Numeral stats.",
+      "html": "<div class=\"ds-posblock\"><div><p class=\"ds-stat-label\">Position</p><p class=\"ds-hero\">P3</p></div><dl class=\"ds-stats\"><div><dt class=\"ds-stat-label\">Gap</dt><dd class=\"ds-stat-value\">+4.812</dd></div><div><dt class=\"ds-stat-label\">Best lap</dt><dd class=\"ds-stat-value ds-stat-pb\">1:21.902</dd></div><div><dt class=\"ds-stat-label\">Pit stops</dt><dd class=\"ds-stat-value\">1</dd></div></dl></div>",
+      "css": ".ds-posblock { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; width: 528px; } .ds-posblock p, .ds-stats, .ds-stats dd { margin: 0; } .ds-hero { font: 600 40px/44px 'IBM Plex Mono', ui-monospace, Consolas, monospace; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: rgb(var(--ink)); } .ds-stats { display: grid; grid-template-columns: repeat(3, auto); gap: 24px; text-align: right; } .ds-stat-label { font: 600 11px/16px 'IBM Plex Sans', system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--mute)); } .ds-stat-value { margin-top: 4px; font: 400 15px/22px 'IBM Plex Mono', ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; color: rgb(var(--ink)); } .ds-stat-pb { color: rgb(var(--pb)); }"
+    },
+    {
+      "name": "Mini-sector Matrix",
+      "kind": "custom",
+      "refersTo": "mini-sector-bar-large",
+      "description": "Driver drawer sectors: S1-S3 times on a baseline over full-width 4px mini-sector strips.",
+      "html": "<div class=\"ds-matrix\"><div><div class=\"ds-mx-head\"><span class=\"ds-mx-label\">S1</span><span class=\"ds-mx-time ds-mx-best\">28.114</span></div><div class=\"ds-mx-bars\"><i class=\"ds-seg-best\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-best\"></i><i class=\"ds-seg-pb\"></i></div></div><div><div class=\"ds-mx-head\"><span class=\"ds-mx-label\">S2</span><span class=\"ds-mx-time ds-mx-pb\">30.881</span></div><div class=\"ds-mx-bars\"><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-pb\"></i></div></div><div><div class=\"ds-mx-head\"><span class=\"ds-mx-label\">S3</span><span class=\"ds-mx-time ds-mx-held\">22.907</span></div><div class=\"ds-mx-bars\"><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-rule\"></i><i class=\"ds-seg-rule\"></i><i class=\"ds-seg-rule\"></i><i class=\"ds-seg-rule\"></i></div></div></div>",
+      "css": ".ds-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 528px; } .ds-mx-head { display: flex; align-items: baseline; justify-content: space-between; } .ds-mx-label { font: 600 11px/16px 'IBM Plex Sans', system-ui, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(var(--mute)); } .ds-mx-time { font: 400 15px/22px 'IBM Plex Mono', ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; color: rgb(var(--ink)); } .ds-mx-best { color: rgb(var(--best)); } .ds-mx-pb { color: rgb(var(--pb)); } .ds-mx-held { color: rgb(var(--mute)); } .ds-mx-bars { display: flex; gap: 3px; margin-top: 8px; } .ds-mx-bars i { display: block; flex: 1; height: 4px; } .ds-seg-best { background: rgb(var(--seg-best)); } .ds-seg-pb { background: rgb(var(--seg-pb)); } .ds-seg-warn { background: rgb(var(--seg-warn)); } .ds-seg-rule { background: rgb(var(--rule)); }"
+    },
+    {
+      "name": "Tooltip",
+      "kind": "custom",
+      "refersTo": "tooltip",
+      "description": "Ink tooltip for metric explanations, shown on hover and focus.",
+      "html": "<span class=\"ds-tip\" role=\"tooltip\">Speed trap, km/h</span>",
+      "css": ".ds-tip { display: inline-block; padding: 4px 8px; border-radius: 4px; background: rgb(var(--ink)); color: rgb(var(--paper)); font: 400 11px/16px 'IBM Plex Sans', system-ui, sans-serif; white-space: nowrap; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Pit Wall Monitor",
+    "overview": "QTR33 Pitwall should read like the screen a race engineer watches on the pit wall: dark, as dense as the job needs and no denser, with every pixel there so the state of the race reads in one glance. The fan has the broadcast in front of them and looks across for a second at a time. The interface has to answer in that second, then let them look back.\n\nThe system is precise and restrained. Surfaces are flat, sections are separated by whitespace and 1px hairlines, and components carry no fills, shadows or chrome of their own. Color is held back for two jobs: one interface accent, Start Light Red, and the timing-data colors that follow official convention (purple for overall fastest, green for personal best, yellow for timed, plus tyre compounds and track flags). With that much restraint, any color on screen means something.\n\nNumbers are the hero. Every timing value is set in a tabular monospace so columns stay aligned while values change several times a second, and each screen has exactly one loud number: the current lap on the main view, the car's position in the driver drawer. Dark is the default theme; the light theme is a full counterpart built from the same tokens, not an inverted afterthought.",
+    "keyCharacteristics": [
+      "Flat, hairline-separated layout; no shadows, gradients, blur or glow.",
+      "One interface accent (Start Light Red); all other color is timing data.",
+      "Tabular monospace numerals throughout; one hero numeral per screen.",
+      "Two weights only (400 and 600), a five-step type scale.",
+      "Ambient motion limited to the LIVE dot and the caution rule.",
+      "Dark default with an equal light theme, both WCAG AA for text."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "Start Light Red is the only interface accent. If an element needs emphasis and is not data, it gets weight or `ink`, not a new color.",
+        "section": "colors"
+      },
+      {
+        "name": "The Data Earns Color Rule",
+        "body": "Data colors are text color or thin bars, never box fills or backgrounds. A cell is purple because the time is the fastest, never for decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Themes Rule",
+        "body": "Every new token is defined in both theme blocks and mapped in `tailwind.config.js`; text pairs stay at or above WCAG AA (4.5:1) on `paper` in both themes.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Every timing numeral uses `.num` (IBM Plex Mono, `tnum`). A number that can change while visible is never set in proportional figures.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two Weights Rule",
+        "body": "Only 400 and 600. Hierarchy comes from size, case and color (`ink` vs `mute`), not from extra weights.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Hero Rule",
+        "body": "Each screen (the main view, or an open drawer) has exactly one `text-hero` number, and it is the answer the screen exists to give. A second hero on the same screen means one of them is wrong.",
+        "section": "typography"
+      },
+      {
+        "name": "The Still Columns Rule",
+        "body": "Values change several times a second, so no value may move its neighbours. Every timing column has a fixed width in the `colgroup`, sized to the longest real value it can hold (IBM Plex Mono 13px ≈ 7.8px per digit, plus 24px padding); Driver is the only flexible column and truncates. Optional lines inside a row (position delta, mini-sector strip) keep their height when empty, so rows never change height either. Below `sm` (640px) the driver cell drops to number and three-letter code.",
+        "section": "layout"
+      },
+      {
+        "name": "The Glance Density Rule",
+        "body": "Density serves a one-second glance: whitespace and hairlines separate groups, never boxes. If a new element needs a container to be legible, the grouping is wrong.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Monitor Rule",
+        "body": "No shadows, gradients, blur or glow, at rest or in any state. If a layer must read as above another, use the scrim and a hairline border.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Only Movers Rule",
+        "body": "Two things may animate continuously: the LIVE dot and the caution alert rule. Everything else is static, apart from 150ms color transitions on hover and the dialog's entry. All of it collapses under `prefers-reduced-motion`.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do use the token names (`paper`, `raise`, `ink`, `mute`, `rule`, `signal`, data tokens) through Tailwind classes; add new tokens to both theme blocks in `index.css` and to `tailwind.config.js`.",
+      "Do set every timing numeral in `.num` (IBM Plex Mono, tabular).",
+      "Do give each screen exactly one `text-hero` number: the lap on the main view, the position in the driver drawer.",
+      "Do present single values in the drawer as Stats (Label over Numeral Large) and put units in the section heading.",
+      "Do separate groups with whitespace and 1px `rule` hairlines.",
+      "Do color times by meaning only: `best` for overall fastest, `pb` for personal best, `ink` otherwise.",
+      "Do keep the global 2px `signal` focus outline visible on every interactive element.",
+      "Do check both themes for WCAG AA text contrast before shipping."
+    ],
+    "donts": [
+      "Don't hard-code colors or use `dark:` variants (the `#E10600` team-color fallback in `DriverRow.tsx` and the `bg-black/50` scrim are existing exceptions to remove, not patterns to copy).",
+      "Don't add shadows, gradients, blur or glow.",
+      "Don't use data colors as box fills or backgrounds.",
+      "Don't introduce a second interface accent.",
+      "Don't use weights other than 400 and 600.",
+      "Don't animate anything besides the LIVE dot and the caution alert rule.",
+      "Don't use official Formula 1 logos or marks; the product is unofficial."
+    ]
+  }
+}
