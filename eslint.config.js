@@ -17,6 +17,8 @@ export default [
       '**/logs/**',
       '**/*.log',
       '**/final-timing-state.json',
+      // Vendored Claude skills (third-party, minified scripts)
+      '.claude/**',
     ],
   },
   js.configs.recommended,
