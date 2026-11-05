@@ -2,7 +2,7 @@ import React from 'react';
 import { DriverState } from '@livetiming/shared';
 import { SectorSegment } from './SectorSegment.js';
 import { TyreBadge } from './TyreBadge.js';
-import { SpeedTrapCell } from './SpeedTrapCell.js';
+import { ArrowUp } from 'lucide-react';
 import { formatGap, formatInterval, formatLapTime } from '../../../utils/formatters.js';
 import { getTimingTextColor, getTimingMeaning } from '../../../utils/colors.js';
 
@@ -14,7 +14,10 @@ export interface DriverRowProps {
   isSelected?: boolean;
 }
 
-const td = 'py-2.5 px-3 align-middle';
+// 8px rows: the tallest cell (the 15px position) sets a ~38px row
+const td = 'py-2 px-3 align-middle';
+// Extra lead-in whitespace where a column group starts (pace at S1, strategy at Tyre)
+const groupStart = 'pl-6';
 
 export const DriverRow: React.FC<DriverRowProps> = ({
   driver,
@@ -23,8 +26,10 @@ export const DriverRow: React.FC<DriverRowProps> = ({
   onSelectDriver,
   isSelected = false,
 }) => {
-  const rawColor = (driver as any).TeamColour || driver.team_color || '#E10600';
-  const teamColor = rawColor.startsWith('#') ? rawColor : `#${rawColor}`;
+  // The feed's team color is data and drawn as-is; with none, the bar falls back to the rule token
+  // rather than an invented brand color
+  const rawColor: string = (driver as any).TeamColour || driver.team_color || '';
+  const teamColor = rawColor && (rawColor.startsWith('#') ? rawColor : `#${rawColor}`);
   const pos = driver.Position ? parseInt(driver.Position, 10) : driver.Line || '—';
   const posDelta = driver.PositionDelta || 0;
 
@@ -90,35 +95,32 @@ export const DriverRow: React.FC<DriverRowProps> = ({
     >
       {/* Position — selected row is marked by the accent rule on the left */}
       <td
-        className={`${td} sticky left-0 z-10 w-12 border-l-2 pl-2 text-right ${stickyBg} ${
+        className={`${td} sticky left-0 z-10 w-16 border-l-2 pl-2 text-right ${stickyBg} ${
           isSelected ? 'border-signal' : 'border-transparent'
         }`}
       >
-        <div className="flex flex-col items-end leading-tight">
+        {/* Gain / loss sits beside the position, not under it, so every row stays one line high */}
+        <div className="flex items-baseline justify-end gap-1.5">
+          {posDelta !== 0 && (
+            <span className={`num text-label ${posDelta > 0 ? 'text-pb' : 'text-danger'}`}>
+              <span aria-hidden="true">{posDelta > 0 ? '▲' : '▼'}</span>
+              {Math.abs(posDelta)}
+              <span className="sr-only">
+                {posDelta > 0 ? ' positions gained' : ' positions lost'}
+              </span>
+            </span>
+          )}
           <span className="num text-ui font-semibold text-ink">{pos}</span>
-          {/* The delta line keeps its height when empty, so a gain or loss never resizes the row */}
-          <span
-            className={`num min-h-[14px] text-label ${posDelta > 0 ? 'text-pb' : 'text-danger'}`}
-          >
-            {posDelta !== 0 && (
-              <>
-                <span aria-hidden="true">{posDelta > 0 ? '▲' : '▼'}</span>
-                {Math.abs(posDelta)}
-                <span className="sr-only">
-                  {posDelta > 0 ? ' positions gained' : ' positions lost'}
-                </span>
-              </>
-            )}
-          </span>
         </div>
       </td>
 
       {/* Driver — the name is a real button so the row is reachable by keyboard */}
-      <td className={`${td} sticky left-12 z-10 ${stickyBg}`}>
-        <div className="flex items-center gap-3">
+      <td className={`${td} sticky left-16 z-10 ${stickyBg}`}>
+        {/* One line: the team survives as its color bar and in the drawer, not as a second line */}
+        <div className="flex min-w-0 items-center gap-3">
           <span
-            className="h-7 w-[3px] flex-shrink-0 rounded-full"
-            style={{ backgroundColor: teamColor }}
+            className={`h-5 w-[3px] flex-shrink-0 rounded-full ${teamColor ? '' : 'bg-rule'}`}
+            style={teamColor ? { backgroundColor: teamColor } : undefined}
             aria-hidden="true"
           />
           <div className="min-w-0">
@@ -139,10 +141,6 @@ export const DriverRow: React.FC<DriverRowProps> = ({
               </span>
               <span className="num shrink-0 text-label text-ink sm:text-mute">{driverCode}</span>
             </button>
-            <p className="ml-7 hidden truncate text-label text-mute sm:block">
-              {/* A non-breaking space keeps the row height when the team is unknown */}
-              {driverTeam || '\u00a0'}
-            </p>
           </div>
         </div>
       </td>
@@ -158,11 +156,20 @@ export const DriverRow: React.FC<DriverRowProps> = ({
           intervalInfo.catching ? 'text-pb' : isLeader || isOut ? 'text-mute' : 'text-ink'
         }`}
       >
+        {/* Catching is said by shape as well as by green: an up arrow, before the value so the
+            digits stay aligned with the rows that have none */}
+        {intervalInfo.catching && (
+          <ArrowUp
+            className="mr-1 inline h-3 w-3 align-[-1px]"
+            strokeWidth={2.5}
+            aria-hidden="true"
+          />
+        )}
         {intervalInfo.text}
         {intervalInfo.catching && <span className="sr-only"> (catching)</span>}
       </td>
 
-      <td className={`${td} text-right`}>
+      <td className={`${td} ${groupStart} text-right`}>
         <SectorSegment sectorIndex={0} sector={driver.Sectors?.['0']} />
       </td>
       <td className={`${td} text-right`}>
@@ -182,11 +189,7 @@ export const DriverRow: React.FC<DriverRowProps> = ({
         {lastMeaning && <span className="sr-only">, {lastMeaning}</span>}
       </td>
 
-      <td className={`${td} text-right`}>
-        <SpeedTrapCell speed={driver.Speeds?.['ST']} label="ST" />
-      </td>
-
-      <td className={td}>
+      <td className={`${td} ${groupStart}`}>
         <TyreBadge stint={driver.CurrentStint} />
       </td>
 

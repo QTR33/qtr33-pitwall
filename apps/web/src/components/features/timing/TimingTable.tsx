@@ -1,5 +1,6 @@
 import React from 'react';
 import { DriverState } from '@livetiming/shared';
+import { ArrowUp } from 'lucide-react';
 import { DriverRow } from './DriverRow.js';
 
 export interface TimingTableProps {
@@ -23,37 +24,53 @@ export const TimingTable: React.FC<TimingTableProps> = ({
     <div className="relative overflow-x-auto">
       {/* Fixed layout: column widths come from the colgroup, never from the values in them, so a
           changing time can't push its neighbours sideways. Widths fit the longest real value
-          (IBM Plex Mono 13px ≈ 7.8px per digit) plus the 24px cell padding; Driver takes the rest */}
-      <table className="w-full min-w-[1024px] table-fixed border-collapse text-left">
-        <caption className="sr-only">
-          Live timing order. Purple marks the overall fastest time, green a personal best.
+          (IBM Plex Mono 13px ≈ 7.8px per digit) plus the 24px cell padding; Driver takes the rest.
+          The 1080px floor leaves Driver ~190px, enough for a full name before it truncates.
+          Groups (order | pace | strategy) are set apart by 12px of extra lead-in at S1 and Tyre */}
+      <table className="w-full min-w-[1080px] table-fixed border-collapse text-left">
+        {/* The legend is the caption, shown under the rows: each color word is set in the color
+            it explains, so a first-time fan can learn the tower without leaving it */}
+        {/* Label size, but sentence case: drop the label scale's 0.06em tracking, which is meant
+            for short uppercase labels and slows reading in running text */}
+        <caption className="caption-bottom pt-3 text-left text-label tracking-normal text-mute">
+          <span className="sr-only">Live timing order. </span>
+          <span className="text-best">Purple</span> fastest overall ·{' '}
+          <span className="text-pb">Green</span> personal best · Grey previous lap ·{' '}
+          <span className="whitespace-nowrap text-pb">
+            <ArrowUp
+              className="mr-0.5 inline h-3 w-3 align-[-1px]"
+              strokeWidth={2.5}
+              aria-hidden="true"
+            />
+            catching
+          </span>{' '}
+          the car ahead · <span className="num text-pb">N</span> new tyres
         </caption>
         <colgroup>
-          <col className="w-12" />
+          {/* Position with its gain / loss beside it: "▲12 20" */}
+          <col className="w-16" />
           <col />
-          {/* Gap, Int: "+12.345", "+2 LAPS", "Leader" */}
+          {/* Gap: "+12.345", "+2 LAPS", "Leader"; Int also fits the 12px catching arrow */}
           <col className="w-[88px]" />
-          <col className="w-[88px]" />
-          {/* S1–S3: "1:02.345" at most; the mini-sector bars share the cell width */}
-          <col className="w-[88px]" />
+          <col className="w-[100px]" />
+          {/* S1–S3: "1:02.345" at most (S1 carries the pace group's lead-in) */}
+          <col className="w-[100px]" />
           <col className="w-[88px]" />
           <col className="w-[88px]" />
           {/* Best "1:21.902", Last up to an out-lap "10:46.790" */}
           <col className="w-[88px]" />
           <col className="w-[96px]" />
-          {/* ST "312" */}
-          <col className="w-14" />
-          {/* Tyre ring + "12 N" */}
-          <col className="w-[84px]" />
+          {/* Tyre ring + "12 N", plus the strategy group's lead-in */}
+          <col className="w-[96px]" />
           {/* "PIT EXIT" / "STOPPED" */}
           <col className="w-[76px]" />
         </colgroup>
         <thead>
           <tr className="border-b border-rule">
-            <th scope="col" className={`${th} sticky left-0 z-10 w-12 bg-paper pl-0 text-right`}>
+            <th scope="col" className={`${th} sticky left-0 z-10 w-16 bg-paper pl-0 text-right`}>
               Pos
             </th>
-            <th scope="col" className={`${th} sticky left-12 z-10 bg-paper`}>
+            <th scope="col" className={`${th} sticky left-16 z-10 bg-paper`}>
               Driver
             </th>
             <th scope="col" className={`${th} text-right`}>
@@ -62,7 +79,7 @@ export const TimingTable: React.FC<TimingTableProps> = ({
             <th scope="col" className={`${th} text-right`}>
               Int
             </th>
-            <th scope="col" className={`${th} text-right`}>
+            <th scope="col" className={`${th} pl-6 text-right`}>
               S1
             </th>
             <th scope="col" className={`${th} text-right`}>
@@ -77,12 +94,7 @@ export const TimingTable: React.FC<TimingTableProps> = ({
             <th scope="col" className={`${th} text-right`}>
               Last
             </th>
-            <th scope="col" className={`${th} text-right`}>
-              <abbr title="Speed trap, km/h" className="no-underline">
-                ST
-              </abbr>
-            </th>
-            <th scope="col" className={th}>
+            <th scope="col" className={`${th} pl-6`}>
               Tyre
             </th>
             <th scope="col" className={`${th} pr-0 text-right`}>
@@ -93,7 +105,7 @@ export const TimingTable: React.FC<TimingTableProps> = ({
         <tbody>
           {drivers.length === 0 ? (
             <tr>
-              <td colSpan={12} className="py-16 text-center text-data text-mute">
+              <td colSpan={11} className="py-16 text-center text-data text-mute">
                 {emptyMessage}
               </td>
             </tr>

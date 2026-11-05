@@ -15,18 +15,17 @@ export function App() {
   const { state, setMode, setSpeed, togglePlayPause, seekReplay, restartReplay, setSeries } =
     useLiveTiming();
 
-  // Keep only the car number: the driver is looked up in each new state, so the drawer stays live
+  // Keep only the car number: the driver is looked up in each new state, so the drawer stays live.
+  // A selection exists only while its drawer is open, so the row's accent edge goes with it
   const [selectedCar, setSelectedCar] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const selectedDriver = state?.drivers.find((d) => d.carNumber === selectedCar) ?? null;
 
   const handleSelectDriver = (driver: DriverState) => {
     setSelectedCar(driver.carNumber ?? null);
-    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setSelectedCar(null);
   };
 
   // Find overall fastest lap driver
@@ -56,7 +55,10 @@ export function App() {
       )}
 
       <main className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-8 md:px-8">
-        <div className="grid grid-cols-1 items-start gap-x-12 gap-y-12 xl:grid-cols-[minmax(0,1fr)_320px]">
+        {/* The sidebar only sits beside the tower once both fit: the tower needs 1080px, the
+            sidebar 320 + 48 gap, the page 64 of gutter — about 1512px, so from 2xl (1536px).
+            Narrower, the tower takes the full width and the sidebar follows it */}
+        <div className="grid grid-cols-1 items-start gap-x-12 gap-y-12 2xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0">
             <h2 className="sr-only">Timing</h2>
             <TimingTable
@@ -67,9 +69,14 @@ export function App() {
             />
           </div>
 
-          <aside className="space-y-10 xl:sticky xl:top-32" aria-label="Session details">
+          {/* Under the tower: fastest lap and race control side by side from lg; a column beside
+              the tower from 2xl */}
+          <aside
+            className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-12 2xl:sticky 2xl:top-32 2xl:flex-col 2xl:gap-10"
+            aria-label="Session details"
+          >
             {fastestLapDriver && (
-              <Card title="Fastest lap">
+              <Card title="Fastest lap" className="lg:w-80 lg:shrink-0 2xl:w-auto">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-ui font-semibold text-ink">{fastestLapDriver.name}</p>
@@ -90,14 +97,22 @@ export function App() {
             )}
 
             {/* Skip-link target: focusable so keyboard focus lands here, not back at the top */}
-            <div id="race-control" tabIndex={-1} className="focus:outline-none">
+            <div
+              id="race-control"
+              tabIndex={-1}
+              className="min-w-0 focus:outline-none lg:flex-1 2xl:flex-none"
+            >
               <RaceControlFeed messages={state?.raceControl || []} maxHeight="max-h-[420px]" />
             </div>
           </aside>
         </div>
       </main>
 
-      <DriverDetailModal driver={selectedDriver} isOpen={isModalOpen} onClose={handleCloseModal} />
+      <DriverDetailModal
+        driver={selectedDriver}
+        isOpen={selectedDriver !== null}
+        onClose={handleCloseModal}
+      />
 
       {showPlayback && state && (
         <PlaybackControls

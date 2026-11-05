@@ -32,17 +32,17 @@ colors:
   rule-light: '#E4E4E0'
   signal-light: '#D70F0F'
   best-light: '#7E22CE'
-  pb-light: '#15803D'
+  pb-light: '#117E3B'
   warn-light: '#8A6100'
   danger-light: '#C81E1E'
   seg-best-light: '#9333EA'
   seg-pb-light: '#16A34A'
-  seg-warn-light: '#E0A800'
+  seg-warn-light: '#BD8600'
   flag-green-light: '#16A34A'
   flag-yellow-light: '#EAB308'
   flag-red-light: '#DC2626'
   compound-soft-light: '#D6002A'
-  compound-medium-light: '#946A00'
+  compound-medium-light: '#8F6500'
   compound-hard-light: '#52565E'
   compound-inter-light: '#2E7D1E'
   compound-wet-light: '#0062A8'
@@ -95,7 +95,7 @@ rounded:
 spacing:
   hairline: '1px'
   bar-gap: '2px'
-  cell-y: '10px'
+  cell-y: '8px'
   cell-x: '12px'
   gutter: '16px'
   gutter-md: '32px'
@@ -139,7 +139,7 @@ components:
     backgroundColor: '{colors.paper}'
     textColor: '{colors.ink}'
     typography: '{typography.numeral}'
-    padding: '10px 12px'
+    padding: '8px 12px'
   timing-row-selected:
     backgroundColor: '{colors.raise}'
   tyre-ring:
@@ -147,9 +147,6 @@ components:
     typography: '{typography.label}'
     rounded: '{rounded.full}'
     size: '20px'
-  mini-sector-bar:
-    backgroundColor: '{colors.seg-pb}'
-    height: '3px'
   mini-sector-bar-large:
     backgroundColor: '{colors.seg-pb}'
     height: '4px'
@@ -215,7 +212,7 @@ These encode timing meaning and nothing else.
 - **Personal Best Green** (`pb`): personal best; also positions gained and the catching interval.
 - **Timed Amber** (`warn`): caution text (yellow, SC, VSC), in-pit status.
 - **Alarm Red** (`danger`): red flag, positions lost, connection errors.
-- **Mini-sector bars** (`seg-best`, `seg-pb`, `seg-warn`): fills for the 3px mini-sector bars. In light theme they are brighter and more saturated than the text tokens so thin bars still read.
+- **Mini-sector bars** (`seg-best`, `seg-pb`, `seg-warn`): fills for the mini-sector bars in the driver drawer. In light theme they are brighter and more saturated than the text tokens so thin bars still read.
 - **Track flags** (`flag-green`, `flag-yellow`, `flag-red`): the full-width alert rule only. The status label beside it uses the AA-safe text tokens instead.
 - **Tyre compounds** (`compound-soft`, `compound-medium`, `compound-hard`, `compound-inter`, `compound-wet`): the ring and letter of the tyre badge.
 - **Team colors** come from the feed at runtime and appear only as a 3px vertical bar beside the driver name.
@@ -226,7 +223,7 @@ These encode timing meaning and nothing else.
 
 **The Data Earns Color Rule.** Data colors are text color or thin bars, never box fills or backgrounds. A cell is purple because the time is the fastest, never for decoration.
 
-**The Two Themes Rule.** Every new token is defined in both theme blocks and mapped in `tailwind.config.js`; text pairs stay at or above WCAG AA (4.5:1) on `paper` in both themes.
+**The Two Themes Rule.** Every new token is defined in both theme blocks and mapped in `tailwind.config.js`; text pairs stay at or above WCAG AA (4.5:1) on both `paper` and `raise` (rows are read while hovered or selected), and thin bars that carry meaning stay at or above 3:1 on `paper`, in both themes.
 
 ## Typography
 
@@ -255,13 +252,13 @@ These encode timing meaning and nothing else.
 
 ## Layout
 
-A single centered container (max 1600px) with a 16px side gutter on small screens and 32px from `md` (768px). The header is sticky from `md`.
+A single centered container (max 1600px) with a 16px side gutter on small screens and 32px from `md` (768px). The header is sticky at every width, so track status, session progress and feed state never scroll out of a glance.
 
-The main view is a two-column grid from `xl` (1280px): the timing tower takes the flexible column and a 320px sidebar (fastest lap, race control) sits to the right, sticky. Columns are 48px apart; sidebar sections are 40px apart. Below `xl`, the sidebar stacks under the tower.
+The main view puts a 320px sidebar (fastest lap, race control) beside the tower only from `2xl` (1536px), sticky, 48px apart: the tower needs its 1080px, so anything narrower would make it scroll. Below `2xl` the tower takes the full width and the sidebar follows it, as two side-by-side blocks from `lg` (fastest lap 320px, race control the rest), stacked below `lg`. Sections are 40px apart. Wherever the race-control feed sits below the tower, its latest message rides in the header (see Race Control Ticker).
 
-The timing tower is a real table with a fixed layout (`table-layout: fixed`), 1024px minimum width, scrolling horizontally inside its own container on narrow screens. Position and driver columns stay sticky on the left. Cells use 10px vertical and 12px horizontal padding; numeric columns are right-aligned.
+The timing tower is a real table with a fixed layout (`table-layout: fixed`), 1080px minimum width, scrolling horizontally inside its own container on narrow screens. Position and driver columns stay sticky on the left. Cells use 8px vertical and 12px horizontal padding, giving one-line rows of about 38px (the 15px position is the tallest cell); numeric columns are right-aligned.
 
-**The Still Columns Rule.** Values change several times a second, so no value may move its neighbours. Every timing column has a fixed width in the `colgroup`, sized to the longest real value it can hold (IBM Plex Mono 13px ≈ 7.8px per digit, plus 24px padding); Driver is the only flexible column and truncates. Optional lines inside a row (position delta, mini-sector strip) keep their height when empty, so rows never change height either. Below `sm` (640px) the driver cell drops to number and three-letter code.
+**The Still Columns Rule.** Values change several times a second, so no value may move its neighbours. Every timing column has a fixed width in the `colgroup`, sized to the longest real value it can hold (IBM Plex Mono 13px ≈ 7.8px per digit, plus 24px padding); Driver is the only flexible column and truncates. Rows are one line and never change height either: the position delta sits beside the number. Below `sm` (640px) the driver cell drops to number and three-letter code.
 
 The header is a three-zone grid on `md` and up (brand and session left, session progress centered, status right); below `md` the progress hero wraps onto its own row. The status zone carries the feed status, last update, theme toggle, track status and weather; there is no wall clock.
 
@@ -269,7 +266,7 @@ The header is a three-zone grid on `md` and up (brand and session left, session 
 
 ## Elevation & Depth
 
-The system is flat. There are no shadows anywhere. Depth is expressed by tone and position only: `raise` marks hovered and selected rows, sticky header and cells repaint `paper` so content passes beneath cleanly, and dialogs sit over a 50% black scrim with a 1px `rule` border.
+The system is flat. There are no shadows anywhere. Depth is expressed by tone and position only: `raise` marks hovered and selected rows, sticky header and cells repaint `paper` so content passes beneath cleanly, and dialogs sit over a scrim of `paper` at 75% (it dims the page toward its own ground in either theme) with a 1px `rule` border.
 
 **The Flat Monitor Rule.** No shadows, gradients, blur or glow, at rest or in any state. If a layer must read as above another, use the scrim and a hairline border.
 
@@ -317,13 +314,15 @@ Precise and restrained; the label does the work.
 
 ### Timing Tower (signature)
 
-The product's core component: a table row per car.
+The product's core component: a table row per car. Columns, in the official order: Pos · Driver · Gap · Int | S1 · S2 · S3 · Best · Last | Tyre · Pit. The pace group (from S1) and the strategy group (from Tyre) each start with 12px of extra lead-in, so the three groups read apart without rules or boxes. Gap and Int carry equal weight.
 
-- **Row:** hairline-separated, `paper` at rest, `raise` on hover and when selected; a 2px left edge in `signal` marks the selected car.
-- **Position:** 15px 600 numeral, with a ▲/▼ delta beneath in `pb` or `danger`.
-- **Driver:** 3px team-color bar, muted car number, name in 600, three-letter code, team in `mute` below.
+- **Row:** hairline-separated, `paper` at rest, `raise` on hover and while selected; a 2px left edge in `signal` marks the selected car. A selection lasts only while its drawer is open; closing the drawer clears it, and focus returns to the row.
+- **Legend:** the table caption, shown under the rows in `mute` Label size: each color word is set in the color it explains (Purple fastest overall · Green personal best · Grey previous lap · ↑ catching the car ahead · N new tyres).
+- **Position:** 15px 600 numeral, with its ▲/▼ delta beside it (to its left) in `pb` or `danger`, so the row stays one line.
+- **Driver:** one line: a 3×20px team-color bar, muted car number, name in 600 (truncating), three-letter code. The team name is not repeated per row; it lives in the drawer and the accessible name.
 - **Times:** right-aligned numerals colored by `best` / `pb` / `ink`; a sector still in progress holds last lap's time in `mute`.
-- **Mini-sectors:** 3px bars, 2px apart, sharing the sector cell's width equally (the count varies by circuit and sector, 6–10), under each sector time, colored by `seg-best`, `seg-pb`, `seg-warn`, `mute` (pit lane) or `rule` (not reached).
+- **Catching:** an interval that is closing shows a 12px up arrow before the value, in `pb` with the value, so shape as well as color carries it; it sits before the digits so they stay aligned with every other row.
+- **Kept for the drawer:** mini-sectors and speed traps are not in the tower. A glance needs the sector time, not ~24 bars per row; both live in the driver drawer, where there is room to read them.
 - **Tyre:** a 20px compound-colored ring with the compound letter, followed by stint laps in `mute` and a `pb` "N" for a new set.
 - **Car state** (last column, in place of the stop count): an uppercase Label — `Out` in `mute` (the name also drops to `mute`, gap and interval read "—"), `Stopped` in `danger`, `In pit` and `Pit exit` in `warn`.
 - **Meaning in words:** every colored time or speed carries `sr-only` text ("fastest overall", "personal best", "previous lap") so the color is never the only carrier.
@@ -336,10 +335,14 @@ The deep view behind a glance: opened by selecting a row in the tower, it shows 
 - **Position block:** `P{position}` in Display at the left, the drawer's one hero; to its right, bottom-aligned, a three-column stat group (Gap, Best lap, Pit stops), right-aligned with 24px gaps. Best lap takes `best` / `pb` / `ink` by meaning.
 - **Stat:** a definition pair (`<dl>` / `<dt>` / `<dd>`): an uppercase Label in `mute` over a Numeral Large value in `ink`, 4px apart. Used for every single value in the drawer.
 - **Section:** an uppercase Label heading with content 12px below. No hairline under the heading; that distinguishes drawer sections from sidebar Cards. Units live in the heading (`Speed traps · km/h`), never in the values.
-- **Sectors:** three columns from `sm` (one column below), 24px apart. Each has `S1`–`S3` as a Label and the time in Numeral Large on one baseline, colored by meaning; a sector still in progress shows last lap's time in `mute`. Beneath, the large mini-sector strip: 4px bars that share the column width equally, 3px apart, in the same segment colors as the tower.
+- **Sectors:** three columns from `sm` (one column below), 24px apart. Each has `S1`–`S3` as a Label and the time in Numeral Large on one baseline, colored by meaning; a sector still in progress shows last lap's time in `mute`. Beneath, the mini-sector strip, the only place mini-sectors appear: 4px bars that share the column width equally, 3px apart, colored by `seg-best`, `seg-pb`, `seg-warn`, `mute` (pit lane) or `rule` (not reached).
 - **Speed traps:** a Stat grid, two columns below `sm` and four from `sm` (Speed trap, Intermediate 1, Intermediate 2, Finish line), each value colored by meaning or `mute` when empty.
-- **Stints:** a compact hairline table (Stint, Tyre, Laps, Best lap) with Label headers, the same 10px row padding as the tower, the first and last columns flush to the edges, and the tyre ring without its lap count. Rows are static: no hover, no selection.
+- **Stints:** a compact hairline table (Stint, Tyre, Laps, Best lap) with Label headers, 10px row padding, the first and last columns flush to the edges, and the tyre ring without its lap count. Rows are static: no hover, no selection.
 - **Empty states:** one plain sentence in `mute` at the content's size, in place of the content, e.g. "No mini-sectors yet", "No stints recorded yet". No icons or illustrations.
+
+### Race Control Ticker
+
+Below `2xl`, a one-line strip at the bottom of the sticky header carries the newest race-control message: Label "Race control" (from `sm`), the time in `mute` numerals, the category Badge, the message in `ink` (truncating, full text in its title) and an "All messages" link to the feed under the tower. It is not a live region; the full feed announces messages once.
 
 ### Track Status
 
@@ -367,7 +370,7 @@ The deep view behind a glance: opened by selecting a row in the tower, it shows 
 ### Don't:
 
 - **Don't** fill unknown facts with defaults: a missing team, total or session name stays empty or reads "—".
-- **Don't** hard-code colors or use `dark:` variants (the `#E10600` team-color fallback in `DriverRow.tsx` and the `bg-black/50` scrim are existing exceptions to remove, not patterns to copy).
+- **Don't** hard-code colors or use `dark:` variants. A team with no color from the feed gets a `rule` bar, never an invented brand color; browser surfaces (text selection, scrollbars) take tokens too.
 - **Don't** add shadows, gradients, blur or glow.
 - **Don't** use data colors as box fills or backgrounds.
 - **Don't** introduce a second interface accent.

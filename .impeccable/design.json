@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-04T15:37:06.134Z",
+  "generatedAt": "2026-11-05T15:05:54.201Z",
   "title": "Design System: QTR33 Pitwall",
   "extensions": {
     "colorMeta": {
@@ -455,8 +455,8 @@
       "pb-light": {
         "role": "data",
         "displayName": "Personal Best Green (light theme)",
-        "canonical": "rgb(21 128 61) /* --pb in html.light */",
-        "oklch": "oklch(52.7% 0.137 150.1)",
+        "canonical": "rgb(17 126 59) /* --pb in html.light */",
+        "oklch": "oklch(52.1% 0.137 150.0)",
         "tonalRamp": [
           "#001200",
           "#003400",
@@ -535,17 +535,17 @@
       "seg-warn-light": {
         "role": "data",
         "displayName": "Mini-sector Amber (light theme)",
-        "canonical": "rgb(224 168 0) /* --seg-warn in html.light */",
-        "oklch": "oklch(76.3% 0.157 84.4)",
+        "canonical": "rgb(189 134 0) /* --seg-warn in html.light */",
+        "oklch": "oklch(65.8% 0.136 79.6)",
         "tonalRamp": [
           "#190600",
-          "#431900",
+          "#431A00",
           "#6A3700",
-          "#8F5A00",
-          "#B57E00",
-          "#D3A745",
-          "#E7CE9D",
-          "#F6EEDC"
+          "#8E5A00",
+          "#B47E00",
+          "#D3A658",
+          "#E7CDA4",
+          "#F6EDDF"
         ]
       },
       "flag-green-light": {
@@ -615,17 +615,17 @@
       "compound-medium-light": {
         "role": "data",
         "displayName": "Medium Compound (light theme)",
-        "canonical": "rgb(148 106 0) /* --compound-medium in html.light */",
-        "oklch": "oklch(55.3% 0.114 81.2)",
+        "canonical": "rgb(143 101 0) /* --compound-medium in html.light */",
+        "oklch": "oklch(53.7% 0.111 80.0)",
         "tonalRamp": [
           "#160700",
           "#3E1E00",
-          "#633C00",
+          "#633B00",
           "#875D00",
-          "#AC8129",
-          "#CCA869",
-          "#E2CEAC",
-          "#F5EEE1"
+          "#AC812E",
+          "#CCA86B",
+          "#E2CEAD",
+          "#F5EDE2"
         ]
       },
       "compound-hard-light": {
@@ -815,9 +815,9 @@
       "name": "Timing Row",
       "kind": "custom",
       "refersTo": "timing-row",
-      "description": "Signature component: one car in the timing tower, with team bar, colored times, mini-sectors and tyre ring.",
-      "html": "<table class=\"ds-tower\"><tbody><tr class=\"ds-row ds-row-selected\"><td class=\"ds-pos\">1</td><td><span class=\"ds-driver\"><span class=\"ds-team\"></span><span class=\"ds-carno\">1</span><span class=\"ds-name\">Driver Name</span><span class=\"ds-code\">DRV</span></span></td><td class=\"ds-num ds-mute\">Leader</td><td class=\"ds-num\"><span class=\"ds-sector\"><span class=\"ds-best\">28.114</span><span class=\"ds-bars\"><i class=\"ds-seg-best\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-best\"></i><i class=\"ds-seg-rule\"></i></span></span></td><td class=\"ds-num ds-pb\">1:21.902</td><td><span class=\"ds-tyre\">M</span> <span class=\"ds-num ds-mute\">12</span></td></tr><tr class=\"ds-row\"><td class=\"ds-pos\">2</td><td><span class=\"ds-driver\"><span class=\"ds-team ds-team-2\"></span><span class=\"ds-carno\">44</span><span class=\"ds-name\">Second Driver</span><span class=\"ds-code\">SEC</span></span></td><td class=\"ds-num\">+2.418</td><td class=\"ds-num\"><span class=\"ds-sector\"><span class=\"ds-ink\">28.390</span><span class=\"ds-bars\"><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-pb\"></i><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-warn\"></i><i class=\"ds-seg-rule\"></i><i class=\"ds-seg-rule\"></i></span></span></td><td class=\"ds-num ds-ink\">1:22.140</td><td><span class=\"ds-tyre ds-tyre-hard\">H</span> <span class=\"ds-num ds-mute\">3</span></td></tr></tbody></table>",
-      "css": ".ds-tower { border-collapse: collapse; font: 400 13px/20px 'IBM Plex Sans', system-ui, sans-serif; color: rgb(var(--ink)); } .ds-row { border-bottom: 1px solid rgb(var(--rule)); background: rgb(var(--paper)); transition: background-color 150ms; cursor: pointer; } .ds-row:hover, .ds-row-selected { background: rgb(var(--raise)); } .ds-row td { padding: 10px 12px; vertical-align: middle; } .ds-row td.ds-num { text-align: right; } .ds-pos { border-left: 2px solid transparent; font: 600 15px/22px 'IBM Plex Mono', ui-monospace, Consolas, monospace; text-align: right; } .ds-row-selected .ds-pos { border-left-color: rgb(var(--signal)); } .ds-driver { display: inline-flex; align-items: center; gap: 8px; } .ds-team { width: 3px; height: 28px; border-radius: 9999px; background: #3671C6; } .ds-team-2 { background: #27F4D2; } .ds-carno { width: 20px; text-align: right; font: 400 11px/16px 'IBM Plex Mono', ui-monospace, Consolas, monospace; color: rgb(var(--mute)); } .ds-name { font-weight: 600; } .ds-code { font: 400 11px/16px 'IBM Plex Mono', ui-monospace, Consolas, monospace; color: rgb(var(--mute)); } .ds-num { font-family: 'IBM Plex Mono', ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; } .ds-mute { color: rgb(var(--mute)); } .ds-ink { color: rgb(var(--ink)); } .ds-best { color: rgb(var(--best)); } .ds-pb { color: rgb(var(--pb)); } .ds-sector { display: inline-flex; flex-direction: column; align-items: flex-end; gap: 4px; } .ds-bars { display: flex; gap: 2px; width: 64px; height: 3px; } .ds-bars i { display: block; flex: 1; } .ds-seg-best { background: rgb(var(--seg-best)); } .ds-seg-pb { background: rgb(var(--seg-pb)); } .ds-seg-warn { background: rgb(var(--seg-warn)); } .ds-seg-rule { background: rgb(var(--rule)); } .ds-tyre { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; box-sizing: border-box; border-radius: 9999px; border: 1.5px solid rgb(var(--compound-medium)); color: rgb(var(--compound-medium)); font: 600 11px/16px 'IBM Plex Mono', ui-monospace, Consolas, monospace; } .ds-tyre-hard { border-color: rgb(var(--compound-hard)); color: rgb(var(--compound-hard)); }"
+      "description": "Signature component: one car in the timing tower, one line high, with team bar, colored times and tyre ring.",
+      "html": "<table class=\"ds-tower\"><tbody><tr class=\"ds-row ds-row-selected\"><td class=\"ds-pos\">1</td><td><span class=\"ds-driver\"><span class=\"ds-team\"></span><span class=\"ds-carno\">1</span><span class=\"ds-name\">Driver Name</span><span class=\"ds-code\">DRV</span></span></td><td class=\"ds-num ds-mute\">Leader</td><td class=\"ds-num\"><span class=\"ds-best\">28.114</span></td><td class=\"ds-num ds-pb\">1:21.902</td><td><span class=\"ds-tyre\">M</span> <span class=\"ds-num ds-mute\">12</span></td></tr><tr class=\"ds-row\"><td class=\"ds-pos\">2</td><td><span class=\"ds-driver\"><span class=\"ds-team ds-team-2\"></span><span class=\"ds-carno\">44</span><span class=\"ds-name\">Second Driver</span><span class=\"ds-code\">SEC</span></span></td><td class=\"ds-num\">+2.418</td><td class=\"ds-num\"><span class=\"ds-ink\">28.390</span></td><td class=\"ds-num ds-ink\">1:22.140</td><td><span class=\"ds-tyre ds-tyre-hard\">H</span> <span class=\"ds-num ds-mute\">3</span></td></tr></tbody></table>",
+      "css": ".ds-tower { border-collapse: collapse; font: 400 13px/20px 'IBM Plex Sans', system-ui, sans-serif; color: rgb(var(--ink)); } .ds-row { border-bottom: 1px solid rgb(var(--rule)); background: rgb(var(--paper)); transition: background-color 150ms; cursor: pointer; } .ds-row:hover, .ds-row-selected { background: rgb(var(--raise)); } .ds-row td { padding: 8px 12px; vertical-align: middle; } .ds-row td.ds-num { text-align: right; } .ds-pos { border-left: 2px solid transparent; font: 600 15px/22px 'IBM Plex Mono', ui-monospace, Consolas, monospace; text-align: right; } .ds-row-selected .ds-pos { border-left-color: rgb(var(--signal)); } .ds-driver { display: inline-flex; align-items: center; gap: 8px; } .ds-team { width: 3px; height: 28px; border-radius: 9999px; background: #3671C6; } .ds-team-2 { background: #27F4D2; } .ds-carno { width: 20px; text-align: right; font: 400 11px/16px 'IBM Plex Mono', ui-monospace, Consolas, monospace; color: rgb(var(--mute)); } .ds-name { font-weight: 600; } .ds-code { font: 400 11px/16px 'IBM Plex Mono', ui-monospace, Consolas, monospace; color: rgb(var(--mute)); } .ds-num { font-family: 'IBM Plex Mono', ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; } .ds-mute { color: rgb(var(--mute)); } .ds-ink { color: rgb(var(--ink)); } .ds-best { color: rgb(var(--best)); } .ds-pb { color: rgb(var(--pb)); } .ds-sector { display: inline-flex; flex-direction: column; align-items: flex-end; gap: 4px; } .ds-bars { display: flex; gap: 2px; width: 64px; height: 3px; } .ds-bars i { display: block; flex: 1; } .ds-seg-best { background: rgb(var(--seg-best)); } .ds-seg-pb { background: rgb(var(--seg-pb)); } .ds-seg-warn { background: rgb(var(--seg-warn)); } .ds-seg-rule { background: rgb(var(--rule)); } .ds-tyre { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; box-sizing: border-box; border-radius: 9999px; border: 1.5px solid rgb(var(--compound-medium)); color: rgb(var(--compound-medium)); font: 600 11px/16px 'IBM Plex Mono', ui-monospace, Consolas, monospace; } .ds-tyre-hard { border-color: rgb(var(--compound-hard)); color: rgb(var(--compound-hard)); }"
     },
     {
       "name": "Drawer Stat Group",
@@ -868,7 +868,7 @@
       },
       {
         "name": "The Two Themes Rule",
-        "body": "Every new token is defined in both theme blocks and mapped in `tailwind.config.js`; text pairs stay at or above WCAG AA (4.5:1) on `paper` in both themes.",
+        "body": "Every new token is defined in both theme blocks and mapped in `tailwind.config.js`; text pairs stay at or above WCAG AA (4.5:1) on both `paper` and `raise` (rows are read while hovered or selected), and thin bars that carry meaning stay at or above 3:1 on `paper`, in both themes.",
         "section": "colors"
       },
       {
@@ -888,7 +888,7 @@
       },
       {
         "name": "The Still Columns Rule",
-        "body": "Values change several times a second, so no value may move its neighbours. Every timing column has a fixed width in the `colgroup`, sized to the longest real value it can hold (IBM Plex Mono 13px ≈ 7.8px per digit, plus 24px padding); Driver is the only flexible column and truncates. Optional lines inside a row (position delta, mini-sector strip) keep their height when empty, so rows never change height either. Below `sm` (640px) the driver cell drops to number and three-letter code.",
+        "body": "Values change several times a second, so no value may move its neighbours. Every timing column has a fixed width in the `colgroup`, sized to the longest real value it can hold (IBM Plex Mono 13px ≈ 7.8px per digit, plus 24px padding); Driver is the only flexible column and truncates. Rows are one line and never change height either: the position delta sits beside the number. Below `sm` (640px) the driver cell drops to number and three-letter code.",
         "section": "layout"
       },
       {
@@ -920,7 +920,7 @@
     ],
     "donts": [
       "Don't fill unknown facts with defaults: a missing team, total or session name stays empty or reads \"—\".",
-      "Don't hard-code colors or use `dark:` variants (the `#E10600` team-color fallback in `DriverRow.tsx` and the `bg-black/50` scrim are existing exceptions to remove, not patterns to copy).",
+      "Don't hard-code colors or use `dark:` variants. A team with no color from the feed gets a `rule` bar, never an invented brand color; browser surfaces (text selection, scrollbars) take tokens too.",
       "Don't add shadows, gradients, blur or glow.",
       "Don't use data colors as box fills or backgrounds.",
       "Don't introduce a second interface accent.",

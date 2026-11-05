@@ -8,6 +8,8 @@ import {
 } from '@livetiming/shared';
 import { logger } from './logger.js';
 
+// impeccable-disable design-system-color -- %c console log styling only; this file renders no UI
+
 // WEC Hypercar 2026 Grid
 const WEC_DRIVERS = [
   {

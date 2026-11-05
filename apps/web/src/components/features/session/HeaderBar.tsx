@@ -7,6 +7,7 @@ import { SessionTimer } from './SessionTimer.js';
 import { BrandMark } from './BrandMark.js';
 import { LastUpdated } from './LastUpdated.js';
 import { FeedNotice } from './FeedNotice.js';
+import { RaceControlTicker } from '../race-control/RaceControlTicker.js';
 import { StatusPill, StatusPillProps } from '../../common/StatusPill.js';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../../../hooks/useTheme.js';
@@ -84,7 +85,8 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
   };
 
   return (
-    <header className="z-30 border-b border-rule bg-paper md:sticky md:top-0">
+    // Sticky at every width: the flag, progress and feed state must never scroll out of a glance
+    <header className="sticky top-0 z-30 border-b border-rule bg-paper">
       {/* Full-width rule in the track-status color (green, yellow, SC/VSC, red);
           beats during caution periods */}
       {flagStyle.alert && (
@@ -153,6 +155,9 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
           </div>
         </div>
       </div>
+
+      {/* Below 2xl the race-control feed sits under the tower, so its latest line rides here */}
+      <RaceControlTicker messages={state.raceControl} className="2xl:hidden" />
 
       {/* Inside the header so it stays in view while the tower scrolls */}
       {linkDown && <FeedNotice lastUpdated={state.lastUpdated} />}
