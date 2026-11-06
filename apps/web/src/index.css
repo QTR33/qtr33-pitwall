@@ -5,14 +5,14 @@
 /*
  * ── Pitwall — Minimal Timing Tower ─────────────────────────────────
  * Single source of design tokens. Values are RGB channels so Tailwind
- * opacity modifiers work (`bg-ink/5`). All text pairs are ≥ 4.5:1 on paper.
+ * opacity modifiers work (`bg-ink/5`). All text pairs are ≥ 4.5:1 on both paper and raise (hovered / selected rows);
+ * thin bars that carry meaning are ≥ 3:1 on paper.
  *
  * Interface: paper · raise · ink · mute · rule · signal (the only accent)
  * Data:      best (overall fastest) · pb (personal best) · warn · danger · tyre compounds
  * Bars:      seg-best · seg-pb · seg-warn — mini-sector fills. Light theme uses brighter,
  *            more saturated values than the text tokens so thin bars read at a glance.
- * Flags:     flag-green · flag-yellow · flag-red — the track-status flag glyph and alert rule.
- *            flag-ink — lettering on the yellow SC / VSC board (dark in both themes).
+ * Flags:     flag-green · flag-yellow · flag-red — the track-status alert rule.
  */
 
 :root,
@@ -38,7 +38,6 @@ html.dark {
   --flag-green: 74 222 128; /* #4ADE80 */
   --flag-yellow: 250 204 21; /* #FACC15 */
   --flag-red: 248 113 113; /* #F87171 */
-  --flag-ink: 20 21 23; /* #141517 */
 
   --compound-soft: 255 45 85; /* #FF2D55 */
   --compound-medium: 255 195 0; /* #FFC300 */
@@ -58,21 +57,20 @@ html.light {
   --signal: 215 15 15; /* #D70F0F */
 
   --best: 126 34 206; /* #7E22CE */
-  --pb: 21 128 61; /* #15803D */
+  --pb: 17 126 59; /* #117E3B */
   --warn: 138 97 0; /* #8A6100 */
   --danger: 200 30 30; /* #C81E1E */
 
   --seg-best: 147 51 234; /* #9333EA */
   --seg-pb: 22 163 74; /* #16A34A */
-  --seg-warn: 224 168 0; /* #E0A800 */
+  --seg-warn: 189 134 0; /* #BD8600 */
 
   --flag-green: 22 163 74; /* #16A34A */
   --flag-yellow: 234 179 8; /* #EAB308 */
   --flag-red: 220 38 38; /* #DC2626 */
-  --flag-ink: 20 21 23; /* #141517 */
 
   --compound-soft: 214 0 42; /* #D6002A */
-  --compound-medium: 148 106 0; /* #946A00 */
+  --compound-medium: 143 101 0; /* #8F6500 */
   --compound-hard: 82 86 94; /* #52565E */
   --compound-inter: 46 125 30; /* #2E7D1E */
   --compound-wet: 0 98 168; /* #0062A8 */
@@ -91,7 +89,14 @@ html.light {
 
   ::selection {
     background: rgb(var(--signal));
-    color: #fff;
+    /* paper on signal clears 5:1 in both themes; plain white did not in dark */
+    color: rgb(var(--paper));
+  }
+
+  /* Standard scrollbar styling (Firefox, current Chromium); the webkit rules cover older engines */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--rule)) transparent;
   }
 
   ::-webkit-scrollbar {
@@ -103,7 +108,7 @@ html.light {
   }
   ::-webkit-scrollbar-thumb {
     background: rgb(var(--rule));
-    border-radius: 3px;
+    border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: rgb(var(--mute));

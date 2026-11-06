@@ -4,14 +4,9 @@ import { getTimingFeed } from '../services/TimingFeed.js';
 
 export function useLiveTiming() {
   const [state, setState] = useState<LiveTimingState | null>(null);
-  const [isConnected, setIsConnected] = useState(true);
-  const [error] = useState<string | null>(null);
 
   useEffect(() => {
-    return getTimingFeed().subscribe((nextState) => {
-      setState(nextState);
-      setIsConnected(true);
-    });
+    return getTimingFeed().subscribe(setState);
   }, []);
 
   const setMode = useCallback((mode: TimingMode) => {
@@ -40,8 +35,6 @@ export function useLiveTiming() {
 
   return {
     state,
-    isConnected,
-    error,
     setMode,
     setSpeed,
     togglePlayPause,

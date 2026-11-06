@@ -85,21 +85,25 @@ export class TimingStateManager {
   // Once the official LapCount topic arrives it owns the lap counter
   private hasLapCount = false;
 
+  // When the last feed message was processed; drives the snapshot's lastUpdated
+  private lastDataAt: number | null = null;
+
   constructor(series: RacingSeriesId = 'f1') {
     this.series = series;
-    this.sessionState = {
+    this.sessionState = TimingStateManager.emptySession(series);
+  }
+
+  // Unknown until the feed says otherwise: empty names, 0 laps, no weather, never invented values
+  private static emptySession(series: RacingSeriesId): SessionState {
+    return {
       series,
-      sessionName: 'Grand Prix 2026',
-      sessionType: 'Race',
-      sessionStatus: 'Started',
+      sessionName: '',
+      sessionType: '',
+      sessionStatus: 'Inactive',
       trackStatus: 'GREEN',
-      circuitName: 'Albert Park Circuit',
-      totalLaps: 58,
-      currentLap: 1,
-      airTemp: 24,
-      trackTemp: 38,
-      humidity: 52,
-      rainfall: false,
+      circuitName: '',
+      totalLaps: 0,
+      currentLap: 0,
     };
   }
 
@@ -114,11 +118,8 @@ export class TimingStateManager {
       this.sessionState.circuitName = 'Indianapolis Motor Speedway';
       this.sessionState.sessionName = 'Indy 500';
       this.sessionState.totalLaps = 200;
-    } else {
-      this.sessionState.circuitName = 'Albert Park Circuit';
-      this.sessionState.sessionName = 'Australian Grand Prix 2026';
-      this.sessionState.totalLaps = 58;
     }
+    // F1 session details come from the real feed (SessionInfo / LapCount), so none are preset
   }
 
   public subscribe(listener: (state: LiveTimingState) => void) {
@@ -165,6 +166,7 @@ export class TimingStateManager {
 
   public processMessage(topic: string, data: any) {
     if (!data) return;
+    this.lastDataAt = Date.now();
 
     if (topic === 'TimingData' || topic === 'TimingAppData') {
       if (data.Lines) {
@@ -259,10 +261,9 @@ export class TimingStateManager {
         this.sessionState.currentLap = maxLaps;
       }
 
-      // Check for session-level data in TimingData
-      if (data.SessionPart) {
-        this.sessionState.sessionType = `Q${data.SessionPart}`;
-      }
+      // Qualifying part (1–3), kept apart from the session's own name
+      const part = parseInt(String(data.SessionPart ?? ''), 10);
+      if (part > 0) this.sessionState.sessionPart = part;
     } else if (topic === 'DriverList') {
       for (const carNum in data) {
         if (!this.driversState[carNum]) {
@@ -360,7 +361,27 @@ export class TimingStateManager {
       if (data.Meeting?.Circuit?.ShortName) {
         this.sessionState.circuitName = data.Meeting.Circuit.ShortName;
       }
-      if (data.Name) this.sessionState.sessionType = data.Name;
+      if (data.Name) {
+        // A different session starts with no qualifying part until the feed names one
+        if (data.Name !== this.sessionState.sessionType) this.sessionState.sessionPart = undefined;
+        this.sessionState.sessionType = data.Name;
+      }
+      const kind = String(data.Type ?? '').toLowerCase();
+      if (kind === 'race' || kind === 'qualifying' || kind === 'practice') {
+        this.sessionState.sessionKind = kind;
+      }
+    } else if (topic === 'ExtrapolatedClock') {
+      // Deltas may carry only some fields, so merge onto the last known clock
+      const prev = this.sessionState.clock;
+      const remaining = data.Remaining ?? prev?.remaining;
+      const utc = data.Utc ?? prev?.utc;
+      if (remaining && utc) {
+        this.sessionState.clock = {
+          remaining: String(remaining),
+          utc: String(utc),
+          running: data.Extrapolating !== undefined ? !!data.Extrapolating : !!prev?.running,
+        };
+      }
     } else if (topic === 'WeatherData') {
       const num = (v: unknown) => {
         const n = parseFloat(String(v ?? ''));
@@ -370,6 +391,8 @@ export class TimingStateManager {
       this.sessionState.trackTemp = num(data.TrackTemp) ?? this.sessionState.trackTemp;
       this.sessionState.humidity = num(data.Humidity) ?? this.sessionState.humidity;
       this.sessionState.windSpeed = num(data.WindSpeed) ?? this.sessionState.windSpeed;
+      this.sessionState.windDirection = num(data.WindDirection) ?? this.sessionState.windDirection;
+      this.sessionState.pressure = num(data.Pressure) ?? this.sessionState.pressure;
       if (data.Rainfall !== undefined) this.sessionState.rainfall = String(data.Rainfall) === '1';
     }
 
@@ -447,7 +470,7 @@ export class TimingStateManager {
       drivers: this.getSortedDrivers(),
       raceControl: this.raceControlMessages,
       replay: replayState,
-      lastUpdated: new Date().toISOString(),
+      lastUpdated: new Date(this.lastDataAt ?? Date.now()).toISOString(),
     };
   }
 
@@ -455,5 +478,7 @@ export class TimingStateManager {
     this.driversState = {};
     this.raceControlMessages = [];
     this.hasLapCount = false;
+    this.lastDataAt = null;
+    this.sessionState = TimingStateManager.emptySession(this.series);
   }
 }

@@ -2,9 +2,10 @@ import React from 'react';
 import { DriverState } from '@livetiming/shared';
 import { SectorSegment } from './SectorSegment.js';
 import { TyreBadge } from './TyreBadge.js';
-import { SpeedTrapCell } from './SpeedTrapCell.js';
+import { Button } from '../../common/Button.js';
+import { ArrowUp } from 'lucide-react';
 import { formatGap, formatInterval, formatLapTime } from '../../../utils/formatters.js';
-import { getTimingTextColor } from '../../../utils/colors.js';
+import { getTimingTextColor, getTimingMeaning } from '../../../utils/colors.js';
 
 export interface DriverRowProps {
   driver: DriverState;
@@ -14,7 +15,10 @@ export interface DriverRowProps {
   isSelected?: boolean;
 }
 
-const td = 'py-2.5 px-3 align-middle';
+// 8px rows: the tallest cell (the 15px position) sets a ~38px row
+const td = 'py-2 px-3 align-middle';
+// Extra lead-in whitespace where a column group starts (pace at S1, strategy at Tyre)
+const groupStart = 'pl-6';
 
 export const DriverRow: React.FC<DriverRowProps> = ({
   driver,
@@ -23,16 +27,23 @@ export const DriverRow: React.FC<DriverRowProps> = ({
   onSelectDriver,
   isSelected = false,
 }) => {
-  const rawColor = (driver as any).TeamColour || driver.team_color || '#E10600';
-  const teamColor = rawColor.startsWith('#') ? rawColor : `#${rawColor}`;
+  // The feed's team color is data and drawn as-is; with none, the bar falls back to the rule token
+  // rather than an invented brand color
+  const rawColor: string = (driver as any).TeamColour || driver.team_color || '';
+  const teamColor = rawColor && (rawColor.startsWith('#') ? rawColor : `#${rawColor}`);
   const pos = driver.Position ? parseInt(driver.Position, 10) : driver.Line || '—';
   const posDelta = driver.PositionDelta || 0;
 
+  // A retired car's gap and interval froze when it stopped racing; they no longer mean anything
+  const isOut = !!driver.Retired;
+
   const gapValue = driver.GapToLeader || (driver as any).TimeDiffToFastest;
-  const gap = formatGap(gapValue, isLeader);
+  const gap = isOut ? '—' : formatGap(gapValue, isLeader);
 
   const intervalValue = driver.IntervalToPositionAhead || (driver as any).TimeDiffToPositionAhead;
-  const intervalInfo = formatInterval(intervalValue, isLeader);
+  const intervalInfo = isOut
+    ? { text: '—', catching: false }
+    : formatInterval(intervalValue, isLeader);
 
   const driverName =
     driver.name ||
@@ -40,7 +51,8 @@ export const DriverRow: React.FC<DriverRowProps> = ({
     (driver as any).BroadcastName ||
     `Car ${driver.carNumber || driver.number}`;
   const driverCode = driver.code || (driver as any).Tla || '';
-  const driverTeam = driver.team || (driver as any).TeamName || 'Independent';
+  // Unknown stays empty: a made-up team would be a claim the feed never made
+  const driverTeam = driver.team || (driver as any).TeamName || '';
   const carNumber = driver.carNumber || driver.number;
 
   const bestColor = getTimingTextColor(
@@ -51,9 +63,26 @@ export const DriverRow: React.FC<DriverRowProps> = ({
     driver.LastLapTime?.OverallFastest,
     driver.LastLapTime?.PersonalFastest
   );
+  const bestMeaning = getTimingMeaning(
+    driver.BestLapTime?.OverallFastest,
+    driver.BestLapTime?.PersonalFastest
+  );
+  const lastMeaning = getTimingMeaning(
+    driver.LastLapTime?.OverallFastest,
+    driver.LastLapTime?.PersonalFastest
+  );
 
-  const inPit = !!driver.InPit;
   const pitStops = driver.NumberOfPitStops ?? 0;
+  // Car state outranks the stop count: out of the race, stopped on track, in or leaving the pits
+  const carState = isOut
+    ? { label: 'Out', className: 'text-mute' }
+    : driver.Stopped
+      ? { label: 'Stopped', className: 'text-danger' }
+      : driver.InPit
+        ? { label: 'In pit', className: 'text-warn' }
+        : driver.PitOut
+          ? { label: 'Pit exit', className: 'text-warn' }
+          : null;
 
   // Sticky cells need an opaque background that tracks the row's hover / selected state
   const stickyBg = isSelected ? 'bg-raise' : 'bg-paper group-hover:bg-raise';
@@ -61,19 +90,18 @@ export const DriverRow: React.FC<DriverRowProps> = ({
   return (
     <tr
       onClick={() => onSelectDriver(driver)}
-      aria-selected={isSelected}
       className={`group cursor-pointer border-b border-rule transition-colors duration-150 ${
         isSelected ? 'bg-raise' : 'hover:bg-raise'
       }`}
     >
       {/* Position — selected row is marked by the accent rule on the left */}
       <td
-        className={`${td} sticky left-0 z-10 w-12 border-l-2 pl-2 text-right ${stickyBg} ${
+        className={`${td} sticky left-0 z-10 w-16 border-l-2 pl-2 text-right ${stickyBg} ${
           isSelected ? 'border-signal' : 'border-transparent'
         }`}
       >
-        <div className="flex flex-col items-end leading-tight">
-          <span className="num text-ui font-semibold text-ink">{pos}</span>
+        {/* Gain / loss sits beside the position, not under it, so every row stays one line high */}
+        <div className="flex items-baseline justify-end gap-1.5">
           {posDelta !== 0 && (
             <span className={`num text-label ${posDelta > 0 ? 'text-pb' : 'text-danger'}`}>
               <span aria-hidden="true">{posDelta > 0 ? '▲' : '▼'}</span>
@@ -83,48 +111,67 @@ export const DriverRow: React.FC<DriverRowProps> = ({
               </span>
             </span>
           )}
+          <span className="num text-ui font-semibold text-ink">{pos}</span>
         </div>
       </td>
 
       {/* Driver — the name is a real button so the row is reachable by keyboard */}
-      <td className={`${td} sticky left-12 z-10 ${stickyBg}`}>
-        <div className="flex items-center gap-3">
+      <td className={`${td} sticky left-16 z-10 ${stickyBg}`}>
+        {/* One line: the team survives as its color bar and in the drawer, not as a second line */}
+        <div className="flex min-w-0 items-center gap-3">
           <span
-            className="h-7 w-[3px] flex-shrink-0 rounded-full"
-            style={{ backgroundColor: teamColor }}
+            className={`h-5 w-[3px] flex-shrink-0 rounded-full ${teamColor ? '' : 'bg-rule'}`}
+            style={teamColor ? { backgroundColor: teamColor } : undefined}
             aria-hidden="true"
           />
           <div className="min-w-0">
-            <button
-              type="button"
-              className="flex items-baseline gap-2 rounded-sm text-left"
-              aria-label={`${driverName}, ${driverTeam} — view details`}
+            {/* Driver is the one flexible column: long names truncate instead of widening it */}
+            <Button
+              variant="plain"
+              size="inline"
+              className="flex min-w-0 max-w-full items-baseline gap-2 text-left"
+              aria-haspopup="dialog"
+              aria-label={`${driverName}${driverTeam ? `, ${driverTeam}` : ''}${isOut ? ', out of the race' : ''} — view details`}
             >
-              <span className="num w-5 text-right text-label text-mute">{carNumber}</span>
-              <span className="hidden truncate text-data font-semibold text-ink sm:inline">
+              <span className="num w-5 shrink-0 text-right text-label text-mute">{carNumber}</span>
+              <span
+                className={`hidden min-w-0 truncate text-data font-semibold sm:inline ${
+                  isOut ? 'text-mute' : 'text-ink'
+                }`}
+              >
                 {driverName}
               </span>
-              <span className="num text-label text-ink sm:text-mute">{driverCode}</span>
-            </button>
-            <p className="ml-7 hidden truncate text-label text-mute sm:block">{driverTeam}</p>
+              <span className="num shrink-0 text-label text-ink sm:text-mute">{driverCode}</span>
+            </Button>
           </div>
         </div>
       </td>
 
-      <td className={`${td} num text-right text-data ${isLeader ? 'text-mute' : 'text-ink'}`}>
+      <td
+        className={`${td} num text-right text-data ${isLeader || isOut ? 'text-mute' : 'text-ink'}`}
+      >
         {gap}
       </td>
 
       <td
         className={`${td} num text-right text-data ${
-          intervalInfo.catching ? 'text-pb' : isLeader ? 'text-mute' : 'text-ink'
+          intervalInfo.catching ? 'text-pb' : isLeader || isOut ? 'text-mute' : 'text-ink'
         }`}
       >
+        {/* Catching is said by shape as well as by green: an up arrow, before the value so the
+            digits stay aligned with the rows that have none */}
+        {intervalInfo.catching && (
+          <ArrowUp
+            className="mr-1 inline h-3 w-3 align-[-1px]"
+            strokeWidth={2.5}
+            aria-hidden="true"
+          />
+        )}
         {intervalInfo.text}
         {intervalInfo.catching && <span className="sr-only"> (catching)</span>}
       </td>
 
-      <td className={`${td} text-right`}>
+      <td className={`${td} ${groupStart} text-right`}>
         <SectorSegment sectorIndex={0} sector={driver.Sectors?.['0']} />
       </td>
       <td className={`${td} text-right`}>
@@ -136,23 +183,21 @@ export const DriverRow: React.FC<DriverRowProps> = ({
 
       <td className={`${td} num text-right text-data ${bestColor}`}>
         {formatLapTime(driver.BestLapTime?.Value)}
+        {bestMeaning && <span className="sr-only">, {bestMeaning}</span>}
       </td>
 
       <td className={`${td} num text-right text-data ${lastColor}`}>
         {formatLapTime(driver.LastLapTime?.Value)}
+        {lastMeaning && <span className="sr-only">, {lastMeaning}</span>}
       </td>
 
-      <td className={`${td} text-right`}>
-        <SpeedTrapCell speed={driver.Speeds?.['ST']} label="ST" />
-      </td>
-
-      <td className={td}>
+      <td className={`${td} ${groupStart}`}>
         <TyreBadge stint={driver.CurrentStint} />
       </td>
 
       <td className={`${td} pr-0 text-right`}>
-        {inPit ? (
-          <span className="label text-warn">In pit</span>
+        {carState ? (
+          <span className={`label whitespace-nowrap ${carState.className}`}>{carState.label}</span>
         ) : (
           <span className="num text-data text-mute">{pitStops}</span>
         )}

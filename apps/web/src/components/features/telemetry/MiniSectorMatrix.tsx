@@ -1,6 +1,6 @@
 import React from 'react';
 import { SectorData } from '@livetiming/shared';
-import { getSegmentColor, getTimingTextColor } from '../../../utils/colors.js';
+import { getSegmentColor, getTimingTextColor, getTimingMeaning } from '../../../utils/colors.js';
 
 export interface MiniSectorMatrixProps {
   sectors?: Record<string, SectorData>;
@@ -17,6 +17,11 @@ export const MiniSectorMatrix: React.FC<MiniSectorMatrixProps> = ({ sectors }) =
       color: data?.Value
         ? getTimingTextColor(data.OverallFastest, data.PersonalFastest)
         : 'text-mute',
+      meaning: data?.Value
+        ? getTimingMeaning(data.OverallFastest, data.PersonalFastest)
+        : data?.PreviousValue
+          ? 'previous lap'
+          : '',
     };
   });
 
@@ -26,7 +31,10 @@ export const MiniSectorMatrix: React.FC<MiniSectorMatrixProps> = ({ sectors }) =
         <div key={sec.index}>
           <div className="flex items-baseline justify-between">
             <span className="label">S{sec.index}</span>
-            <span className={`num text-ui ${sec.color}`}>{sec.time || '—'}</span>
+            <span className={`num text-ui ${sec.color}`}>
+              {sec.time || '—'}
+              {sec.meaning && <span className="sr-only">, {sec.meaning}</span>}
+            </span>
           </div>
           <div className="mt-2 flex gap-[3px]">
             {sec.segments.length === 0 ? (

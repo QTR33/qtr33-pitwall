@@ -162,7 +162,8 @@ export class F1Replayer {
       isPaused: !this.isPlaying,
       speedMultiplier: this.speedMultiplier,
       currentProgress: Math.min(100, Math.round((this.currentIndex / total) * 100)),
-      currentTimestamp: this.events[this.currentIndex]?.time || new Date().toISOString(),
+      // When the event on screen was recorded; absent until the recording has loaded
+      currentTimestamp: this.events[Math.min(this.currentIndex, total - 1)]?.time,
       totalEvents: this.events.length,
       currentEventIndex: this.currentIndex,
     };

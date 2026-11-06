@@ -7,48 +7,40 @@ import { RaceControlFeed } from './components/features/race-control/RaceControlF
 import { DriverDetailModal } from './components/features/telemetry/DriverDetailModal.js';
 import { PlaybackControls } from './components/features/playback/PlaybackControls.js';
 import { Card } from './components/common/Card.js';
+import { SkipLink } from './components/common/SkipLink.js';
 import { DriverState } from '@livetiming/shared';
 import { formatLapTime } from './utils/formatters.js';
 import { FEATURES } from './config.js';
 
 export function App() {
-  const {
-    state,
-    isConnected,
-    error,
-    setMode,
-    setSpeed,
-    togglePlayPause,
-    seekReplay,
-    restartReplay,
-    setSeries,
-  } = useLiveTiming();
+  const { state, setMode, setSpeed, togglePlayPause, seekReplay, restartReplay, setSeries } =
+    useLiveTiming();
 
-  const [selectedDriver, setSelectedDriver] = useState<DriverState | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Keep only the car number: the driver is looked up in each new state, so the drawer stays live.
+  // A selection exists only while its drawer is open, so the row's accent edge goes with it
+  const [selectedCar, setSelectedCar] = useState<string | null>(null);
+  const selectedDriver = state?.drivers.find((d) => d.carNumber === selectedCar) ?? null;
 
   const handleSelectDriver = (driver: DriverState) => {
-    setSelectedDriver(driver);
-    setIsModalOpen(true);
+    setSelectedCar(driver.carNumber ?? null);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setSelectedCar(null);
   };
 
   // Find overall fastest lap driver
   const fastestLapDriver = state?.drivers.find((d) => d.BestLapTime?.OverallFastest);
   const showPlayback = FEATURES.replay && state?.mode === 'replay';
+  // Until the first live probe settles there is nothing true to show in the tower yet
+  const isConnecting = state?.mode === 'replay' && state.feedStatus === 'connecting';
 
   return (
     <div className={`flex min-h-screen flex-col ${showPlayback ? 'pb-36 sm:pb-20' : ''}`}>
+      <SkipLink href="#race-control">Skip to race control</SkipLink>
+
       {state ? (
-        <HeaderBar
-          state={state}
-          isConnected={isConnected}
-          onSetMode={setMode}
-          onSetSeries={setSeries}
-        />
+        <HeaderBar state={state} onSetMode={setMode} onSetSeries={setSeries} />
       ) : (
         <header className="border-b border-rule">
           <div className="mx-auto flex max-w-[1600px] items-center justify-between px-4 py-4 md:px-8">
@@ -58,28 +50,29 @@ export function App() {
         </header>
       )}
 
-      {error && !isConnected && (
-        <div className="mx-auto mt-4 w-full max-w-[1600px] px-4 md:px-8">
-          <p role="alert" className="border-l-2 border-danger pl-3 text-data text-ink">
-            Lost connection to the timing feed. Reconnecting…
-          </p>
-        </div>
-      )}
-
       <main className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-8 md:px-8">
-        <div className="grid grid-cols-1 items-start gap-x-12 gap-y-12 xl:grid-cols-[minmax(0,1fr)_320px]">
+        {/* The sidebar only sits beside the tower once both fit: the tower needs 1080px, the
+            sidebar 320 + 48 gap, the page 64 of gutter — about 1512px, so from 2xl (1536px).
+            Narrower, the tower takes the full width and the sidebar follows it */}
+        <div className="grid grid-cols-1 items-start gap-x-12 gap-y-12 2xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0">
             <h2 className="sr-only">Timing</h2>
             <TimingTable
-              drivers={state?.drivers || []}
+              drivers={isConnecting ? [] : state?.drivers || []}
               onSelectDriver={handleSelectDriver}
-              selectedDriverNum={selectedDriver?.carNumber}
+              selectedDriverNum={selectedCar ?? undefined}
+              emptyMessage={isConnecting ? 'Connecting to live timing…' : undefined}
             />
           </div>
 
-          <aside className="space-y-10 xl:sticky xl:top-32" aria-label="Session details">
+          {/* Under the tower: fastest lap and race control side by side from lg; a column beside
+              the tower from 2xl */}
+          <aside
+            className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-12 2xl:sticky 2xl:top-32 2xl:flex-col 2xl:gap-10"
+            aria-label="Session details"
+          >
             {fastestLapDriver && (
-              <Card title="Fastest lap">
+              <Card title="Fastest lap" className="lg:w-80 lg:shrink-0 2xl:w-auto">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-ui font-semibold text-ink">{fastestLapDriver.name}</p>
@@ -99,12 +92,23 @@ export function App() {
               </Card>
             )}
 
-            <RaceControlFeed messages={state?.raceControl || []} maxHeight="max-h-[420px]" />
+            {/* Skip-link target: focusable so keyboard focus lands here, not back at the top */}
+            <div
+              id="race-control"
+              tabIndex={-1}
+              className="min-w-0 focus:outline-none lg:flex-1 2xl:flex-none"
+            >
+              <RaceControlFeed messages={state?.raceControl || []} maxHeight="max-h-[420px]" />
+            </div>
           </aside>
         </div>
       </main>
 
-      <DriverDetailModal driver={selectedDriver} isOpen={isModalOpen} onClose={handleCloseModal} />
+      <DriverDetailModal
+        driver={selectedDriver}
+        isOpen={selectedDriver !== null}
+        onClose={handleCloseModal}
+      />
 
       {showPlayback && state && (
         <PlaybackControls

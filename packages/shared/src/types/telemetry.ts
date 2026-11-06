@@ -116,11 +116,21 @@ export interface SessionState {
   circuitName: string;
   totalLaps: number;
   currentLap: number;
+  /** Kind of session (SessionInfo.Type; sprints count as race / qualifying); absent until named */
+  sessionKind?: 'race' | 'qualifying' | 'practice';
+  /** Qualifying part from TimingData.SessionPart (1–3: Q1–Q3, or SQ1–SQ3 in sprint qualifying) */
+  sessionPart?: number;
+  /** Official session clock (ExtrapolatedClock): `remaining` (H:MM:SS) as of `utc`, counting down while `running` */
+  clock?: { remaining: string; utc: string; running: boolean };
   clockTime?: string;
+  /** WeatherData, as the feed reports it: temperatures °C, humidity %, wind m/s, pressure mbar */
   airTemp?: number;
   trackTemp?: number;
   humidity?: number;
   windSpeed?: number;
+  /** Direction the wind blows from, degrees clockwise from north */
+  windDirection?: number;
+  pressure?: number;
   rainfall?: boolean;
 }
 
@@ -134,6 +144,13 @@ export interface ReplayState {
   currentEventIndex?: number;
 }
 
+/**
+ * Health of the link to the live timing source:
+ * connecting (first attempt in progress), connected, reconnecting (link dropped, retrying),
+ * offline (not linked: no live session, or live timing is unavailable)
+ */
+export type FeedStatus = 'connecting' | 'connected' | 'reconnecting' | 'offline';
+
 export interface LiveTimingState {
   series: RacingSeriesId;
   mode: TimingMode;
@@ -141,6 +158,9 @@ export interface LiveTimingState {
   drivers: DriverState[];
   raceControl: RaceControlMessage[];
   replay?: ReplayState;
+  /** Absent when the source does not report it */
+  feedStatus?: FeedStatus;
+  /** When timing data last arrived (ISO); not when this snapshot was taken */
   lastUpdated: string;
 }
 

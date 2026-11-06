@@ -23,16 +23,16 @@ export const StintHistoryTable: React.FC<StintHistoryTableProps> = ({ stints }) 
     <table className="w-full border-collapse text-left">
       <thead>
         <tr className="border-b border-rule">
-          <th scope="col" className="label py-2 pr-3 font-semibold">
+          <th scope="col" className="label py-2 pr-3">
             Stint
           </th>
-          <th scope="col" className="label py-2 px-3 font-semibold">
+          <th scope="col" className="label py-2 px-3">
             Tyre
           </th>
-          <th scope="col" className="label py-2 px-3 text-right font-semibold">
+          <th scope="col" className="label py-2 px-3 text-right">
             Laps
           </th>
-          <th scope="col" className="label py-2 pl-3 text-right font-semibold">
+          <th scope="col" className="label py-2 pl-3 text-right">
             Best lap
           </th>
         </tr>

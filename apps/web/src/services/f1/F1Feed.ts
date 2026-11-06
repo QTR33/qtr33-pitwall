@@ -1,4 +1,10 @@
-import { LiveTimingState, TimingMode, TimingStateManager, f1Drivers2026 } from '@livetiming/shared';
+import {
+  FeedStatus,
+  LiveTimingState,
+  TimingMode,
+  TimingStateManager,
+  f1Drivers2026,
+} from '@livetiming/shared';
 import { ENV } from '../../env.js';
 import { logger } from '../logger.js';
 import { F1Connection } from './F1Connection.js';
@@ -10,6 +16,8 @@ const SESSION_ACTIVITY_WINDOW_MS = 5 * 60_000;
 const LIVE_CHECK_INTERVAL_MS = 60_000;
 // While replaying in place of live: how often to look for a session that has started
 const LIVE_RETRY_INTERVAL_MS = 5 * 60_000;
+// Returning to the tab probes for a live session at once, but no more often than this
+const VISIBLE_PROBE_MIN_GAP_MS = 30_000;
 
 /**
  * Client-side F1 feed: streams the official live timing straight from F1 when a session is
@@ -27,6 +35,10 @@ export class F1Feed {
   private requestedMode: TimingMode = 'live';
   // Not 'live' until F1 confirms a session is running
   private mode: TimingMode = 'replay';
+  // True until the first live probe settles, so the screen says it is connecting, not replaying
+  private firstProbe = true;
+  private probing = false;
+  private lastProbeAt = 0;
   private running = false;
   // Bumped on every mode change so a slow live probe can tell it was superseded
   private modeRun = 0;
@@ -34,6 +46,8 @@ export class F1Feed {
   // Connection work runs one task at a time so live probes and disconnects never interleave
   private connectionQueue: Promise<unknown> = Promise.resolve();
   private listeners = new Set<() => void>();
+  // Development only: stops the mock topics fed to the replay
+  private stopDevMocks: Array<() => void> | null = null;
 
   constructor() {
     this.liveManager.loadDriverMetadata(this.drivers);
@@ -46,6 +60,8 @@ export class F1Feed {
     this.liveManager.subscribe(() => this.mode === 'live' && this.notify());
     this.replayManager.subscribe(() => this.mode === 'replay' && this.notify());
     this.replayer.setOnStateChange(() => this.mode === 'replay' && this.notify());
+    // A dropped or restored link changes what the screen must say, even with no new data
+    this.connection?.setOnStatusChange(() => this.mode === 'live' && this.notify());
   }
 
   /** Called on every state change; read the state with getState() */
@@ -59,23 +75,96 @@ export class F1Feed {
   }
 
   public getState(): LiveTimingState {
-    return this.mode === 'live'
-      ? this.liveManager.getFullSnapshot('live')
-      : this.replayManager.getFullSnapshot('replay', this.replayer.getReplayState());
+    if (this.mode === 'live') {
+      return { ...this.liveManager.getFullSnapshot('live'), feedStatus: this.getLiveStatus() };
+    }
+    return {
+      ...this.replayManager.getFullSnapshot('replay', this.replayer.getReplayState()),
+      feedStatus: this.firstProbe ? 'connecting' : 'offline',
+    };
+  }
+
+  private getLiveStatus(): FeedStatus {
+    const status = this.connection?.getStatus() ?? 'offline';
+    // Between drop and retry the link is down but a reconnect is scheduled
+    return status === 'offline' ? 'reconnecting' : status;
   }
 
   public start(): void {
     if (this.running) return;
     this.running = true;
+    this.watchBrowser(true);
+    // The import sits inside the DEV branch so production builds drop the module entirely
+    if (import.meta.env.DEV) void import('./devMocks.js').then((m) => this.startDevMocks(m));
     void this.setMode(this.requestedMode);
+  }
+
+  /**
+   * The recording has no weather, session name, lap total or session clock, so in development the
+   * replay can be given mock ones: `?mockWeather=dry|rain|cycle` and
+   * `?mockSession=race|qualifying|practice` in the URL, or VITE_MOCK_WEATHER / VITE_MOCK_SESSION
+   * in .env.development. Live state is never touched.
+   */
+  private startDevMocks(mock: typeof import('./devMocks.js')) {
+    if (!this.running || this.stopDevMocks) return;
+    const params = new URLSearchParams(window.location.search);
+    const weather =
+      mock.parseMockWeatherMode(params.get('mockWeather')) ??
+      mock.parseMockWeatherMode(import.meta.env.VITE_MOCK_WEATHER);
+    const session =
+      mock.parseMockSessionMode(params.get('mockSession')) ??
+      mock.parseMockSessionMode(import.meta.env.VITE_MOCK_SESSION);
+    this.stopDevMocks = [];
+    if (weather) this.stopDevMocks.push(mock.startMockWeather(this.replayManager, weather));
+    if (session) {
+      this.stopDevMocks.push(
+        mock.startMockSession(
+          this.replayManager,
+          session,
+          () => this.replayer.getReplayState().currentTimestamp
+        )
+      );
+    }
   }
 
   public async stop(): Promise<void> {
     this.running = false;
+    this.watchBrowser(false);
+    this.stopDevMocks?.forEach((stop) => stop());
+    this.stopDevMocks = null;
     this.modeRun++;
     this.clearModeTimer();
     this.replayer.stop();
     await this.disconnectLive();
+  }
+
+  // The browser knows about a lost or restored network (and a sleeping tab) before any timer does
+  private watchBrowser(on: boolean) {
+    if (typeof window === 'undefined') return;
+    const method = on ? 'addEventListener' : 'removeEventListener';
+    window[method]('online', this.handleOnline);
+    window[method]('offline', this.handleOffline);
+    document[method]('visibilitychange', this.handleVisible);
+  }
+
+  private readonly handleOffline = () => {
+    if (this.mode === 'live') this.connection?.notifyOffline();
+  };
+
+  private readonly handleOnline = () => this.resume(0);
+
+  private readonly handleVisible = () => {
+    if (document.visibilityState === 'visible') this.resume(VISIBLE_PROBE_MIN_GAP_MS);
+  };
+
+  /** Network or tab is back: reconnect a live feed now, or look for a session now */
+  private resume(minProbeGapMs: number) {
+    if (!this.running || this.firstProbe || this.requestedMode !== 'live') return;
+    if (this.mode === 'live') {
+      this.connection?.retryNow();
+    } else if (Date.now() - this.lastProbeAt >= minProbeGapMs) {
+      void this.probeLive();
+    }
   }
 
   public async setMode(mode: TimingMode): Promise<void> {
@@ -136,11 +225,15 @@ export class F1Feed {
   private enterLive() {
     logger.info('[F1] Live session running, streaming from F1');
     this.mode = 'live';
+    this.firstProbe = false;
     this.replayer.stop();
     this.notify();
 
     this.modeTimer = setInterval(() => {
-      if (this.connection?.hasRecentSessionActivity(SESSION_ACTIVITY_WINDOW_MS)) return;
+      // Silence while our own link is down is an outage, not the session ending: stay live,
+      // say "Reconnecting", and let the connection keep retrying until data flows again
+      if (this.connection?.getStatus() !== 'connected') return;
+      if (this.connection.hasRecentSessionActivity(SESSION_ACTIVITY_WINDOW_MS)) return;
       logger.info('[F1] Session has ended, showing the replay');
       this.clearModeTimer();
       void this.disconnectLive();
@@ -151,20 +244,31 @@ export class F1Feed {
 
   private enterReplay() {
     this.mode = 'replay';
+    this.firstProbe = false;
     void this.replayer.start();
     this.notify();
 
     if (this.requestedMode !== 'live' || !this.connection) return;
+    this.modeTimer = setInterval(() => void this.probeLive(), LIVE_RETRY_INTERVAL_MS);
+  }
+
+  /** While replaying in place of live: check once whether a session has started, and go live */
+  private async probeLive() {
+    if (this.probing || this.mode !== 'replay') return;
+    this.probing = true;
+    this.lastProbeAt = Date.now();
     const run = this.modeRun;
-    this.modeTimer = setInterval(async () => {
-      if (run !== this.modeRun) return;
+    try {
       const live = await this.tryLive();
-      if (run !== this.modeRun) return;
+      // A newer setMode()/stop() took over while the probe ran
+      if (run !== this.modeRun || this.mode !== 'replay') return;
       if (live) {
         this.clearModeTimer();
         this.enterLive();
       }
-    }, LIVE_RETRY_INTERVAL_MS);
+    } finally {
+      this.probing = false;
+    }
   }
 
   private clearModeTimer() {

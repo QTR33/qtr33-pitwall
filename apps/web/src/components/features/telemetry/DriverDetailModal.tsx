@@ -4,7 +4,7 @@ import { Modal } from '../../common/Modal.js';
 import { MiniSectorMatrix } from './MiniSectorMatrix.js';
 import { StintHistoryTable } from './StintHistoryTable.js';
 import { formatLapTime, formatGap, formatSpeed } from '../../../utils/formatters.js';
-import { getTimingTextColor } from '../../../utils/colors.js';
+import { getTimingTextColor, getTimingMeaning } from '../../../utils/colors.js';
 
 export interface DriverDetailModalProps {
   driver: DriverState | null;
@@ -37,10 +37,14 @@ export const DriverDetailModal: React.FC<DriverDetailModalProps> = ({
   const carNumber = driver.carNumber || driver.number;
   const driverName =
     driver.name || (driver as any).FullName || (driver as any).BroadcastName || `Car ${carNumber}`;
-  const driverTeam = driver.team || (driver as any).TeamName || 'Independent';
+  const driverTeam = driver.team || (driver as any).TeamName || '';
   const gapValue = driver.GapToLeader || (driver as any).TimeDiffToFastest;
   const isLeader = String(pos) === '1';
   const bestColor = getTimingTextColor(
+    driver.BestLapTime?.OverallFastest,
+    driver.BestLapTime?.PersonalFastest
+  );
+  const bestMeaning = getTimingMeaning(
     driver.BestLapTime?.OverallFastest,
     driver.BestLapTime?.PersonalFastest
   );
@@ -58,7 +62,7 @@ export const DriverDetailModal: React.FC<DriverDetailModalProps> = ({
       onClose={onClose}
       drawer={true}
       title={driverName}
-      subTitle={`${driverTeam} · Car ${carNumber}`}
+      subTitle={[driverTeam, `Car ${carNumber}`].filter(Boolean).join(' · ')}
     >
       <div className="space-y-10">
         {/* Position is the drawer's one bold element */}
@@ -71,6 +75,7 @@ export const DriverDetailModal: React.FC<DriverDetailModalProps> = ({
             <Stat label="Gap">{formatGap(gapValue, isLeader)}</Stat>
             <Stat label="Best lap">
               <span className={bestColor}>{formatLapTime(driver.BestLapTime?.Value)}</span>
+              {bestMeaning && <span className="sr-only">, {bestMeaning}</span>}
             </Stat>
             <Stat label="Pit stops">{driver.NumberOfPitStops ?? 0}</Stat>
           </dl>
@@ -87,9 +92,13 @@ export const DriverDetailModal: React.FC<DriverDetailModalProps> = ({
               const color = speed?.Value
                 ? getTimingTextColor(speed.OverallFastest, speed.PersonalFastest)
                 : 'text-mute';
+              const meaning = speed?.Value
+                ? getTimingMeaning(speed.OverallFastest, speed.PersonalFastest)
+                : '';
               return (
                 <Stat key={trap.id} label={trap.name}>
                   <span className={color}>{formatSpeed(speed)}</span>
+                  {meaning && <span className="sr-only">, {meaning}</span>}
                 </Stat>
               );
             })}

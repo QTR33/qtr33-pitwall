@@ -10,7 +10,10 @@ export interface RaceControlFeedProps {
 
 const MAX_VISIBLE = 15;
 
-function getCategory(msg: RaceControlMessage): { label: string; variant: BadgeProps['variant'] } {
+export function getCategory(msg: RaceControlMessage): {
+  label: string;
+  variant: BadgeProps['variant'];
+} {
   if (msg.Flag) {
     const f = msg.Flag.toUpperCase();
     if (f === 'RED') return { label: 'Red flag', variant: 'danger' };
@@ -26,7 +29,7 @@ function getCategory(msg: RaceControlMessage): { label: string; variant: BadgePr
 }
 
 // F1 sends Utc without a zone suffix ("2026-10-11T12:42:29"), which Date would read as local time
-function formatUtcTime(utc: string) {
+export function formatUtcTime(utc: string) {
   const hasZone = /(Z|[+-]\d{2}:?\d{2})$/i.test(utc);
   const d = new Date(hasZone ? utc : `${utc}Z`);
   if (isNaN(d.getTime())) return utc;

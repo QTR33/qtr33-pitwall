@@ -16,6 +16,15 @@ export class WebSocketClient implements TimingFeed {
   constructor(private readonly serverUrl: string) {
     this.wsUrl = `${serverUrl.replace(/^http/, 'ws')}/ws`;
     this.connect();
+    // Back online: retry at once instead of waiting out the reconnect delay
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', () => {
+        if (!this.reconnectTimer) return;
+        clearTimeout(this.reconnectTimer);
+        this.reconnectTimer = null;
+        this.connect();
+      });
+    }
   }
 
   private connect() {
@@ -38,7 +47,9 @@ export class WebSocketClient implements TimingFeed {
         try {
           const message = JSON.parse(event.data);
           if (message.type === 'STATE_UPDATE' && message.payload) {
-            this.currentState = message.payload as LiveTimingState;
+            const payload = message.payload as LiveTimingState;
+            // The server's own feed status, when it sends one; reaching us proves the link is up
+            this.currentState = { ...payload, feedStatus: payload.feedStatus ?? 'connected' };
             this.notify(this.currentState);
           }
         } catch (err) {
@@ -52,6 +63,11 @@ export class WebSocketClient implements TimingFeed {
         }
         this.isConnected = false;
         this.ws = null;
+        // Keep the last state on screen, but say the link to it is down
+        if (this.currentState && this.currentState.feedStatus !== 'reconnecting') {
+          this.currentState = { ...this.currentState, feedStatus: 'reconnecting' };
+          this.notify(this.currentState);
+        }
         this.scheduleReconnect();
       };
 

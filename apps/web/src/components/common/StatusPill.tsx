@@ -1,10 +1,21 @@
 import React from 'react';
 
 export interface StatusPillProps {
-  status: 'live' | 'replay' | 'paused' | 'flag' | 'sc' | 'vsc' | 'green' | 'red';
+  status:
+    | 'live'
+    | 'connecting'
+    | 'reconnecting'
+    | 'replay'
+    | 'paused'
+    | 'flag'
+    | 'sc'
+    | 'vsc'
+    | 'green'
+    | 'red';
   text: string;
   className?: string;
   pulse?: boolean;
+  title?: string;
 }
 
 export const StatusPill: React.FC<StatusPillProps> = ({
@@ -12,9 +23,12 @@ export const StatusPill: React.FC<StatusPillProps> = ({
   text,
   className = '',
   pulse = true,
+  title,
 }) => {
   const dot = {
     live: 'bg-signal',
+    connecting: 'bg-mute',
+    reconnecting: 'bg-warn',
     replay: 'bg-mute',
     paused: 'bg-mute',
     flag: 'bg-warn',
@@ -30,6 +44,7 @@ export const StatusPill: React.FC<StatusPillProps> = ({
   return (
     <span
       role="status"
+      title={title}
       className={`inline-flex items-center gap-2 text-data font-semibold text-ink ${className}`}
     >
       <span className="relative flex h-2 w-2" aria-hidden="true">

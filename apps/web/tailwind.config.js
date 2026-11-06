@@ -29,12 +29,11 @@ export default {
           pb: token('seg-pb'),
           warn: token('seg-warn'),
         },
-        // Track-status flag glyph + alert rule
+        // Track-status alert rule
         flag: {
           green: token('flag-green'),
           yellow: token('flag-yellow'),
           red: token('flag-red'),
-          ink: token('flag-ink'),
         },
         compound: {
           soft: token('compound-soft'),

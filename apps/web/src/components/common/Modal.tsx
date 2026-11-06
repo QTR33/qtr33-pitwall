@@ -27,6 +27,10 @@ export const Modal: React.FC<ModalProps> = ({
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  // Read through a ref so a new onClose each render (live data re-renders ~16×/s) never re-runs the
+  // open effect, which would yank focus back to the close button on every update
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -37,7 +41,7 @@ export const Modal: React.FC<ModalProps> = ({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
         return;
       }
       // Keep keyboard focus inside the dialog
@@ -62,7 +66,7 @@ export const Modal: React.FC<ModalProps> = ({
       window.removeEventListener('keydown', handleKeyDown);
       previouslyFocused?.focus();
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -94,7 +98,9 @@ export const Modal: React.FC<ModalProps> = ({
     <div
       className={`fixed inset-0 z-50 flex ${drawer ? 'justify-end' : 'items-center justify-center p-4'}`}
     >
-      <div className="fixed inset-0 animate-fade-in bg-black/50" onClick={onClose} />
+      {/* Scrim from the paper token: it dims the page toward its own ground in either theme
+          (fixed black was heavy in light and nearly invisible in dark) */}
+      <div className="fixed inset-0 animate-fade-in bg-paper/75" onClick={onClose} />
       <div
         ref={panelRef}
         role="dialog"
