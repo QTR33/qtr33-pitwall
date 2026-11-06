@@ -24,10 +24,7 @@ export class F1Replayer {
   private speedMultiplier = 2; // Default 2x for responsive demo playback
   private onStateChange?: () => void;
 
-  constructor(
-    private manager: TimingStateManager,
-    private driverData: any[]
-  ) {}
+  constructor(private manager: TimingStateManager) {}
 
   public setOnStateChange(cb?: () => void) {
     this.onStateChange = cb;
@@ -48,15 +45,10 @@ export class F1Replayer {
         logger.info(`[F1 Replayer] Loaded ${events.length} recorded telemetry events`);
       })
       .catch((err) => {
-        // No recording available: the dashboard stays on the driver grid
+        // No recording available: the timing table stays on its empty state
         logger.warn(`[F1 Replayer] Could not load ${REPLAY_URL}:`, err);
       });
     return this.loading;
-  }
-
-  private resetToGrid() {
-    this.manager.resetState();
-    this.manager.loadDriverMetadata(this.driverData);
   }
 
   public async start(): Promise<void> {
@@ -67,7 +59,7 @@ export class F1Replayer {
     if (run !== this.runId) return;
 
     if (this.currentIndex === 0) {
-      this.resetToGrid();
+      this.manager.resetState();
       const warmup = Math.min(WARMUP_EVENTS, this.events.length);
       for (let i = 0; i < warmup; i++) {
         this.apply(this.events[i]);
@@ -90,7 +82,7 @@ export class F1Replayer {
     if (this.currentIndex >= this.events.length) {
       // Loop replay
       this.currentIndex = 0;
-      this.resetToGrid();
+      this.manager.resetState();
     }
 
     this.apply(this.events[this.currentIndex]);
@@ -137,7 +129,7 @@ export class F1Replayer {
     const clamped = Math.max(0, Math.min(100, progressPercent));
     const targetIndex = Math.floor((clamped / 100) * this.events.length);
 
-    this.resetToGrid();
+    this.manager.resetState();
     for (let i = 0; i < targetIndex; i++) {
       this.apply(this.events[i]);
     }

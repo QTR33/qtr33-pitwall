@@ -31,6 +31,28 @@ function deepMerge<T extends Record<string, any>>(target: T, source: Record<stri
   return target;
 }
 
+/** Who drives a car: the fields a driver row shows besides timing */
+type DriverIdentity = Pick<DriverState, 'name' | 'code' | 'team' | 'team_color'>;
+
+/**
+ * Reads a driver's identity from either the feed's DriverList spelling (FullName, Tla, TeamName,
+ * TeamColour without '#') or the static grid's (name, code, team, team_color). Fields the source
+ * doesn't carry are left out rather than set to undefined, so merging never erases a known value.
+ */
+function readIdentity(raw: Record<string, any>): DriverIdentity {
+  const color = raw.TeamColour || raw.team_color;
+  const identity: DriverIdentity = {
+    name: raw.FullName || raw.BroadcastName || raw.name,
+    code: raw.Tla || raw.code,
+    team: raw.TeamName || raw.team,
+    team_color: color ? (String(color).startsWith('#') ? color : `#${color}`) : undefined,
+  };
+  for (const key of Object.keys(identity) as Array<keyof DriverIdentity>) {
+    if (!identity[key]) delete identity[key];
+  }
+  return identity;
+}
+
 /**
  * Maps any track-status spelling seen in the feeds (TrackStatus codes, SessionData names like
  * `SCDeployed`, race control flags like `DOUBLE YELLOW`) to a TrackFlag. Returns null for
@@ -79,6 +101,9 @@ export function normalizeTrackFlag(raw: unknown): TrackFlag | null {
 export class TimingStateManager {
   private series: RacingSeriesId;
   private driversState: Record<string, DriverState> = {};
+  // Static grid by car number. It never adds a car: it only names cars the feed reports, for
+  // fields the feed hasn't sent (the replay recording has no full DriverList). Survives resets.
+  private fallbackDrivers: Record<string, DriverIdentity> = {};
   private sessionState: SessionState;
   private raceControlMessages: RaceControlMessage[] = [];
   private messageListeners: Array<(state: LiveTimingState) => void> = [];
@@ -141,26 +166,15 @@ export class TimingStateManager {
     }
   }
 
-  public loadDriverMetadata(drivers: any[]) {
+  /**
+   * Sets the static grid used to name drivers the feed hasn't identified. The feed's DriverList
+   * always wins field by field, and cars missing from the feed are never shown.
+   */
+  public setFallbackDrivers(drivers: any[]) {
+    this.fallbackDrivers = {};
     for (const driver of drivers) {
-      const carNum = String(driver.RacingNumber || driver.number || driver.carNumber);
-      if (!this.driversState[carNum]) {
-        this.driversState[carNum] = { carNumber: carNum };
-      }
-      const teamColor = driver.TeamColour
-        ? driver.TeamColour.startsWith('#')
-          ? driver.TeamColour
-          : `#${driver.TeamColour}`
-        : driver.team_color || '#E10600';
-
-      this.driversState[carNum] = deepMerge(this.driversState[carNum], {
-        ...driver,
-        carNumber: carNum,
-        name: driver.FullName || driver.BroadcastName || driver.name,
-        code: driver.Tla || driver.code,
-        team: driver.TeamName || driver.team,
-        team_color: teamColor,
-      });
+      const carNum = String(driver.RacingNumber || driver.number || driver.carNumber || '');
+      if (carNum) this.fallbackDrivers[carNum] = readIdentity(driver);
     }
   }
 
@@ -265,31 +279,18 @@ export class TimingStateManager {
       const part = parseInt(String(data.SessionPart ?? ''), 10);
       if (part > 0) this.sessionState.sessionPart = part;
     } else if (topic === 'DriverList') {
-      for (const carNum in data) {
+      for (const [carNum, rawDriver] of Object.entries(data)) {
+        // Only car entries are objects; skips markers such as the snapshot's `_kf: true`
+        if (!rawDriver || typeof rawDriver !== 'object') continue;
         if (!this.driversState[carNum]) {
           this.driversState[carNum] = { carNumber: carNum };
         }
-        const rawDriver = data[carNum];
-        const teamColor = rawDriver.TeamColour
-          ? rawDriver.TeamColour.startsWith('#')
-            ? rawDriver.TeamColour
-            : `#${rawDriver.TeamColour}`
-          : rawDriver.team_color || this.driversState[carNum].team_color || '#E10600';
-
-        const normalizedDriver: any = {
+        // Deltas often carry only Line; readIdentity leaves out what they don't carry
+        this.driversState[carNum] = deepMerge(this.driversState[carNum], {
           ...rawDriver,
-          carNumber: String(rawDriver.RacingNumber || rawDriver.number || carNum),
-          name:
-            rawDriver.FullName ||
-            rawDriver.BroadcastName ||
-            rawDriver.name ||
-            this.driversState[carNum].name,
-          code: rawDriver.Tla || rawDriver.code || this.driversState[carNum].code,
-          team: rawDriver.TeamName || rawDriver.team || this.driversState[carNum].team,
-          team_color: teamColor,
-        };
-
-        this.driversState[carNum] = deepMerge(this.driversState[carNum], normalizedDriver);
+          carNumber: carNum,
+          ...readIdentity(rawDriver),
+        });
       }
     } else if (topic === 'RaceControlMessages') {
       if (data.Messages) {
@@ -433,10 +434,17 @@ export class TimingStateManager {
   }
 
   public getSortedDrivers(): DriverState[] {
-    const drivers = Object.keys(this.driversState).map((carNumber) => ({
-      ...this.driversState[carNumber],
-      carNumber,
-    }));
+    const drivers = Object.entries(this.driversState).map(([carNumber, state]) => {
+      const fallback = this.fallbackDrivers[carNumber];
+      return {
+        ...state,
+        carNumber,
+        name: state.name ?? fallback?.name,
+        code: state.code ?? fallback?.code,
+        team: state.team ?? fallback?.team,
+        team_color: state.team_color ?? fallback?.team_color,
+      };
+    });
 
     drivers.sort((a, b) => {
       const posA = a.Position ? parseInt(a.Position, 10) : 999;

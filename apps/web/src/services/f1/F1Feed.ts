@@ -25,7 +25,6 @@ const VISIBLE_PROBE_MIN_GAP_MS = 30_000;
  * so probing for a live session never disturbs the replay on screen.
  */
 export class F1Feed {
-  private readonly drivers = f1Drivers2026.drivers;
   private readonly liveManager = new TimingStateManager('f1');
   private readonly replayManager = new TimingStateManager('f1');
   private readonly connection: F1Connection | null;
@@ -50,12 +49,13 @@ export class F1Feed {
   private stopDevMocks: Array<() => void> | null = null;
 
   constructor() {
-    this.liveManager.loadDriverMetadata(this.drivers);
-    this.replayManager.loadDriverMetadata(this.drivers);
+    // The feed's DriverList names the drivers; the static grid only fills what it leaves out
+    this.liveManager.setFallbackDrivers(f1Drivers2026.drivers);
+    this.replayManager.setFallbackDrivers(f1Drivers2026.drivers);
     this.connection = ENV.F1_SIGNALR_URL
       ? new F1Connection(this.liveManager, ENV.F1_SIGNALR_URL)
       : null;
-    this.replayer = new F1Replayer(this.replayManager, this.drivers);
+    this.replayer = new F1Replayer(this.replayManager);
 
     this.liveManager.subscribe(() => this.mode === 'live' && this.notify());
     this.replayManager.subscribe(() => this.mode === 'replay' && this.notify());
@@ -207,7 +207,6 @@ export class F1Feed {
       // Start from a clean subscription so the fresh snapshot lands on the reset state
       await connection.disconnect();
       this.liveManager.resetState();
-      this.liveManager.loadDriverMetadata(this.drivers);
       try {
         await connection.connect();
       } catch {

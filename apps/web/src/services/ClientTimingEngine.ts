@@ -391,8 +391,8 @@ export class ClientTimingEngine {
 
     const compounds = ['SOFT', 'MEDIUM', 'HARD'];
 
-    // Load driver profiles
-    this.manager.loadDriverMetadata(rawDrivers);
+    // Names the simulated cars; the timing lines below are what put them on the board
+    this.manager.setFallbackDrivers(rawDrivers);
 
     // Generate initial timing lines
     const lines: Record<string, any> = {};

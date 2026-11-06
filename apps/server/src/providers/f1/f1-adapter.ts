@@ -20,33 +20,35 @@ export class F1SeriesAdapter implements SeriesProvider {
   private connection: F1Connection;
   private replayer: F1Replayer;
   private currentMode: TimingMode = CONFIG.DEFAULT_MODE;
-  private driversList: any[] = [];
 
   constructor() {
     this.manager = new TimingStateManager('f1');
-    this.loadDriverData();
+    this.loadFallbackDrivers();
     this.connection = new F1Connection(this.manager);
-    this.replayer = new F1Replayer(this.manager, this.driversList);
+    this.replayer = new F1Replayer(this.manager);
   }
 
-  private loadDriverData() {
-    // A drivers.json in the data dir overrides the bundled 2026 grid
+  /**
+   * The feed's DriverList names the drivers; this static grid only fills in names, teams and
+   * colors the feed hasn't sent. A drivers.json in the data dir overrides the bundled 2026 grid.
+   */
+  private loadFallbackDrivers() {
     const overridePath = path.join(CONFIG.DATA_DIR, 'f1', 'drivers.json');
     let source = '@livetiming/shared (drivers-2026.json)';
-    this.driversList = f1Drivers2026.drivers;
+    let driversList: any[] = f1Drivers2026.drivers;
 
     if (fs.existsSync(overridePath)) {
       try {
         const raw = JSON.parse(fs.readFileSync(overridePath, 'utf-8'));
-        this.driversList = raw.drivers || [];
+        driversList = raw.drivers || [];
         source = overridePath;
       } catch (e) {
         console.error('[F1 Adapter] Failed parsing drivers json:', e);
       }
     }
 
-    console.log(`[F1 Adapter] Loaded ${this.driversList.length} drivers from ${source}`);
-    this.manager.loadDriverMetadata(this.driversList);
+    console.log(`[F1 Adapter] Loaded ${driversList.length} fallback drivers from ${source}`);
+    this.manager.setFallbackDrivers(driversList);
   }
 
   public async start(mode: TimingMode = this.currentMode): Promise<void> {

@@ -149,7 +149,7 @@ livetiming-dashboard/
 │   └── f1/
 │       ├── signal.log                  # Real-time recorded raw telemetry log
 │       ├── final-timing-state.json     # Snapshot state
-│       └── drivers.json                # 2026 F1 driver grid specifications
+│       └── drivers.json                # Fallback driver grid (overrides the bundled one)
 │
 ├── .eslintrc.json                      # ESLint configuration
 ├── .eslintignore                       # ESLint ignore rules
@@ -215,7 +215,7 @@ Server environment variables (`apps/server/.env`, see `apps/server/.env.example`
 
 ## 🏎️ 2026 Formula 1 Grid Reference
 
-The project includes pre-configured driver numbers, 3-letter codes, teams, and official hex colors for the 2026 grid:
+Driver names, codes, teams and colors come from the feed's `DriverList`. This bundled 2026 grid is only a fallback: it fills in fields the feed hasn't sent (the replay recording carries no full `DriverList`) and never adds a car the feed doesn't report:
 
 | #      | Driver            | Code  | Team            | Accent Color              |
 | :----- | :---------------- | :---- | :-------------- | :------------------------ |

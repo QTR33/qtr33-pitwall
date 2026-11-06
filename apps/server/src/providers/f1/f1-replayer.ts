@@ -18,12 +18,10 @@ export class F1Replayer {
   private timer: NodeJS.Timeout | null = null;
   private isPlaying = false;
   private speedMultiplier = 2; // Default 2x for responsive demo playback
-  private initialDriverData: any[] = [];
   private onStateChangeCallback?: (replayState: ReplayState) => void;
 
-  constructor(manager: TimingStateManager, driverData: any[] = []) {
+  constructor(manager: TimingStateManager) {
     this.manager = manager;
-    this.initialDriverData = driverData;
   }
 
   public setOnStateChange(cb?: (replayState: ReplayState) => void) {
@@ -134,7 +132,6 @@ export class F1Replayer {
 
     if (this.currentIndex === 0) {
       this.manager.resetState();
-      this.manager.loadDriverMetadata(this.initialDriverData);
 
       // Fast forward first 50 events so initial screen has positions and timing immediately
       const warmup = Math.min(60, this.events.length);
@@ -166,7 +163,6 @@ export class F1Replayer {
       // Loop replay
       this.currentIndex = 0;
       this.manager.resetState();
-      this.manager.loadDriverMetadata(this.initialDriverData);
     }
 
     const currentEvent = this.events[this.currentIndex];
@@ -227,7 +223,6 @@ export class F1Replayer {
 
     this.currentIndex = 0;
     this.manager.resetState();
-    this.manager.loadDriverMetadata(this.initialDriverData);
 
     for (let i = 0; i < targetIndex; i++) {
       const ev = this.events[i];

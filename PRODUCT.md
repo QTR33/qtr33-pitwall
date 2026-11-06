@@ -46,7 +46,7 @@ QTR33 Pitwall shows the official live timing of a session as a single timing tow
 
 - Recorded raw feed: `data/f1/signal.log`; final state snapshot: `data/f1/final-timing-state.json`.
 - Replay recording served to the web app: `apps/web/public/replay/f1.json`.
-- 2026 driver and team metadata: `packages/shared/src/series/f1/drivers-2026.json`, `data/f1/drivers.json`.
+- 2026 driver and team metadata (fallback only; the feed's DriverList wins): `packages/shared/src/series/f1/drivers-2026.json`, `data/f1/drivers.json`.
 - No user research, testimonials, usage numbers or press exist; do not invent them.
 
 ## Product Principles
