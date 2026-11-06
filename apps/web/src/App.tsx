@@ -7,6 +7,7 @@ import { RaceControlFeed } from './components/features/race-control/RaceControlF
 import { DriverDetailModal } from './components/features/telemetry/DriverDetailModal.js';
 import { PlaybackControls } from './components/features/playback/PlaybackControls.js';
 import { Card } from './components/common/Card.js';
+import { SkipLink } from './components/common/SkipLink.js';
 import { DriverState } from '@livetiming/shared';
 import { formatLapTime } from './utils/formatters.js';
 import { FEATURES } from './config.js';
@@ -36,12 +37,7 @@ export function App() {
 
   return (
     <div className={`flex min-h-screen flex-col ${showPlayback ? 'pb-36 sm:pb-20' : ''}`}>
-      <a
-        href="#race-control"
-        className="sr-only rounded border border-rule bg-paper px-3 py-2 text-data font-semibold text-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50"
-      >
-        Skip to race control
-      </a>
+      <SkipLink href="#race-control">Skip to race control</SkipLink>
 
       {state ? (
         <HeaderBar state={state} onSetMode={setMode} onSetSeries={setSeries} />

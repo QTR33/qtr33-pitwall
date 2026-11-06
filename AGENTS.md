@@ -33,8 +33,14 @@ This repository is a production-grade **Yarn Monorepo** for motorsport real-time
    - No shadows, gradients, blur or glow. Separate content with whitespace and 1px `rule` hairlines. Only the LIVE dot and the track-status alert rule during caution periods (yellow, SC, VSC) may animate; respect `prefers-reduced-motion`.
    - Keep keyboard focus visible (global `:focus-visible` ring) and text contrast ≥ WCAG AA in both themes.
 4. **Component Hierarchy**:
-   - Put low-level design primitives (`Button`, `Badge`, `Card`, `Modal`, `Tabs`, `StatusPill`, `Tooltip`) inside `apps/web/src/components/common/`.
+   - Put low-level design primitives inside `apps/web/src/components/common/`: `Button`, `SegmentedControl`, `SkipLink`, `Badge`, `Card`, `Modal`, `Tabs`, `StatusPill`, `Tooltip`, `HeroNumber`.
    - Put domain-specific features inside `apps/web/src/components/features/<domain>/` (`session/`, `timing/`, `race-control/`, `telemetry/`, `playback/`).
+   - **Reuse primitives to the fullest.** Feature components compose primitives and never restyle a raw element a primitive already covers:
+     - Every `<button>`, and every `<a>` styled as a control or text link, is a `Button`. Pick a `variant` (`primary`, `secondary`, `danger`, `ghost`, `link`, `toggle`, `plain`) and a `size` (`sm`, `md`, `lg`, `icon`, `icon-sm`, `inline`). Render another element with `as` (`<Button as="a" href="#race-control" variant="link" size="inline">`). An icon-only button takes `icon` plus an `aria-label`.
+     - Text switches (Live / Replay, 1× 2× 5× 10×) are a `SegmentedControl`. Tabs are `Tabs`. Hover or focus detail is a `Tooltip`. The screen's one hero number is a `HeroNumber`.
+     - Customize through props: `className` for layout (margins, width, flex, gaps), and `children` / `icon` for content. `className` adds and never overrides: there is no class merging, so a class that fights one the primitive sets (another display, color, padding or font size) wins or loses by stylesheet order. When a call site needs a different look, add a variant or size to the primitive instead of overriding it.
+     - When a pattern appears in a second feature component, extract it into `common/` instead of copying the markup. A pattern that genuinely cannot use a primitive gets its own primitive with a comment saying why (see `SkipLink`).
+     - Before adding UI, check `common/` first; a raw `<button>` or `<a>` outside `common/` is a review finding.
 5. **Branch Naming**:
    - Before installing or working with a Claude skill, branch off `main` as `skill/<skill-name>` — the skill's own name in lowercase kebab-case (e.g. `skill/impeccable`, `skill/frontend-design`).
 

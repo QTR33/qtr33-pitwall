@@ -46,6 +46,8 @@ export class F1Feed {
   // Connection work runs one task at a time so live probes and disconnects never interleave
   private connectionQueue: Promise<unknown> = Promise.resolve();
   private listeners = new Set<() => void>();
+  // Development only: stops the mock topics fed to the replay
+  private stopDevMocks: Array<() => void> | null = null;
 
   constructor() {
     this.liveManager.loadDriverMetadata(this.drivers);
@@ -92,12 +94,44 @@ export class F1Feed {
     if (this.running) return;
     this.running = true;
     this.watchBrowser(true);
+    // The import sits inside the DEV branch so production builds drop the module entirely
+    if (import.meta.env.DEV) void import('./devMocks.js').then((m) => this.startDevMocks(m));
     void this.setMode(this.requestedMode);
+  }
+
+  /**
+   * The recording has no weather, session name, lap total or session clock, so in development the
+   * replay can be given mock ones: `?mockWeather=dry|rain|cycle` and
+   * `?mockSession=race|qualifying|practice` in the URL, or VITE_MOCK_WEATHER / VITE_MOCK_SESSION
+   * in .env.development. Live state is never touched.
+   */
+  private startDevMocks(mock: typeof import('./devMocks.js')) {
+    if (!this.running || this.stopDevMocks) return;
+    const params = new URLSearchParams(window.location.search);
+    const weather =
+      mock.parseMockWeatherMode(params.get('mockWeather')) ??
+      mock.parseMockWeatherMode(import.meta.env.VITE_MOCK_WEATHER);
+    const session =
+      mock.parseMockSessionMode(params.get('mockSession')) ??
+      mock.parseMockSessionMode(import.meta.env.VITE_MOCK_SESSION);
+    this.stopDevMocks = [];
+    if (weather) this.stopDevMocks.push(mock.startMockWeather(this.replayManager, weather));
+    if (session) {
+      this.stopDevMocks.push(
+        mock.startMockSession(
+          this.replayManager,
+          session,
+          () => this.replayer.getReplayState().currentTimestamp
+        )
+      );
+    }
   }
 
   public async stop(): Promise<void> {
     this.running = false;
     this.watchBrowser(false);
+    this.stopDevMocks?.forEach((stop) => stop());
+    this.stopDevMocks = null;
     this.modeRun++;
     this.clearModeTimer();
     this.replayer.stop();

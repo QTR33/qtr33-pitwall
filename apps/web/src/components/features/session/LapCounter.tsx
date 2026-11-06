@@ -1,5 +1,6 @@
 import React from 'react';
 import { SessionState, DriverState } from '@livetiming/shared';
+import { HeroNumber } from '../../common/HeroNumber.js';
 
 export interface LapCounterProps {
   session: SessionState;
@@ -19,18 +20,12 @@ export const LapCounter: React.FC<LapCounterProps> = ({ session, drivers = [] })
   if (!currentLap) return null;
 
   return (
-    <p className="flex items-baseline gap-3">
-      <span className="label" aria-hidden="true">
-        Lap
-      </span>
-      <span className="num text-hero font-semibold text-ink" aria-hidden="true">
-        {currentLap}
-        <span className="text-mute">/{totalLaps ?? '—'}</span>
-      </span>
-      <span className="sr-only">
-        Lap {currentLap}
-        {totalLaps ? ` of ${totalLaps}` : ', total laps not known'}
-      </span>
-    </p>
+    <HeroNumber
+      label="Lap"
+      spoken={`Lap ${currentLap}${totalLaps ? ` of ${totalLaps}` : ', total laps not known'}`}
+    >
+      {currentLap}
+      <span className="text-mute">/{totalLaps ?? '—'}</span>
+    </HeroNumber>
   );
 };

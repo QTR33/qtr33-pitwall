@@ -1,6 +1,7 @@
 import React from 'react';
 import { ReplayState } from '@livetiming/shared';
 import { Button } from '../../common/Button.js';
+import { SegmentedControl } from '../../common/SegmentedControl.js';
 import { Play, Pause, RotateCcw } from 'lucide-react';
 
 export interface PlaybackControlsProps {
@@ -61,22 +62,14 @@ export const PlaybackControls: React.FC<PlaybackControlsProps> = ({
           <span className="num w-10 text-right text-data text-ink">{progress}%</span>
         </label>
 
-        <div className="flex items-center gap-3" role="group" aria-label="Playback speed">
-          <span className="label">Speed</span>
-          {SPEEDS.map((s) => (
-            <button
-              key={s}
-              type="button"
-              onClick={() => onSetSpeed(s)}
-              aria-pressed={currentSpeed === s}
-              className={`num text-data transition-colors duration-150 ${
-                currentSpeed === s ? 'font-semibold text-ink' : 'text-mute hover:text-ink'
-              }`}
-            >
-              {s}×
-            </button>
-          ))}
-        </div>
+        <SegmentedControl
+          label="Playback speed"
+          visibleLabel="Speed"
+          numeric
+          options={SPEEDS.map((s) => ({ value: s, label: `${s}×`, ariaLabel: `${s} times speed` }))}
+          value={currentSpeed}
+          onChange={onSetSpeed}
+        />
       </div>
     </div>
   );

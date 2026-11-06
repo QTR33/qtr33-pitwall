@@ -7,6 +7,10 @@ interface ImportMetaEnv {
   readonly VITE_F1_SIGNALR_URL?: string;
   /** Optional backend base URL, e.g. http://localhost:3001. Unset = client-only. */
   readonly VITE_SERVER_URL?: string;
+  /** Development only: mock WeatherData for the replay (`dry`, `rain` or `cycle`). */
+  readonly VITE_MOCK_WEATHER?: string;
+  /** Development only: mock session for the replay (`race`, `sprint`, `qualifying`, `sprint-qualifying`, `practice`). */
+  readonly VITE_MOCK_SESSION?: string;
 }
 
 interface ImportMeta {

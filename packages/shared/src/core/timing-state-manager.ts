@@ -261,10 +261,9 @@ export class TimingStateManager {
         this.sessionState.currentLap = maxLaps;
       }
 
-      // Check for session-level data in TimingData
-      if (data.SessionPart) {
-        this.sessionState.sessionType = `Q${data.SessionPart}`;
-      }
+      // Qualifying part (1–3), kept apart from the session's own name
+      const part = parseInt(String(data.SessionPart ?? ''), 10);
+      if (part > 0) this.sessionState.sessionPart = part;
     } else if (topic === 'DriverList') {
       for (const carNum in data) {
         if (!this.driversState[carNum]) {
@@ -362,7 +361,11 @@ export class TimingStateManager {
       if (data.Meeting?.Circuit?.ShortName) {
         this.sessionState.circuitName = data.Meeting.Circuit.ShortName;
       }
-      if (data.Name) this.sessionState.sessionType = data.Name;
+      if (data.Name) {
+        // A different session starts with no qualifying part until the feed names one
+        if (data.Name !== this.sessionState.sessionType) this.sessionState.sessionPart = undefined;
+        this.sessionState.sessionType = data.Name;
+      }
       const kind = String(data.Type ?? '').toLowerCase();
       if (kind === 'race' || kind === 'qualifying' || kind === 'practice') {
         this.sessionState.sessionKind = kind;
@@ -388,6 +391,8 @@ export class TimingStateManager {
       this.sessionState.trackTemp = num(data.TrackTemp) ?? this.sessionState.trackTemp;
       this.sessionState.humidity = num(data.Humidity) ?? this.sessionState.humidity;
       this.sessionState.windSpeed = num(data.WindSpeed) ?? this.sessionState.windSpeed;
+      this.sessionState.windDirection = num(data.WindDirection) ?? this.sessionState.windDirection;
+      this.sessionState.pressure = num(data.Pressure) ?? this.sessionState.pressure;
       if (data.Rainfall !== undefined) this.sessionState.rainfall = String(data.Rainfall) === '1';
     }
 

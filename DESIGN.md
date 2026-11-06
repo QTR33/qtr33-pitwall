@@ -260,7 +260,7 @@ The timing tower is a real table with a fixed layout (`table-layout: fixed`), 10
 
 **The Still Columns Rule.** Values change several times a second, so no value may move its neighbours. Every timing column has a fixed width in the `colgroup`, sized to the longest real value it can hold (IBM Plex Mono 13px ≈ 7.8px per digit, plus 24px padding); Driver is the only flexible column and truncates. Rows are one line and never change height either: the position delta sits beside the number. Below `sm` (640px) the driver cell drops to number and three-letter code.
 
-The header is a three-zone grid on `md` and up (brand and session left, session progress centered, status right); below `md` the progress hero wraps onto its own row. The status zone carries the feed status, last update, theme toggle, track status and weather; there is no wall clock.
+The header is a three-zone grid on `md` and up (brand and session left, session progress centered, status right); below `md` the progress hero wraps onto its own row. The brand zone stacks three lines: the BrandMark; the session itself in `ink` 600 ("Practice 1", "Qualifying Q2", "Sprint Qualifying SQ1", "Sprint", "Race": the feed's session name plus the qualifying part, so sessions tell apart at a glance); then the meeting, circuit and, for a recording, its date in `mute`. Each line truncates on its own. The status zone carries the feed status, last update and theme toggle on its first row, and track conditions and track status on its second (see Track Conditions); there is no wall clock.
 
 **The Glance Density Rule.** Density serves a one-second glance: whitespace and hairlines separate groups, never boxes. If a new element needs a container to be legible, the grouping is wrong.
 
@@ -283,14 +283,21 @@ Precise and restrained; the label does the work.
 - **Shape:** gently squared corners (4px); heights 32 / 36 / 40px.
 - **Primary:** `ink` fill with `paper` text, 600 weight; hover drops the fill to 85% opacity.
 - **Secondary:** no fill, 1px `rule` border, `ink` text; hover darkens the border to `mute`.
-- **Ghost:** text only in `mute`; hover to `ink`. Used for close and restart.
+- **Ghost:** text only in `mute`; hover to `ink`. Used for close, restart and the theme toggle (`icon-sm`: a 32px square pulled into the line so it adds no height).
 - **Danger:** secondary shape with `danger` text; border turns `danger` on hover.
+- **Link:** in-page text links ("All messages"): `mute`, `ink` and underlined on hover, no box.
+- **Toggle:** one segment of a text switch (see below).
+- **Plain:** no color of its own, for triggers that are content, such as the driver name that opens the drawer.
 - **Disabled:** 40% opacity, not-allowed cursor. Focus uses the global 2px `signal` outline at 2px offset.
+
+### Primitives First
+
+**The One Primitive Rule.** Every control comes from `components/common/`. A button, or a link styled as one, is always `Button` (with `as="a"` for links); a text switch is `SegmentedControl`; the hero number is `HeroNumber`; hover or focus detail is `Tooltip`. Call sites add layout with `className` and content with `children` or `icon`, and never restyle a primitive's color, size or type. A new look is a new variant in the primitive, so the next screen inherits it. A pattern that shows up in a second feature becomes a primitive instead of a copy.
 
 ### Tabs and Segmented Text Controls
 
 - **Tabs:** text-only labels 20px apart on a `rule` hairline; active tab is `ink` with a 2px `signal` underline, inactive is `mute` with hover to `ink`.
-- **Mode and speed switches** (Live / Replay, 1× 2× 5× 10×): plain text buttons with `aria-pressed`; active is `ink` 600, inactive `mute`.
+- **Mode and speed switches** (Live / Replay, 1× 2× 5× 10×): `SegmentedControl`, plain text buttons with `aria-pressed`; active is `ink`, inactive `mute`, both 600 so a switch never changes width when it flips. Speeds are set in tabular numerals.
 
 ### Badges and Status
 
@@ -348,6 +355,16 @@ Below `2xl`, a one-line strip at the bottom of the sticky header carries the new
 
 - **Alert rule:** a 2px full-width bar across the top of the header in the flag color (green, yellow, red); it beats with a 1.2s heartbeat during caution (yellow, SC, VSC) and is absent under the chequered flag.
 - **Status label:** the track status in words only ("Green flag", "Safety car", "Red flag"…), 13px 600 in the AA-safe text token (`pb`, `warn`, `danger`, `ink`). No flag icon or board beside it: the alert rule already carries the flag color.
+
+### Track Conditions
+
+The feed's WeatherData, on the second row of the header's status zone, to the left of the status label behind a 12px-tall `rule` hairline. The status label keeps the zone's right edge, so the readout grows away from it and never moves it.
+
+- **Readings:** `Label value unit` in `text-data` `mute`, values in `.num`, 12px apart: `Track 39°C`, `Air 25°C`, `Humidity 45%`, `Wind 1.2 m/s NE`. Temperatures are whole degrees (the feed's 0.1° is noise at a glance); units are the feed's own, °C and m/s, and the compass is the 8-point direction the wind blows from. Each value sits in a slot sized to its usual longest value (`2ch` temperatures and humidity, `3ch` wind), right-aligned.
+- **Tiers:** track temperature and rain at every width, air from `lg`, humidity and wind from `xl`. Nothing renders until WeatherData arrives, and a reading the feed has not sent is left out, never shown as a default.
+- **Rain:** the word "Rain" in `ink` 600, first in the row, while the feed reports rainfall. It is not a data color: `warn` beside the status label would read as a caution flag. While dry its slot stays reserved (invisible) from `md`, where the centred progress column would otherwise shift when it appears.
+- **Details:** the readout is focusable (tap focuses it on touch) and opens the common Tooltip, right-aligned below it, listing every reading at the feed's precision, pressure and wind degrees included.
+- **Screen readers:** the readout is a group named "Track conditions", described by one spoken sentence in words ("track 39 degrees Celsius, … wind 1.2 metres per second from the north-east"); the visual readings are hidden from the tree. A separate polite status line announces rain starting and stopping, once.
 
 ### Named Rules
 

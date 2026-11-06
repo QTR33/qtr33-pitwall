@@ -2,6 +2,7 @@ import React from 'react';
 import { DriverState } from '@livetiming/shared';
 import { SectorSegment } from './SectorSegment.js';
 import { TyreBadge } from './TyreBadge.js';
+import { Button } from '../../common/Button.js';
 import { ArrowUp } from 'lucide-react';
 import { formatGap, formatInterval, formatLapTime } from '../../../utils/formatters.js';
 import { getTimingTextColor, getTimingMeaning } from '../../../utils/colors.js';
@@ -125,9 +126,10 @@ export const DriverRow: React.FC<DriverRowProps> = ({
           />
           <div className="min-w-0">
             {/* Driver is the one flexible column: long names truncate instead of widening it */}
-            <button
-              type="button"
-              className="flex min-w-0 max-w-full items-baseline gap-2 rounded-sm text-left"
+            <Button
+              variant="plain"
+              size="inline"
+              className="flex min-w-0 max-w-full items-baseline gap-2 text-left"
               aria-haspopup="dialog"
               aria-label={`${driverName}${driverTeam ? `, ${driverTeam}` : ''}${isOut ? ', out of the race' : ''} — view details`}
             >
@@ -140,7 +142,7 @@ export const DriverRow: React.FC<DriverRowProps> = ({
                 {driverName}
               </span>
               <span className="num shrink-0 text-label text-ink sm:text-mute">{driverCode}</span>
-            </button>
+            </Button>
           </div>
         </div>
       </td>

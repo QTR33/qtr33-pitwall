@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SessionState } from '@livetiming/shared';
+import { HeroNumber } from '../../common/HeroNumber.js';
 import { formatCountdown, parseClockSeconds } from '../../../utils/formatters.js';
 
 export interface SessionTimerProps {
@@ -30,14 +31,8 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({ session, referenceTi
   const remaining = formatCountdown(remainingAt - Math.max(0, elapsed));
 
   return (
-    <p className="flex items-baseline gap-3">
-      <span className="label" aria-hidden="true">
-        Remaining
-      </span>
-      <span className="num text-hero font-semibold text-ink" aria-hidden="true">
-        {remaining}
-      </span>
-      <span className="sr-only">{remaining} remaining in the session</span>
-    </p>
+    <HeroNumber label="Remaining" spoken={`${remaining} remaining in the session`}>
+      {remaining}
+    </HeroNumber>
   );
 };

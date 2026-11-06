@@ -1,5 +1,5 @@
 import React from 'react';
-import { LiveTimingState, RacingSeriesId, TimingMode } from '@livetiming/shared';
+import { LiveTimingState, RacingSeriesId, SessionState, TimingMode } from '@livetiming/shared';
 import { FlagBanner } from './FlagBanner.js';
 import { WeatherReadout } from './WeatherReadout.js';
 import { LapCounter } from './LapCounter.js';
@@ -9,6 +9,8 @@ import { LastUpdated } from './LastUpdated.js';
 import { FeedNotice } from './FeedNotice.js';
 import { RaceControlTicker } from '../race-control/RaceControlTicker.js';
 import { StatusPill, StatusPillProps } from '../../common/StatusPill.js';
+import { Button } from '../../common/Button.js';
+import { SegmentedControl } from '../../common/SegmentedControl.js';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../../../hooks/useTheme.js';
 import { getTrackFlagStyle } from '../../../utils/colors.js';
@@ -22,6 +24,15 @@ export interface HeaderBarProps {
 }
 
 type FeedPill = Pick<StatusPillProps, 'status' | 'text' | 'title' | 'pulse'>;
+
+/** "Practice 1", "Qualifying Q2", "Sprint Qualifying SQ1", "Sprint", "Race"; the feed's own name */
+function getSessionLabel(session: SessionState): string {
+  const part =
+    session.sessionKind === 'qualifying' && session.sessionPart
+      ? `${/sprint/i.test(session.sessionType) ? 'SQ' : 'Q'}${session.sessionPart}`
+      : '';
+  return [session.sessionType, part].filter(Boolean).join(' ');
+}
 
 // The pill must never let a recording or a dropped link pass for live timing
 function getFeedPill(state: LiveTimingState): FeedPill | null {
@@ -47,6 +58,7 @@ function getFeedPill(state: LiveTimingState): FeedPill | null {
 export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
   const isLive = state.mode === 'live';
   const { theme, toggleTheme } = useTheme();
+  const themeLabel = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
   const trackStatus = state.session.trackStatus || 'GREEN';
   const flagStyle = getTrackFlagStyle(trackStatus);
   const pill = getFeedPill(state);
@@ -60,29 +72,14 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
     !isLive && state.replay?.currentTimestamp
       ? formatRecordedDate(state.replay.currentTimestamp)
       : null;
-  const sessionLine = [
+  const sessionLabel = getSessionLabel(state.session);
+  const meetingLine = [
     state.session.sessionName,
-    state.session.sessionType,
+    state.session.circuitName,
     recordedOn && `Recorded ${recordedOn}`,
   ]
     .filter(Boolean)
     .join(' · ');
-
-  const modeButton = (mode: TimingMode, label: string) => {
-    const active = state.mode === mode;
-    return (
-      <button
-        type="button"
-        onClick={() => onSetMode(mode)}
-        aria-pressed={active}
-        className={`text-data font-semibold transition-colors duration-150 ${
-          active ? 'text-ink' : 'text-mute hover:text-ink'
-        }`}
-      >
-        {label}
-      </button>
-    );
-  };
 
   return (
     // Sticky at every width: the flag, progress and feed state must never scroll out of a glance
@@ -100,12 +97,14 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
         {/* Brand & session */}
         <div className="min-w-0">
           <BrandMark />
-          {sessionLine && (
-            <p className="mt-1 truncate text-data text-mute">
-              {sessionLine}
-              {state.session.circuitName && (
-                <span className="hidden lg:inline"> · {state.session.circuitName}</span>
-              )}
+          {/* Which session this is, on its own line so practice, qualifying, sprint and race
+              tell apart at a glance; where and when sit below it, quieter */}
+          {sessionLabel && (
+            <p className="mt-1 truncate text-data font-semibold text-ink">{sessionLabel}</p>
+          )}
+          {meetingLine && (
+            <p className={`truncate text-data text-mute ${sessionLabel ? '' : 'mt-1'}`}>
+              {meetingLine}
             </p>
           )}
         </div>
@@ -127,31 +126,33 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
         <div className="flex flex-col items-end gap-1 justify-self-end">
           <div className="flex items-center gap-4">
             {FEATURES.replay && (
-              <div className="flex items-center gap-3" role="group" aria-label="Timing mode">
-                {modeButton('live', 'Live')}
-                {modeButton('replay', 'Replay')}
-              </div>
+              <SegmentedControl
+                label="Timing mode"
+                options={[
+                  { value: 'live', label: 'Live' },
+                  { value: 'replay', label: 'Replay' },
+                ]}
+                value={state.mode}
+                onChange={onSetMode}
+              />
             )}
             {/* A recording's update time is just the wall clock, so only live shows it */}
             {isLive && <LastUpdated lastUpdated={state.lastUpdated} />}
             {pill && <StatusPill {...pill} />}
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="icon-sm"
               onClick={toggleTheme}
-              className="-m-2 p-2 text-mute transition-colors duration-150 hover:text-ink"
-              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              {theme === 'dark' ? (
-                <Sun className="h-4 w-4" aria-hidden="true" />
-              ) : (
-                <Moon className="h-4 w-4" aria-hidden="true" />
-              )}
-            </button>
+              title={themeLabel}
+              aria-label={themeLabel}
+              icon={theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            />
           </div>
+          {/* The flag label holds the right edge; conditions sit to its left behind a hairline,
+              so a change in the readout never moves it */}
           <div className="flex items-center gap-3">
-            <FlagBanner flag={trackStatus} />
             <WeatherReadout session={state.session} />
+            <FlagBanner flag={trackStatus} />
           </div>
         </div>
       </div>

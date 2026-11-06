@@ -1,5 +1,6 @@
 import React from 'react';
 import { RaceControlMessage } from '@livetiming/shared';
+import { Button } from '../../common/Button.js';
 import { Badge } from '../../common/Badge.js';
 import { formatUtcTime, getCategory } from './RaceControlFeed.js';
 
@@ -33,12 +34,15 @@ export const RaceControlTicker: React.FC<RaceControlTickerProps> = ({
         <span className="min-w-0 truncate text-ink" title={latest.Message}>
           {latest.Message}
         </span>
-        <a
+        <Button
+          as="a"
           href="#race-control"
-          className="ml-auto shrink-0 rounded-sm text-mute underline-offset-2 transition-colors duration-150 hover:text-ink hover:underline"
+          variant="link"
+          size="inline"
+          className="ml-auto shrink-0"
         >
           All messages
-        </a>
+        </Button>
       </p>
     </div>
   );
