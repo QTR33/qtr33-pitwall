@@ -48,7 +48,11 @@ export const RaceControlFeed: React.FC<RaceControlFeedProps> = ({
   const visible = messages.slice(0, MAX_VISIBLE);
 
   return (
+    // Flex columns down to the list, so when the sidebar is held to the screen's height the list
+    // gives up the room and scrolls inside, instead of the sidebar running past the screen
     <Card
+      className="flex min-h-0 flex-col"
+      contentClassName="flex min-h-0 flex-col"
       title="Race control"
       action={
         <span className="num text-label text-mute">
@@ -59,7 +63,11 @@ export const RaceControlFeed: React.FC<RaceControlFeedProps> = ({
       {messages.length === 0 ? (
         <p className="py-4 text-data text-mute">No messages from race control yet.</p>
       ) : (
-        <ol className={`${maxHeight} overflow-y-auto`} aria-live="polite" aria-relevant="additions">
+        <ol
+          className={`${maxHeight} min-h-0 overflow-y-auto`}
+          aria-live="polite"
+          aria-relevant="additions"
+        >
           {visible.map((msg, idx) => {
             const category = getCategory(msg);
             return (

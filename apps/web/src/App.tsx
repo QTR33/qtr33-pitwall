@@ -76,9 +76,17 @@ export function App() {
             </div>
 
             {/* Under the tower: fastest lap and race control side by side from lg; a column beside
-              the tower from 2xl */}
+              the tower from 2xl, pinned 2rem under the header (its height comes from HeaderBar).
+              Pinned, it is held to the screen's height: sticky only works within the tower's
+              row, so a sidebar taller than the room left at the bottom of the page would be
+              pushed up and under the header. The room is the screen less the header, 2rem above
+              and 2rem of page padding below, plus the playback bar when it shows */}
             <aside
-              className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-12 2xl:sticky 2xl:top-32 2xl:flex-col 2xl:gap-10"
+              className={`flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-12 2xl:sticky 2xl:top-[calc(var(--header-h,6.5rem)_+_2rem)] 2xl:flex-col 2xl:gap-10 ${
+                showPlayback
+                  ? '2xl:max-h-[calc(100vh_-_var(--header-h,6.5rem)_-_9rem)]'
+                  : '2xl:max-h-[calc(100vh_-_var(--header-h,6.5rem)_-_4rem)]'
+              }`}
               aria-label="Session details"
             >
               {fastestLapDriver && (
@@ -102,11 +110,12 @@ export function App() {
                 </Card>
               )}
 
-              {/* Skip-link target: focusable so keyboard focus lands here, not back at the top */}
+              {/* Skip-link target: focusable so keyboard focus lands here, not back at the top.
+                  The one part of the pinned sidebar that may shrink (its list then scrolls) */}
               <div
                 id="race-control"
                 tabIndex={-1}
-                className="min-w-0 focus:outline-none lg:flex-1 2xl:flex-none"
+                className="flex min-h-0 min-w-0 flex-col focus:outline-none lg:flex-1 2xl:flex-initial"
               >
                 <RaceControlFeed messages={state?.raceControl || []} maxHeight="max-h-[420px]" />
               </div>

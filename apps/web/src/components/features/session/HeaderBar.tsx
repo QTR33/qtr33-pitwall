@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { LiveTimingState, RacingSeriesId, SessionState, TimingMode } from '@livetiming/shared';
 import { FlagBanner } from './FlagBanner.js';
 import { WeatherReadout } from './WeatherReadout.js';
@@ -77,6 +77,23 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
   const linkDown =
     isLive && (state.feedStatus === 'reconnecting' || state.feedStatus === 'connecting');
 
+  // The sidebar pins itself just under the header, whose height moves with what it shows (the
+  // caution rule, a second session line, the lost-link notice), so publish the real height
+  const headerRef = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const root = document.documentElement;
+    const publish = () => root.style.setProperty('--header-h', `${header.offsetHeight}px`);
+    publish();
+    const observer = new ResizeObserver(publish);
+    observer.observe(header);
+    return () => {
+      observer.disconnect();
+      root.style.removeProperty('--header-h');
+    };
+  }, []);
+
   // Only what the feed reported; a recording without session info is named by its date
   const recordedOn =
     !isLive && state.replay?.currentTimestamp
@@ -93,7 +110,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
 
   return (
     // Sticky at every width: the flag, progress and feed state must never scroll out of a glance
-    <header className="sticky top-0 z-30 border-b border-rule bg-paper">
+    <header ref={headerRef} className="sticky top-0 z-30 border-b border-rule bg-paper">
       {/* Full-width rule in the track-status color (green, yellow, SC/VSC, red);
           beats during caution periods */}
       {flagStyle?.alert && (
