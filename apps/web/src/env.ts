@@ -1,3 +1,7 @@
+/**
+ * development: logs to the console; between sessions the F1 recording plays, so there is data.
+ * production: no logging; between sessions the dashboard says no session is on track.
+ */
 export type AppEnv = 'development' | 'production';
 
 // VITE_APP_ENV wins; otherwise follow Vite's mode (`vite` = development, `vite build` = production)

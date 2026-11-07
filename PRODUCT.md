@@ -23,7 +23,7 @@ QTR33 Pitwall shows the official live timing of a session as a single timing tow
 ## Operating Context
 
 - Used during live sessions, alongside a broadcast, often for the full length of a race.
-- Data arrives as sub-second deltas from the official F1 SignalR hub; between sessions the app plays a bundled recording.
+- Data arrives as sub-second deltas from the official F1 SignalR hub; between sessions the deployed app (`VITE_APP_ENV=production`) says no session is on track and keeps checking, while development plays a bundled recording instead.
 - Dark theme is the default, with a light theme alternative.
 
 ## Capabilities and Constraints
@@ -45,7 +45,8 @@ QTR33 Pitwall shows the official live timing of a session as a single timing tow
 ## Evidence on Hand
 
 - Recorded raw feed: `data/f1/signal.log`; final state snapshot: `data/f1/final-timing-state.json`.
-- Replay recording served to the web app: `apps/web/public/replay/f1.json`.
+- Server day captures, one file per topic and day: `logs/<Topic>/<YYYY-MM-DD>.log` (gitignored, local only).
+- Replay recording served to the web app: `apps/web/public/replay/f1.json`, built from the 2026-10-11 Singapore Grand Prix race logs (`yarn replay:build --logs 2026-10-11`).
 - 2026 driver and team metadata (fallback only; the feed's DriverList wins): `packages/shared/src/series/f1/drivers-2026.json`, `data/f1/drivers.json`.
 - No user research, testimonials, usage numbers or press exist; do not invent them.
 

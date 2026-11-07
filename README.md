@@ -15,7 +15,7 @@ A high-performance, real-time motorsport live timing and telemetry platform. Bui
 
 - **⚡ Dual Operational Modes**:
   - **Live SignalR Stream**: Direct WebSocket connection to `https://livetiming.formula1.com/signalrcore` with auto-reconnection and heartbeat monitoring.
-  - **Replay / Simulator Engine**: Offline playback engine parsing recorded telemetry (`signal.log`) with variable speed multipliers (**1x, 2x, 5x, 10x**), scrub navigation, pause, and restart.
+  - **Replay / Simulator Engine**: Offline playback of a recorded session (the server's `logs/` day captures or `signal.log`) on the recording's own clock, at **1x** (real time), **2x, 5x, 10x**, with scrub navigation, pause, and restart.
 - **🏁 Pitwall Live Timing Leaderboard**:
   - Positions P1–P22 with gain/loss deltas (▲/▼).
   - Driver numbers with official team color branding.
@@ -177,7 +177,7 @@ yarn install
 
 ### 2. Start Development Environment
 
-The web dashboard runs entirely in the browser: it connects straight to the official F1 SignalR hub, and when no session is on track it plays the recording in `apps/web/public/replay/f1.json`. The backend server is optional.
+The web dashboard runs entirely in the browser: it connects straight to the official F1 SignalR hub. When no session is on track, a production build says so ("No session on track") and keeps checking, while development plays the recording in `apps/web/public/replay/f1.json` so there is data to work with (see `VITE_APP_ENV`). The backend server is optional.
 
 ```bash
 cp apps/web/.env.example apps/web/.env.development   # then set the variables below
@@ -188,11 +188,11 @@ The dashboard is at [http://localhost:5173](http://localhost:5173). `yarn dev` a
 
 Web environment variables (`apps/web/.env.development`, `apps/web/.env.production`, or your static host's build settings):
 
-| Variable              | Description                                                                                   |
-| :-------------------- | :-------------------------------------------------------------------------------------------- |
-| `VITE_APP_ENV`        | `development` logs to the browser console, `production` logs nothing. Defaults to Vite's mode |
-| `VITE_F1_SIGNALR_URL` | F1 SignalR Core hub. Empty = replay only                                                      |
-| `VITE_SERVER_URL`     | Optional. Stream from `apps/server` (e.g. `http://localhost:3001`) instead of F1 directly     |
+| Variable              | Description                                                                                                                                                            |
+| :-------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_APP_ENV`        | `development` logs to the console and plays the recording between sessions; `production` logs nothing and shows "No session on track" instead. Defaults to Vite's mode |
+| `VITE_F1_SIGNALR_URL` | F1 SignalR Core hub. Empty = live timing off: development plays the recording, production shows "Can't reach live timing"                                              |
+| `VITE_SERVER_URL`     | Optional. Stream from `apps/server` (e.g. `http://localhost:3001`) instead of F1 directly                                                                              |
 
 Server environment variables (`apps/server/.env`, see `apps/server/.env.example`): `F1_SIGNALR_URL` (F1 SignalR Core hub; empty = replay only), `PORT` (default `3001`), `DATA_DIR` (`<repo>/data`), `LOGS_DIR` (`<repo>/logs`).
 
@@ -200,22 +200,23 @@ Server environment variables (`apps/server/.env`, see `apps/server/.env.example`
 
 ### 3. Individual Component Scripts
 
-| Command             | Description                                         |
-| :------------------ | :-------------------------------------------------- |
-| `yarn dev:server`   | Starts backend server with hot-reload (`tsx watch`) |
-| `yarn dev:web`      | Starts frontend Vite development server             |
-| `yarn build`        | Compiles TypeScript and builds production bundles   |
-| `yarn replay:build` | Converts `data/f1/signal.log` into the web replay   |
-| `yarn typecheck`    | Type-checks shared, server and web (`tsc --noEmit`) |
-| `yarn lint`         | Runs ESLint across all packages and applications    |
-| `yarn format`       | Formats all code using Prettier                     |
-| `yarn format:check` | Validates Prettier formatting                       |
+| Command                               | Description                                                                                                                   |
+| :------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------- |
+| `yarn dev:server`                     | Starts backend server with hot-reload (`tsx watch`)                                                                           |
+| `yarn dev:web`                        | Starts frontend Vite development server                                                                                       |
+| `yarn build`                          | Compiles TypeScript and builds production bundles                                                                             |
+| `yarn replay:build`                   | Converts `data/f1/signal.log` into the web replay                                                                             |
+| `yarn replay:build --logs 2026-10-11` | Builds the web replay from the server's per-topic day logs in `logs/` (the bundled one is the 2026 Singapore Grand Prix race) |
+| `yarn typecheck`                      | Type-checks shared, server and web (`tsc --noEmit`)                                                                           |
+| `yarn lint`                           | Runs ESLint across all packages and applications                                                                              |
+| `yarn format`                         | Formats all code using Prettier                                                                                               |
+| `yarn format:check`                   | Validates Prettier formatting                                                                                                 |
 
 ---
 
 ## 🏎️ 2026 Formula 1 Grid Reference
 
-Driver names, codes, teams and colors come from the feed's `DriverList`. This bundled 2026 grid is only a fallback: it fills in fields the feed hasn't sent (the replay recording carries no full `DriverList`) and never adds a car the feed doesn't report:
+Driver names, codes, teams and colors come from the feed's `DriverList`. This bundled 2026 grid is only a fallback: it fills in fields the feed hasn't sent (an older recording may carry no full `DriverList`) and never adds a car the feed doesn't report:
 
 | #      | Driver            | Code  | Team            | Accent Color              |
 | :----- | :---------------- | :---- | :-------------- | :------------------------ |

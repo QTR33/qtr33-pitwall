@@ -2,10 +2,11 @@ import { TimingStateManager } from '@livetiming/shared';
 import { logger } from '../logger.js';
 
 /*
- * Development-only feed topics for the recorded replay, which carries no WeatherData, SessionInfo,
- * LapCount total or session clock. Never used for live timing and never bundled into a production
- * build: F1Feed imports this module inside an `import.meta.env.DEV` branch. Messages use the
- * feed's own shapes (strings included) so the real parsing runs.
+ * Development-only feed topics for the recorded replay: what a recording lacks, or what it never
+ * had to show (rain, a session clock: a race recording has none, and an older one may also lack
+ * WeatherData, SessionInfo and the LapCount total). Never used for live timing and never bundled
+ * into a production build: F1Feed imports this module inside an `import.meta.env.DEV` branch.
+ * Messages use the feed's own shapes (strings included) so the real parsing runs.
  */
 
 /** dry: steady · rain: raining throughout · cycle: rain starts and stops every 30s */

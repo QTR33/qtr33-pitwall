@@ -125,7 +125,6 @@ export class TimingStateManager {
       sessionName: '',
       sessionType: '',
       sessionStatus: 'Inactive',
-      trackStatus: 'GREEN',
       circuitName: '',
       totalLaps: 0,
       currentLap: 0,
@@ -319,7 +318,7 @@ export class TimingStateManager {
                 this.sessionState.trackStatus = flag;
               } else if (
                 (flag === 'YELLOW' || flag === 'DOUBLE_YELLOW') &&
-                (current === 'GREEN' || current === 'CLEAR' || current === 'YELLOW')
+                (!current || current === 'GREEN' || current === 'CLEAR' || current === 'YELLOW')
               ) {
                 this.sessionState.trackStatus = flag;
               }

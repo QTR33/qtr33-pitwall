@@ -11,17 +11,29 @@ interface ReplayEvent {
 const REPLAY_URL = `${import.meta.env.BASE_URL}replay/f1.json`;
 // Fast-forward this many events on start so the first frame already has positions and timing
 const WARMUP_EVENTS = 60;
+// The recording plays on its own clock, scaled by the speed: each tick applies every event the
+// playhead has passed, so busy moments (a restart, a round of stops) keep their real rhythm
+const TICK_MS = 100;
+// A longer silence (the recorder lost its link) is cut to this, so playback never sits idle
+const MAX_SILENCE_MS = 5_000;
 
 /** Plays a recorded F1 session back into a TimingStateManager at variable speed. */
 export class F1Replayer {
   private events: ReplayEvent[] = [];
+  // When each event was recorded (ms), parsed once on load
+  private times: number[] = [];
   private loading: Promise<void> | null = null;
   private currentIndex = 0;
+  // Recording time (ms) the replay has reached
+  private playhead = 0;
+  // Wall clock (ms) of the previous tick, so time spent paused never counts as playback
+  private lastTickAt = 0;
   private timer: ReturnType<typeof setTimeout> | null = null;
   private isPlaying = false;
   // Bumped by start()/pause() so a start() still awaiting the download knows it was superseded
   private runId = 0;
-  private speedMultiplier = 2; // Default 2x for responsive demo playback
+  // 1× is real time: in development the replay stands in for a live session
+  private speedMultiplier = 1;
   private onStateChange?: () => void;
 
   constructor(private manager: TimingStateManager) {}
@@ -42,6 +54,13 @@ export class F1Replayer {
       })
       .then((events) => {
         this.events = events;
+        // An event without a readable time keeps the previous one's, so it plays right after it
+        let last = 0;
+        this.times = events.map((e) => {
+          const t = Date.parse(e.time);
+          if (!Number.isNaN(t)) last = t;
+          return last;
+        });
         logger.info(`[F1 Replayer] Loaded ${events.length} recorded telemetry events`);
       })
       .catch((err) => {
@@ -65,9 +84,11 @@ export class F1Replayer {
         this.apply(this.events[i]);
       }
       this.currentIndex = warmup;
+      this.syncPlayhead();
     }
 
-    this.scheduleNextTick();
+    this.lastTickAt = performance.now();
+    this.tick();
     this.notifyState();
     logger.info(`[F1 Replayer] Started at speed ${this.speedMultiplier}x`);
   }
@@ -76,25 +97,40 @@ export class F1Replayer {
     this.manager.processMessage(event.topic, event.data);
   }
 
-  private scheduleNextTick() {
+  /** Puts the playhead on the last applied event, after a jump in the recording */
+  private syncPlayhead() {
+    this.playhead = this.times[Math.max(0, this.currentIndex - 1)] ?? 0;
+  }
+
+  private tick() {
     if (!this.isPlaying || this.events.length === 0) return;
 
     if (this.currentIndex >= this.events.length) {
       // Loop replay
       this.currentIndex = 0;
       this.manager.resetState();
+      this.syncPlayhead();
     }
 
-    this.apply(this.events[this.currentIndex]);
-    this.currentIndex++;
+    const now = performance.now();
+    this.playhead += (now - this.lastTickAt) * this.speedMultiplier;
+    this.lastTickAt = now;
 
-    const intervalMs = Math.max(40, Math.floor(400 / this.speedMultiplier));
-    this.timer = setTimeout(() => this.scheduleNextTick(), intervalMs);
+    // Cut a long silence short
+    const nextAt = this.times[this.currentIndex];
+    if (nextAt - this.playhead > MAX_SILENCE_MS) this.playhead = nextAt - MAX_SILENCE_MS;
 
-    // Periodically notify state
-    if (this.currentIndex % 10 === 0) {
-      this.notifyState();
+    const before = this.currentIndex;
+    while (
+      this.currentIndex < this.events.length &&
+      this.times[this.currentIndex] <= this.playhead
+    ) {
+      this.apply(this.events[this.currentIndex]);
+      this.currentIndex++;
     }
+    if (this.currentIndex !== before) this.notifyState();
+
+    this.timer = setTimeout(() => this.tick(), TICK_MS);
   }
 
   public pause(): void {
@@ -110,7 +146,8 @@ export class F1Replayer {
   public resume(): void {
     if (this.isPlaying) return;
     this.isPlaying = true;
-    this.scheduleNextTick();
+    this.lastTickAt = performance.now();
+    this.tick();
     this.notifyState();
   }
 
@@ -134,6 +171,9 @@ export class F1Replayer {
       this.apply(this.events[i]);
     }
     this.currentIndex = targetIndex;
+    this.syncPlayhead();
+    // Catching up on thousands of events takes a moment; it is not playback time
+    this.lastTickAt = performance.now();
     this.notifyState();
   }
 
