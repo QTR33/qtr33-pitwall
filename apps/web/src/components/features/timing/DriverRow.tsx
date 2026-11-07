@@ -99,11 +99,14 @@ export const DriverRow: React.FC<DriverRowProps> = ({
       }`}
     >
       {/* Position — selected row is marked by the accent rule on the left */}
-      <td
-        className={`${td} sticky left-0 z-10 w-16 border-l-2 pl-2 text-right ${stickyBg} ${
-          isSelected ? 'border-signal' : 'border-transparent'
-        }`}
-      >
+      <td className={`${td} sticky left-0 z-10 w-16 pl-2 text-right ${stickyBg}`}>
+        {/* The rule is drawn inside the cell, not as its left border: in a collapsed table the
+            table paints the borders, so a border stays put while the sticky cell slides over it,
+            and an unselected (transparent) one left a slit where scrolled cells showed through.
+            The sticky cell is the containing block, so the rule moves with it */}
+        {isSelected && (
+          <span className="absolute inset-y-0 left-0 w-0.5 bg-signal" aria-hidden="true" />
+        )}
         {/* Gain / loss sits beside the position, not under it, so every row stays one line high */}
         <div className="flex items-baseline justify-end gap-1.5">
           {posDelta !== 0 && (
