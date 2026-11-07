@@ -70,6 +70,8 @@ export function App() {
                 onSelectDriver={handleSelectDriver}
                 selectedDriverNum={selectedCar ?? undefined}
                 emptyMessage={isConnecting ? 'Connecting to live timing…' : undefined}
+                // The feed types a sprint as a race too; an unnamed session shows no change
+                showPositionChange={state?.session.sessionKind === 'race'}
               />
             </div>
 

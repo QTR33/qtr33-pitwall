@@ -13,6 +13,8 @@ export interface DriverRowProps {
   isLeader: boolean;
   onSelectDriver: (driver: DriverState) => void;
   isSelected?: boolean;
+  /** Places gained / lost beside the position; only a race or sprint has a grid to count from */
+  showPositionChange?: boolean;
 }
 
 // 8px rows: the tallest cell (the 15px position) sets a ~38px row
@@ -26,13 +28,15 @@ export const DriverRow: React.FC<DriverRowProps> = ({
   isLeader,
   onSelectDriver,
   isSelected = false,
+  showPositionChange = false,
 }) => {
   // The feed's team color is data and drawn as-is; with none, the bar falls back to the rule token
   // rather than an invented brand color
   const rawColor: string = (driver as any).TeamColour || driver.team_color || '';
   const teamColor = rawColor && (rawColor.startsWith('#') ? rawColor : `#${rawColor}`);
   const pos = driver.Position ? parseInt(driver.Position, 10) : driver.Line || '—';
-  const posDelta = driver.PositionDelta || 0;
+  // In practice and qualifying the order is a lap-time ranking, so a move up or down is no overtake
+  const posDelta = showPositionChange ? driver.PositionDelta || 0 : 0;
 
   // A retired car's gap and interval froze when it stopped racing; they no longer mean anything
   const isOut = !!driver.Retired;

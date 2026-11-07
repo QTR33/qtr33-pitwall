@@ -9,6 +9,8 @@ export interface TimingTableProps {
   selectedDriverNum?: string;
   /** Shown in place of the rows when there are no drivers */
   emptyMessage?: string;
+  /** Places gained / lost beside each position: races and sprints only */
+  showPositionChange?: boolean;
 }
 
 const th = 'label whitespace-nowrap py-3 px-3 font-semibold';
@@ -18,6 +20,7 @@ export const TimingTable: React.FC<TimingTableProps> = ({
   onSelectDriver,
   selectedDriverNum,
   emptyMessage = 'Waiting for timing data…',
+  showPositionChange = false,
 }) => {
   return (
     // `relative` contains the absolutely-positioned sr-only text inside the scroll area
@@ -47,7 +50,8 @@ export const TimingTable: React.FC<TimingTableProps> = ({
           the car ahead · <span className="num text-pb">N</span> new tyres
         </caption>
         <colgroup>
-          {/* Position with its gain / loss beside it: "▲12 20" */}
+          {/* Position with its gain / loss beside it in a race: "▲12 20". The width stays the
+              same in other sessions so the tower does not shift when the session changes */}
           <col className="w-16" />
           <col />
           {/* Gap: "+12.345", "+2 LAPS", "Leader"; Int also fits the 12px catching arrow */}
@@ -118,6 +122,7 @@ export const TimingTable: React.FC<TimingTableProps> = ({
                 isLeader={idx === 0}
                 onSelectDriver={onSelectDriver}
                 isSelected={selectedDriverNum === driver.carNumber}
+                showPositionChange={showPositionChange}
               />
             ))
           )}
