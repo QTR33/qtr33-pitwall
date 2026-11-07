@@ -6,6 +6,8 @@ export interface StatusPillProps {
     | 'connecting'
     | 'reconnecting'
     | 'replay'
+    | 'idle'
+    | 'offline'
     | 'paused'
     | 'flag'
     | 'sc'
@@ -30,6 +32,8 @@ export const StatusPill: React.FC<StatusPillProps> = ({
     connecting: 'bg-mute',
     reconnecting: 'bg-warn',
     replay: 'bg-mute',
+    idle: 'bg-mute',
+    offline: 'bg-danger',
     paused: 'bg-mute',
     flag: 'bg-warn',
     sc: 'bg-warn',

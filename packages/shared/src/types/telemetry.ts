@@ -112,7 +112,8 @@ export interface SessionState {
   sessionName: string;
   sessionType: string;
   sessionStatus: 'Inactive' | 'Started' | 'Paused' | 'Ended' | 'Finished' | string;
-  trackStatus: TrackFlag;
+  /** Absent until the feed reports it: an unknown track is never shown as green */
+  trackStatus?: TrackFlag;
   circuitName: string;
   totalLaps: number;
   currentLap: number;
@@ -147,9 +148,12 @@ export interface ReplayState {
 /**
  * Health of the link to the live timing source:
  * connecting (first attempt in progress), connected, reconnecting (link dropped, retrying),
- * offline (not linked: no live session, or live timing is unavailable)
+ * offline (not linked: a recording is playing instead).
+ * With no recording to fall back on, the state waits for a session and says why:
+ * no-session (the source answered, nothing is on track), unreachable (the source did not answer)
  */
-export type FeedStatus = 'connecting' | 'connected' | 'reconnecting' | 'offline';
+export type FeedStatus =
+  'connecting' | 'connected' | 'reconnecting' | 'offline' | 'no-session' | 'unreachable';
 
 export interface LiveTimingState {
   series: RacingSeriesId;

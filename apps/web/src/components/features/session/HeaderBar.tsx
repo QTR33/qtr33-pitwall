@@ -15,6 +15,7 @@ import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../../../hooks/useTheme.js';
 import { getTrackFlagStyle } from '../../../utils/colors.js';
 import { formatRecordedDate } from '../../../utils/formatters.js';
+import { getWaitReason } from '../../../utils/feedStatus.js';
 import { FEATURES } from '../../../config.js';
 
 export interface HeaderBarProps {
@@ -37,6 +38,12 @@ function getSessionLabel(session: SessionState): string {
 // The pill must never let a recording or a dropped link pass for live timing
 function getFeedPill(state: LiveTimingState): FeedPill | null {
   const feed = state.feedStatus;
+  if (feed === 'no-session') {
+    return { status: 'idle', text: 'No session', title: 'Nothing is running on track right now' };
+  }
+  if (feed === 'unreachable') {
+    return { status: 'offline', text: 'Offline', title: 'Can’t reach live timing' };
+  }
   if (state.mode === 'replay') {
     if (feed === 'connecting') {
       return { status: 'connecting', text: 'Connecting', title: 'Connecting to live timing' };
@@ -56,11 +63,14 @@ function getFeedPill(state: LiveTimingState): FeedPill | null {
 }
 
 export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
-  const isLive = state.mode === 'live';
+  // Between sessions there is no track status, progress or data age to report, only the pill
+  const waiting = getWaitReason(state) !== null;
+  const isLive = state.mode === 'live' && !waiting;
   const { theme, toggleTheme } = useTheme();
   const themeLabel = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
-  const trackStatus = state.session.trackStatus || 'GREEN';
-  const flagStyle = getTrackFlagStyle(trackStatus);
+  // Only what the feed reported: until it names a track status there is no label and no rule
+  const trackStatus = state.session.trackStatus;
+  const flagStyle = trackStatus ? getTrackFlagStyle(trackStatus) : null;
   const pill = getFeedPill(state);
   const isTimedSession =
     state.session.sessionKind === 'practice' || state.session.sessionKind === 'qualifying';
@@ -86,7 +96,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
     <header className="sticky top-0 z-30 border-b border-rule bg-paper">
       {/* Full-width rule in the track-status color (green, yellow, SC/VSC, red);
           beats during caution periods */}
-      {flagStyle.alert && (
+      {flagStyle?.alert && (
         <div
           className={`h-0.5 w-full ${flagStyle.fill} ${flagStyle.pulse ? 'animate-heartbeat' : ''}`}
           aria-hidden="true"
@@ -112,7 +122,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
         {/* The one loud element answers "how far along is this session": laps in a race,
             time left in practice and qualifying, where laps are per car, not per session */}
         <div className="order-3 col-span-2 md:order-none md:col-span-1">
-          {isTimedSession ? (
+          {waiting ? null : isTimedSession ? (
             <SessionTimer
               session={state.session}
               referenceTime={isLive ? undefined : state.replay?.currentTimestamp}
@@ -150,10 +160,12 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ state, onSetMode }) => {
           </div>
           {/* The flag label holds the right edge; conditions sit to its left behind a hairline,
               so a change in the readout never moves it */}
-          <div className="flex items-center gap-3">
-            <WeatherReadout session={state.session} />
-            <FlagBanner flag={trackStatus} />
-          </div>
+          {!waiting && (
+            <div className="flex items-center gap-3">
+              <WeatherReadout session={state.session} />
+              {trackStatus && <FlagBanner flag={trackStatus} />}
+            </div>
+          )}
         </div>
       </div>
 

@@ -302,9 +302,10 @@ Precise and restrained; the label does the work.
 ### Badges and Status
 
 - **Badge:** an uppercase 11px label in a data color (`pb`, `warn`, `danger`, `best`, `signal` or `mute`), no fill, no border.
-- **Status pill:** an 8px dot plus a 13px 600 label. Only the LIVE dot (`signal`) animates; every other state is a static dot. It always names the source truthfully: `Live` (`signal`, pulsing), `Reconnecting` (`warn`), `Connecting` (`mute`) and `Recorded session` (`mute`, with a title explaining that no live timing is available). A recording is never left unlabelled.
+- **Status pill:** an 8px dot plus a 13px 600 label. Only the LIVE dot (`signal`) animates; every other state is a static dot. It always names the source truthfully: `Live` (`signal`, pulsing), `Reconnecting` (`warn`), `Connecting` (`mute`), `Recorded session` (`mute`, with a title explaining that no live timing is available), and between sessions in production `No session` (`mute`) or `Offline` (`danger`, F1 did not answer). A recording is never left unlabelled.
 - **Last data:** beside the pill while live, the age of the last feed message of any kind (heartbeats included), never a clock time, since the header has no clock to compare one against: "Last data just now" under 5s, "Last data 12s ago" after that, then "No data for 25s" in `warn` 600 past 15s, announced once to screen readers. A fixed minimum width keeps its neighbours still as it ticks.
 - **Feed notice:** while the live link is down, a full-width line at the bottom of the sticky header, above a `rule` hairline: "Lost connection to live timing." in `danger` 600, then "Reconnecting… Times shown are from HH:MM:SS." in `mute`. The timing stays on screen; its age is stated. No colored side border, no fill.
+- **Between sessions** (production, `VITE_APP_ENV`): the tower and sidebar give way to one centered message, 96px below the header: a Title in `ink` 600 ("No session on track", or "Can't reach live timing" when F1 does not answer) over one Body sentence in `mute` saying the page keeps checking by itself, so there is no need to refresh. No icon, illustration or box. The header keeps only the BrandMark, the pill and the theme toggle: track status, the progress hero, conditions and data age do not exist until a session starts, so they are left out rather than shown as defaults. The screen has no hero number. Development plays the recording instead.
 
 ### Cards / Sections
 
@@ -354,7 +355,7 @@ Below `2xl`, a one-line strip at the bottom of the sticky header carries the new
 ### Track Status
 
 - **Alert rule:** a 2px full-width bar across the top of the header in the flag color (green, yellow, red); it beats with a 1.2s heartbeat during caution (yellow, SC, VSC) and is absent under the chequered flag.
-- **Status label:** the track status in words only ("Green flag", "Safety car", "Red flag"…), 13px 600 in the AA-safe text token (`pb`, `warn`, `danger`, `ink`). No flag icon or board beside it: the alert rule already carries the flag color.
+- **Status label:** the track status in words only ("Green flag", "Safety car", "Red flag"…), 13px 600 in the AA-safe text token (`pb`, `warn`, `danger`, `ink`). No flag icon or board beside it: the alert rule already carries the flag color. Until the feed reports a track status, neither the label nor the rule is shown: an unknown track is never "Green flag".
 
 ### Track Conditions
 
