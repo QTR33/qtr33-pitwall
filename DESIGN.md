@@ -324,7 +324,7 @@ Precise and restrained; the label does the work.
 
 The product's core component: a table row per car. Columns, in the official order: Pos · Driver · Gap · Int | S1 · S2 · S3 · Best · Last | Tyre · Pit. The pace group (from S1) and the strategy group (from Tyre) each start with 12px of extra lead-in, so the three groups read apart without rules or boxes. Gap and Int carry equal weight.
 
-- **Row:** hairline-separated, `paper` at rest, `raise` on hover and while selected; a 2px left edge in `signal` marks the selected car. A selection lasts only while its drawer is open; closing the drawer clears it, and focus returns to the row.
+- **Row:** hairline-separated, `paper` at rest, `raise` on hover and while selected; a 2px left edge in `signal` marks the selected car. A selection lasts only while its drawer is open; closing the drawer clears it, and focus returns to the row. Hover lights every cell at once, with no fade: the sticky cells paint their own background, so a fading row lit the position and name before the times behind them.
 - **Legend:** the table caption, shown under the rows in `mute` Label size: each color word is set in the color it explains (Purple fastest overall · Green personal best · Grey previous lap · ↑ catching the car ahead · N new tyres).
 - **Position:** 15px 600 numeral, with its ▲/▼ delta beside it (to its left) in `pb` or `danger`, so the row stays one line.
 - **Driver:** one line: a 3×20px team-color bar, muted car number, name in 600 (truncating), three-letter code. The team name is not repeated per row; it lives in the drawer and the accessible name.

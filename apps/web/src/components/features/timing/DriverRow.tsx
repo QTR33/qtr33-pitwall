@@ -88,13 +88,15 @@ export const DriverRow: React.FC<DriverRowProps> = ({
           ? { label: 'Pit exit', className: 'text-warn' }
           : null;
 
-  // Sticky cells need an opaque background that tracks the row's hover / selected state
+  // Sticky cells need an opaque background that tracks the row's hover / selected state.
+  // No color transition on the row: the sticky cells paint their own background, so a fading row
+  // lit the position and name at once and the times behind them 150ms later
   const stickyBg = isSelected ? 'bg-raise' : 'bg-paper group-hover:bg-raise';
 
   return (
     <tr
       onClick={() => onSelectDriver(driver)}
-      className={`group cursor-pointer border-b border-rule transition-colors duration-150 ${
+      className={`group cursor-pointer border-b border-rule ${
         isSelected ? 'bg-raise' : 'hover:bg-raise'
       }`}
     >
