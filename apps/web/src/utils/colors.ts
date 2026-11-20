@@ -88,13 +88,16 @@ export function getTyreCompoundInfo(compound?: string): {
 
   const comp = compound.trim().toUpperCase();
 
+  // Medium and intermediate match on how the name starts, not on what it contains:
+  // "INTERMEDIATE" contains "MED", so a contains-check showed every intermediate as a medium
+
   // SOFT / RED / C4 / C5 / S
   if (comp === 'S' || comp.includes('SOFT') || comp === 'C4' || comp === 'C5' || comp === 'RED') {
     return { name: 'Soft', short: 'S', className: 'text-compound-soft border-compound-soft' };
   }
 
   // MEDIUM / YELLOW / C3 / M
-  if (comp === 'M' || comp.includes('MED') || comp === 'C3' || comp === 'YELLOW') {
+  if (comp === 'M' || comp.startsWith('MED') || comp === 'C3' || comp === 'YELLOW') {
     return { name: 'Medium', short: 'M', className: 'text-compound-medium border-compound-medium' };
   }
 
@@ -104,7 +107,7 @@ export function getTyreCompoundInfo(compound?: string): {
   }
 
   // INTERMEDIATE / GREEN / I
-  if (comp === 'I' || comp.includes('INTER') || comp === 'GREEN') {
+  if (comp === 'I' || comp.startsWith('INTER') || comp === 'GREEN') {
     return {
       name: 'Intermediate',
       short: 'I',

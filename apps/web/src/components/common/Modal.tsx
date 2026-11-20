@@ -7,6 +7,8 @@ export interface ModalProps {
   onClose: () => void;
   title?: string;
   subTitle?: string;
+  /** Controls for the dialog's subject, in the header before the close button */
+  actions?: React.ReactNode;
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   drawer?: boolean;
@@ -20,6 +22,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   subTitle,
+  actions,
   children,
   size = 'lg',
   drawer = false,
@@ -88,9 +91,12 @@ export const Modal: React.FC<ModalProps> = ({
         )}
         {subTitle && <p className="mt-0.5 text-data text-mute">{subTitle}</p>}
       </div>
-      <Button ref={closeRef} variant="ghost" size="icon" onClick={onClose} aria-label="Close">
-        <X className="h-5 w-5" aria-hidden="true" />
-      </Button>
+      <div className="flex shrink-0 items-center gap-2">
+        {actions}
+        <Button ref={closeRef} variant="ghost" size="icon" onClick={onClose} aria-label="Close">
+          <X className="h-5 w-5" aria-hidden="true" />
+        </Button>
+      </div>
     </div>
   );
 

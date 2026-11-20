@@ -34,6 +34,7 @@ QTR33 Pitwall shows the official live timing of a session as a single timing tow
 - Overall fastest lap (purple) and personal best (green) follow the official timing convention.
 - Race control feed and track-status flag banner (green, yellow, SC, VSC, red, chequered).
 - Driver detail view: sector splits, mini-sectors, speed traps, stint history.
+- Watched drivers: star any number of cars to keep their rows highlighted in the tower; in memory for the visit only, never saved.
 - An optional Express + WebSocket server exists in `apps/server`; the web app does not require it.
 - Open decision: which device the second screen mainly is (laptop or phone) has not been decided.
 
@@ -45,7 +46,7 @@ QTR33 Pitwall shows the official live timing of a session as a single timing tow
 ## Evidence on Hand
 
 - Recorded raw feed: `data/f1/signal.log`; final state snapshot: `data/f1/final-timing-state.json`.
-- Server day captures, one file per topic and day: `logs/<Topic>/<YYYY-MM-DD>.log` (gitignored, local only).
+- Server day captures, one file per topic and day: `logs/<Topic>/<YYYY-MM-DD>.log` (gitignored, local only). The server keeps the last 2 months and deletes older days on start and at the first signal of each day.
 - Replay recording served to the web app: `apps/web/public/replay/f1.json`, built from the 2026-10-11 Singapore Grand Prix race logs (`yarn replay:build --logs 2026-10-11`).
 - 2026 driver and team metadata (fallback only; the feed's DriverList wins): `packages/shared/src/series/f1/drivers-2026.json`, `data/f1/drivers.json`.
 - No user research, testimonials, usage numbers or press exist; do not invent them.

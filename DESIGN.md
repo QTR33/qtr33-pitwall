@@ -194,12 +194,12 @@ Every color is an RGB-channel CSS variable defined per theme on `:root, html.dar
 
 ### Primary
 
-- **Start Light Red** (`signal`; `signal-light` in light theme): the only interface accent. Used for the `QTR33` wordmark, the LIVE dot, the global focus ring, the active tab underline, the selected-row edge, the range input accent, and text selection. Never used for data.
+- **Start Light Red** (`signal`; `signal-light` in light theme): the only interface accent. Used for the `QTR33` wordmark, the LIVE dot, the global focus ring, the active tab underline, the selected- and watched-row edge, the watch star, the range input accent, and text selection. Never used for data.
 
 ### Neutral
 
 - **Monitor Black / Sheet White** (`paper` / `paper-light`): the page and every surface. Sticky table cells and the header repaint `paper` so they stay opaque.
-- **Raised Panel** (`raise` / `raise-light`): a single tonal step above paper, used only for hovered and selected timing rows. It is a state, not a surface.
+- **Raised Panel** (`raise` / `raise-light`): a single tonal step above paper, used only for hovered, selected and watched timing rows. It is a state, not a surface.
 - **Readout White / Ink Black** (`ink` / `ink-light`): primary text and values; also the fill of the primary button and tooltip, with `paper` text.
 - **Dimmed Readout** (`mute` / `mute-light`): labels, secondary text, held (previous-lap) sector times, inactive controls, units.
 - **Hairline** (`rule` / `rule-light`): every divider and border, plus the unreached mini-sector bar.
@@ -272,7 +272,7 @@ The system is flat. There are no shadows anywhere. Depth is expressed by tone an
 
 ## Shapes
 
-Square and quiet. Controls, dialogs and tooltips use a barely-softened 4px radius; the driver button's focus target uses 2px. Circles are reserved for meaning: the tyre ring (20px, 1.5px compound-colored stroke), the LIVE and status dots (8px) and the team bar's rounded ends. Borders are always 1px `rule`, except the 2px active-tab underline and the 2px selected-row edge in `signal`.
+Square and quiet. Controls, dialogs and tooltips use a barely-softened 4px radius; the driver button's focus target uses 2px. Circles are reserved for meaning: the tyre ring (20px, 1.5px compound-colored stroke), the LIVE and status dots (8px) and the team bar's rounded ends. Borders are always 1px `rule`, except the 2px active-tab underline and the 2px selected- and watched-row edge in `signal`.
 
 ## Components
 
@@ -287,6 +287,7 @@ Precise and restrained; the label does the work.
 - **Danger:** secondary shape with `danger` text; border turns `danger` on hover.
 - **Link:** in-page text links ("All messages"): `mute`, `ink` and underlined on hover, no box.
 - **Toggle:** one segment of a text switch (see below).
+- **Mark:** an on / off marker for one item, such as watching a driver: `mute` (hover `ink`) when off, `signal` when on, with `aria-pressed` and a label that stays the same in both states. Its star icon is outlined when off and filled when on.
 - **Plain:** no color of its own, for triggers that are content, such as the driver name that opens the drawer.
 - **Disabled:** 40% opacity, not-allowed cursor. Focus uses the global 2px `signal` outline at 2px offset.
 
@@ -324,7 +325,8 @@ Precise and restrained; the label does the work.
 
 The product's core component: a table row per car. Columns, in the official order: Pos · Driver · Gap · Int | S1 · S2 · S3 · Best · Last | Tyre · Pit. The pace group (from S1) and the strategy group (from Tyre) each start with 12px of extra lead-in, so the three groups read apart without rules or boxes. Gap and Int carry equal weight.
 
-- **Row:** hairline-separated, `paper` at rest, `raise` on hover and while selected; a 2px left edge in `signal` marks the selected car. A selection lasts only while its drawer is open; closing the drawer clears it, and focus returns to the row.
+- **Row:** hairline-separated, `paper` at rest, `raise` on hover and while selected; a 2px left edge in `signal` marks the selected car. A selection lasts only while its drawer is open; closing the drawer clears it, and focus returns to the row. Hover lights every cell at once, with no fade: the sticky cells paint their own background, so a fading row lit the position and name before the times behind them.
+- **Watched cars:** a fan can watch any number of cars to find them at a glance as the order changes. A watched row keeps the selected look (`raise` and the 2px `signal` edge) wherever it moves, plus a filled `signal` star at the right end of the driver cell. Other rows show an outlined `mute` star only under the pointer or keyboard focus, in a slot that is always reserved so names never shift. Touch screens have no hover, so there only watched rows show the star, and the drawer's Watch toggle is the way in. Clicking the star never opens the drawer. Watching lasts for the visit only: it is kept in memory, never saved, and a reload starts with none.
 - **Legend:** the table caption, shown under the rows in `mute` Label size: each color word is set in the color it explains (Purple fastest overall · Green personal best · Grey previous lap · ↑ catching the car ahead · N new tyres).
 - **Position:** 15px 600 numeral, with its ▲/▼ delta beside it (to its left) in `pb` or `danger`, so the row stays one line.
 - **Driver:** one line: a 3×20px team-color bar, muted car number, name in 600 (truncating), three-letter code. The team name is not repeated per row; it lives in the drawer and the accessible name.
@@ -339,7 +341,7 @@ The product's core component: a table row per car. Columns, in the official orde
 
 The deep view behind a glance: opened by selecting a row in the tower, it shows one car in full without leaving the timing.
 
-- **Frame:** the right-hand drawer variant of Dialog (max 576px, full height), titled with the driver's name over `{team} · Car {number}` in `mute`. Body padding is 24px; sections stack 40px apart.
+- **Frame:** the right-hand drawer variant of Dialog (max 576px, full height), titled with the driver's name over `{team} · Car {number}` in `mute`, with a `mark` "Watch" toggle (star icon) beside the close button. Body padding is 24px; sections stack 40px apart.
 - **Position block:** `P{position}` in Display at the left, the drawer's one hero; to its right, bottom-aligned, a three-column stat group (Gap, Best lap, Pit stops), right-aligned with 24px gaps. Best lap takes `best` / `pb` / `ink` by meaning.
 - **Stat:** a definition pair (`<dl>` / `<dt>` / `<dd>`): an uppercase Label in `mute` over a Numeral Large value in `ink`, 4px apart. Used for every single value in the drawer.
 - **Section:** an uppercase Label heading with content 12px below. No hairline under the heading; that distinguishes drawer sections from sidebar Cards. Units live in the heading (`Speed traps · km/h`), never in the values.
