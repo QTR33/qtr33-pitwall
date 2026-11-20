@@ -17,6 +17,7 @@ export type ButtonVariant =
   | 'ghost' // mute text, ink on hover: close, restart, theme toggle
   | 'link' // mute text, ink and underline on hover: in-page links
   | 'toggle' // a segment of a text switch; `pressed` makes it ink
+  | 'mark' // an on / off marker for one item (watch a driver): mute, ink on hover; `pressed` makes it signal
   | 'plain'; // no color of its own, for triggers that are content (a driver name)
 
 export type ButtonSize =
@@ -34,7 +35,7 @@ interface ButtonOwnProps<E extends React.ElementType> {
   size?: ButtonSize;
   /** Leading icon, hidden from assistive tech */
   icon?: React.ReactNode;
-  /** For `toggle`: whether this segment is the selected one; sets `aria-pressed` on buttons */
+  /** For `toggle` and `mark`: whether it is on; sets `aria-pressed` on buttons */
   pressed?: boolean;
   className?: string;
 }
@@ -60,6 +61,7 @@ const variantClass = (variant: ButtonVariant, pressed: boolean): string =>
     link: 'text-mute underline-offset-2 hover:text-ink hover:underline',
     // Both states stay 600 so a switch never changes width when it flips
     toggle: `font-semibold ${pressed ? 'text-ink' : 'text-mute hover:text-ink'}`,
+    mark: `font-semibold ${pressed ? 'text-signal' : 'text-mute hover:text-ink'}`,
     plain: '',
   })[variant];
 
@@ -97,7 +99,9 @@ function ButtonImpl<E extends React.ElementType = 'button'>(
   const isButton = Component === 'button';
   const extra: Record<string, unknown> = {};
   if (isButton && !(props as { type?: string }).type) extra.type = 'button';
-  if (isButton && variant === 'toggle' && pressed !== undefined) extra['aria-pressed'] = pressed;
+  if (isButton && (variant === 'toggle' || variant === 'mark') && pressed !== undefined) {
+    extra['aria-pressed'] = pressed;
+  }
 
   return (
     <Component

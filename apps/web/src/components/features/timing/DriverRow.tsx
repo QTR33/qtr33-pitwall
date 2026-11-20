@@ -3,7 +3,7 @@ import { DriverState } from '@livetiming/shared';
 import { SectorSegment } from './SectorSegment.js';
 import { TyreBadge } from './TyreBadge.js';
 import { Button } from '../../common/Button.js';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, Star } from 'lucide-react';
 import { formatGap, formatInterval, formatLapTime } from '../../../utils/formatters.js';
 import { getTimingTextColor, getTimingMeaning } from '../../../utils/colors.js';
 
@@ -13,6 +13,10 @@ export interface DriverRowProps {
   isLeader: boolean;
   onSelectDriver: (driver: DriverState) => void;
   isSelected?: boolean;
+  /** A car the fan is following: its row stays highlighted wherever it moves in the order */
+  isWatched?: boolean;
+  /** Turns watching this car on or off; without it the row has no watch toggle */
+  onToggleWatch?: (driver: DriverState) => void;
   /** Places gained / lost beside the position; only a race or sprint has a grid to count from */
   showPositionChange?: boolean;
 }
@@ -28,6 +32,8 @@ export const DriverRow: React.FC<DriverRowProps> = ({
   isLeader,
   onSelectDriver,
   isSelected = false,
+  isWatched = false,
+  onToggleWatch,
   showPositionChange = false,
 }) => {
   // The feed's team color is data and drawn as-is; with none, the bar falls back to the rule token
@@ -88,25 +94,27 @@ export const DriverRow: React.FC<DriverRowProps> = ({
           ? { label: 'Pit exit', className: 'text-warn' }
           : null;
 
+  // A watched car is held in the same raised state as the selected one, so it is found at a glance
+  const isHighlighted = isSelected || isWatched;
   // Sticky cells need an opaque background that tracks the row's hover / selected state.
   // No color transition on the row: the sticky cells paint their own background, so a fading row
   // lit the position and name at once and the times behind them 150ms later
-  const stickyBg = isSelected ? 'bg-raise' : 'bg-paper group-hover:bg-raise';
+  const stickyBg = isHighlighted ? 'bg-raise' : 'bg-paper group-hover:bg-raise';
 
   return (
     <tr
       onClick={() => onSelectDriver(driver)}
       className={`group cursor-pointer border-b border-rule ${
-        isSelected ? 'bg-raise' : 'hover:bg-raise'
+        isHighlighted ? 'bg-raise' : 'hover:bg-raise'
       }`}
     >
-      {/* Position — selected row is marked by the accent rule on the left */}
+      {/* Position — selected and watched rows are marked by the accent rule on the left */}
       <td className={`${td} sticky left-0 z-10 w-16 pl-2 text-right ${stickyBg}`}>
         {/* The rule is drawn inside the cell, not as its left border: in a collapsed table the
             table paints the borders, so a border stays put while the sticky cell slides over it,
             and an unselected (transparent) one left a slit where scrolled cells showed through.
             The sticky cell is the containing block, so the rule moves with it */}
-        {isSelected && (
+        {isHighlighted && (
           <span className="absolute inset-y-0 left-0 w-0.5 bg-signal" aria-hidden="true" />
         )}
         {/* Gain / loss sits beside the position, not under it, so every row stays one line high */}
@@ -140,7 +148,7 @@ export const DriverRow: React.FC<DriverRowProps> = ({
               size="inline"
               className="flex min-w-0 max-w-full items-baseline gap-2 text-left"
               aria-haspopup="dialog"
-              aria-label={`${driverName}${driverTeam ? `, ${driverTeam}` : ''}${isOut ? ', out of the race' : ''} — view details`}
+              aria-label={`${driverName}${driverTeam ? `, ${driverTeam}` : ''}${isOut ? ', out of the race' : ''}${isWatched ? ', watching' : ''} — view details`}
             >
               <span className="num w-5 shrink-0 text-right text-label text-mute">{carNumber}</span>
               <span
@@ -153,6 +161,40 @@ export const DriverRow: React.FC<DriverRowProps> = ({
               <span className="num shrink-0 text-label text-ink sm:text-mute">{driverCode}</span>
             </Button>
           </div>
+
+          {/* Watch toggle at the cell's right end. A watched car always shows its star; the rest
+              show it only under the pointer or keyboard focus, so twenty idle stars don't crowd
+              the tower. Its slot is kept while hidden, so names never shift when it appears.
+              Touch screens have no hover to reveal it, so there only a watched car shows one
+              (to stop watching); the driver drawer has the toggle for everyone */}
+          {onToggleWatch && (
+            <span
+              className={`ml-auto shrink-0 ${
+                isWatched
+                  ? ''
+                  : 'opacity-0 group-hover:opacity-100 has-[:focus-visible]:opacity-100 [@media(hover:none)]:hidden'
+              }`}
+            >
+              <Button
+                variant="mark"
+                size="icon-sm"
+                pressed={isWatched}
+                aria-label={`Watch ${driverName}`}
+                onClick={(e: React.MouseEvent) => {
+                  // The row opens the drawer; the star only marks the car
+                  e.stopPropagation();
+                  onToggleWatch(driver);
+                }}
+              >
+                <Star
+                  className="h-3.5 w-3.5"
+                  fill={isWatched ? 'currentColor' : 'none'}
+                  strokeWidth={2}
+                  aria-hidden="true"
+                />
+              </Button>
+            </span>
+          )}
         </div>
       </td>
 

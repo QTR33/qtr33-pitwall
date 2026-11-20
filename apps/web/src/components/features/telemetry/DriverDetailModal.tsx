@@ -1,6 +1,8 @@
 import React from 'react';
 import { DriverState } from '@livetiming/shared';
+import { Star } from 'lucide-react';
 import { Modal } from '../../common/Modal.js';
+import { Button } from '../../common/Button.js';
 import { MiniSectorMatrix } from './MiniSectorMatrix.js';
 import { StintHistoryTable } from './StintHistoryTable.js';
 import { formatLapTime, formatGap, formatSpeed } from '../../../utils/formatters.js';
@@ -10,6 +12,10 @@ export interface DriverDetailModalProps {
   driver: DriverState | null;
   isOpen: boolean;
   onClose: () => void;
+  /** Whether the fan is watching this car (its row stays highlighted in the tower) */
+  isWatched?: boolean;
+  /** Turns watching this car on or off; without it the drawer has no watch toggle */
+  onToggleWatch?: () => void;
 }
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
@@ -30,6 +36,8 @@ export const DriverDetailModal: React.FC<DriverDetailModalProps> = ({
   driver,
   isOpen,
   onClose,
+  isWatched = false,
+  onToggleWatch,
 }) => {
   if (!driver) return null;
 
@@ -63,6 +71,27 @@ export const DriverDetailModal: React.FC<DriverDetailModalProps> = ({
       drawer={true}
       title={driverName}
       subTitle={[driverTeam, `Car ${carNumber}`].filter(Boolean).join(' · ')}
+      // The tower's star appears on hover only, so on a touch screen this is the way to watch.
+      // The label stays "Watch" in both states: aria-pressed says whether it is on
+      actions={
+        onToggleWatch && (
+          <Button
+            variant="mark"
+            size="sm"
+            pressed={isWatched}
+            onClick={onToggleWatch}
+            icon={
+              <Star
+                className="h-4 w-4"
+                fill={isWatched ? 'currentColor' : 'none'}
+                strokeWidth={2}
+              />
+            }
+          >
+            Watch
+          </Button>
+        )
+      }
     >
       <div className="space-y-10">
         {/* Position is the drawer's one bold element */}

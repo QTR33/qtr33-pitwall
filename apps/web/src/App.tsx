@@ -31,6 +31,20 @@ export function App() {
     setSelectedCar(null);
   };
 
+  // Cars the fan is following. Kept in memory only, for this visit: a reload starts with none
+  const [watchedCars, setWatchedCars] = useState<ReadonlySet<string>>(() => new Set());
+
+  const toggleWatch = (driver: DriverState) => {
+    const car = driver.carNumber;
+    if (!car) return;
+    setWatchedCars((prev) => {
+      const next = new Set(prev);
+      if (next.has(car)) next.delete(car);
+      else next.add(car);
+      return next;
+    });
+  };
+
   // Find overall fastest lap driver
   const fastestLapDriver = state?.drivers.find((d) => d.BestLapTime?.OverallFastest);
   const showPlayback = FEATURES.replay && state?.mode === 'replay';
@@ -69,6 +83,8 @@ export function App() {
                 drivers={isConnecting ? [] : state?.drivers || []}
                 onSelectDriver={handleSelectDriver}
                 selectedDriverNum={selectedCar ?? undefined}
+                watchedCars={watchedCars}
+                onToggleWatch={toggleWatch}
                 emptyMessage={isConnecting ? 'Connecting to live timing…' : undefined}
                 // The feed types a sprint as a race too; an unnamed session shows no change
                 showPositionChange={state?.session.sessionKind === 'race'}
@@ -128,6 +144,8 @@ export function App() {
         driver={selectedDriver}
         isOpen={selectedDriver !== null}
         onClose={handleCloseModal}
+        isWatched={!!selectedCar && watchedCars.has(selectedCar)}
+        onToggleWatch={selectedDriver ? () => toggleWatch(selectedDriver) : undefined}
       />
 
       {showPlayback && state && (

@@ -7,6 +7,10 @@ export interface TimingTableProps {
   drivers: DriverState[];
   onSelectDriver: (driver: DriverState) => void;
   selectedDriverNum?: string;
+  /** Car numbers the fan is watching; their rows stay highlighted */
+  watchedCars?: ReadonlySet<string>;
+  /** Turns watching a car on or off; without it the rows have no watch toggle */
+  onToggleWatch?: (driver: DriverState) => void;
   /** Shown in place of the rows when there are no drivers */
   emptyMessage?: string;
   /** Places gained / lost beside each position: races and sprints only */
@@ -19,6 +23,8 @@ export const TimingTable: React.FC<TimingTableProps> = ({
   drivers,
   onSelectDriver,
   selectedDriverNum,
+  watchedCars,
+  onToggleWatch,
   emptyMessage = 'Waiting for timing data…',
   showPositionChange = false,
 }) => {
@@ -122,6 +128,8 @@ export const TimingTable: React.FC<TimingTableProps> = ({
                 isLeader={idx === 0}
                 onSelectDriver={onSelectDriver}
                 isSelected={selectedDriverNum === driver.carNumber}
+                isWatched={!!driver.carNumber && !!watchedCars?.has(driver.carNumber)}
+                onToggleWatch={onToggleWatch}
                 showPositionChange={showPositionChange}
               />
             ))
