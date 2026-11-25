@@ -47,7 +47,7 @@ QTR33 Pitwall shows the official live timing of a session as a single timing tow
 
 - Recorded raw feed: `data/f1/signal.log`; final state snapshot: `data/f1/final-timing-state.json`.
 - Server day captures, one file per topic and day: `logs/<Topic>/<YYYY-MM-DD>.log` (gitignored, local only). The server keeps the last 2 months and deletes older days on start and at the first signal of each day.
-- Replay recording served to the web app: `apps/web/public/replay/f1.json`, built from the 2026-10-11 Singapore Grand Prix race logs (`yarn replay:build --logs 2026-10-11`).
+- Replay recording served to the web app: `apps/web/public/replay/f1.json`, built from the 2026-10-11 Singapore Grand Prix race logs (`yarn replay:build --logs 2026-10-11`). Development can play another recording from the same folder with `?replay=<name>` or `VITE_REPLAY`: `sao-paulo-fp3.json` is about 4.5 minutes of the 2026 São Paulo Grand Prix Practice 3, from the keyframe the recorder received on reconnecting (`yarn replay:build --logs 2026-11-07 --from 2026-11-07T15:05:23.744Z --out sao-paulo-fp3`). The other November captures hold only post-session snapshots or a few minutes of timing.
 - 2026 driver and team metadata (fallback only; the feed's DriverList wins): `packages/shared/src/series/f1/drivers-2026.json`, `data/f1/drivers.json`.
 - No user research, testimonials, usage numbers or press exist; do not invent them.
 

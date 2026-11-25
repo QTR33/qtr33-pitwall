@@ -11,6 +11,8 @@ interface ImportMetaEnv {
   readonly VITE_MOCK_WEATHER?: string;
   /** Development only: mock session for the replay (`race`, `sprint`, `qualifying`, `sprint-qualifying`, `practice`). */
   readonly VITE_MOCK_SESSION?: string;
+  /** Development only: the recording in public/replay to play instead of `f1`, e.g. `sao-paulo-fp3`. */
+  readonly VITE_REPLAY?: string;
 }
 
 interface ImportMeta {
