@@ -8,7 +8,7 @@ import {
 import { ENV, IS_DEV } from '../../env.js';
 import { logger } from '../logger.js';
 import { F1Connection } from './F1Connection.js';
-import { F1Replayer } from './F1Replayer.js';
+import { F1Replayer, replayUrl } from './F1Replayer.js';
 
 /** What a look for a live session found */
 type ProbeResult = 'live' | 'no-session' | 'unreachable';
@@ -22,6 +22,22 @@ const LIVE_CHECK_INTERVAL_MS = 60_000;
 const LIVE_RETRY_INTERVAL_MS = 5 * 60_000;
 // Returning to the tab probes for a live session at once, but no more often than this
 const VISIBLE_PROBE_MIN_GAP_MS = 30_000;
+
+/**
+ * Development can play another recording from public/replay (built with `yarn replay:build
+ * --out <name>`): `?replay=<name>` in the URL, or VITE_REPLAY in .env.development. Production
+ * builds always play replay/f1.json.
+ */
+function devReplayName(): string | undefined {
+  if (!import.meta.env.DEV || typeof window === 'undefined') return undefined;
+  const name = (
+    new URLSearchParams(window.location.search).get('replay') ?? import.meta.env.VITE_REPLAY
+  )
+    ?.trim()
+    .toLowerCase();
+  // A plain file name only: the value becomes part of a URL path
+  return name && /^[a-z0-9-]+$/.test(name) ? name : undefined;
+}
 
 /**
  * Client-side F1 feed: streams the official live timing straight from F1 when a session is
@@ -63,7 +79,7 @@ export class F1Feed {
     this.connection = ENV.F1_SIGNALR_URL
       ? new F1Connection(this.liveManager, ENV.F1_SIGNALR_URL)
       : null;
-    this.replayer = new F1Replayer(this.replayManager);
+    this.replayer = new F1Replayer(this.replayManager, replayUrl(devReplayName()));
 
     this.liveManager.subscribe(() => this.mode === 'live' && this.notify());
     this.replayManager.subscribe(() => this.mode === 'replay' && this.notify());

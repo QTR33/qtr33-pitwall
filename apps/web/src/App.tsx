@@ -3,6 +3,7 @@ import { useLiveTiming } from './hooks/useLiveTiming.js';
 import { HeaderBar } from './components/features/session/HeaderBar.js';
 import { BrandMark } from './components/features/session/BrandMark.js';
 import { TimingTable } from './components/features/timing/TimingTable.js';
+import { DriverSearch } from './components/features/timing/DriverSearch.js';
 import { RaceControlFeed } from './components/features/race-control/RaceControlFeed.js';
 import { DriverDetailModal } from './components/features/telemetry/DriverDetailModal.js';
 import { PlaybackControls } from './components/features/playback/PlaybackControls.js';
@@ -13,6 +14,7 @@ import { DriverState } from '@livetiming/shared';
 import { formatLapTime } from './utils/formatters.js';
 import { FEATURES } from './config.js';
 import { getWaitReason } from './utils/feedStatus.js';
+import { searchDrivers } from './utils/driverSearch.js';
 
 export function App() {
   const { state, setMode, setSpeed, togglePlayPause, seekReplay, restartReplay, setSeries } =
@@ -45,6 +47,10 @@ export function App() {
     });
   };
 
+  // Finds a car by number, name or code: the tower marks the matches in place and jumps to the
+  // one the query points at. In memory only, like watching
+  const [driverQuery, setDriverQuery] = useState('');
+
   // Find overall fastest lap driver
   const fastestLapDriver = state?.drivers.find((d) => d.BestLapTime?.OverallFastest);
   const showPlayback = FEATURES.replay && state?.mode === 'replay';
@@ -52,6 +58,9 @@ export function App() {
   const isConnecting = state?.mode === 'replay' && state.feedStatus === 'connecting';
   // Production between sessions: nothing to put in the tower, and no recording in its place
   const waitingReason = state ? getWaitReason(state) : null;
+  const towerDrivers = isConnecting ? [] : state?.drivers || [];
+  const driverSearch = searchDrivers(towerDrivers, driverQuery);
+  const matchingCars = new Set(driverSearch.matches.map((d) => d.carNumber));
 
   return (
     <div className={`flex min-h-screen flex-col ${showPlayback ? 'pb-36 sm:pb-20' : ''}`}>
@@ -73,14 +82,24 @@ export function App() {
         {waitingReason ? (
           <NoSessionNotice reason={waitingReason} />
         ) : (
-          /* The sidebar only sits beside the tower once both fit: the tower needs 1080px, the
-            sidebar 320 + 48 gap, the page 64 of gutter — about 1512px, so from 2xl (1536px).
+          /* The sidebar only sits beside the tower once both fit: the tower needs 1086px, the
+            sidebar 320 + 48 gap, the page 64 of gutter — 1518px, so from 2xl (1536px), which also
+            leaves room for a page scrollbar of up to 18px.
             Narrower, the tower takes the full width and the sidebar follows it */
           <div className="grid grid-cols-1 items-start gap-x-12 gap-y-12 2xl:grid-cols-[minmax(0,1fr)_320px]">
             <div className="min-w-0">
               <h2 className="sr-only">Timing</h2>
+              {/* The band carries 12px of its own padding (its ground while pinned under the
+                  header), so the field still starts where the column does, 16px above the tower */}
+              <DriverSearch
+                className="-mt-3 mb-1"
+                query={driverQuery}
+                onQueryChange={setDriverQuery}
+                result={driverSearch}
+                onOpenDriver={handleSelectDriver}
+              />
               <TimingTable
-                drivers={isConnecting ? [] : state?.drivers || []}
+                drivers={towerDrivers}
                 onSelectDriver={handleSelectDriver}
                 selectedDriverNum={selectedCar ?? undefined}
                 watchedCars={watchedCars}
@@ -88,6 +107,8 @@ export function App() {
                 emptyMessage={isConnecting ? 'Connecting to live timing…' : undefined}
                 // The feed types a sprint as a race too; an unnamed session shows no change
                 showPositionChange={state?.session.sessionKind === 'race'}
+                matchingCars={matchingCars}
+                searchTargetCar={driverSearch.target?.carNumber}
               />
             </div>
 

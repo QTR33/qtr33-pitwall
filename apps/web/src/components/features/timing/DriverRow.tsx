@@ -4,7 +4,12 @@ import { SectorSegment } from './SectorSegment.js';
 import { TyreBadge } from './TyreBadge.js';
 import { Button } from '../../common/Button.js';
 import { ArrowUp, Star } from 'lucide-react';
-import { formatGap, formatInterval, formatLapTime } from '../../../utils/formatters.js';
+import {
+  formatGap,
+  formatInterval,
+  formatLapTime,
+  splitDriverName,
+} from '../../../utils/formatters.js';
 import { getTimingTextColor, getTimingMeaning } from '../../../utils/colors.js';
 
 export interface DriverRowProps {
@@ -19,6 +24,10 @@ export interface DriverRowProps {
   onToggleWatch?: (driver: DriverState) => void;
   /** Places gained / lost beside the position; only a race or sprint has a grid to count from */
   showPositionChange?: boolean;
+  /** Matches the driver search: raised in place, so the order and the cars around it stay */
+  isSearchMatch?: boolean;
+  /** The one car the driver search points at (Enter opens it) */
+  isSearchTarget?: boolean;
 }
 
 // 8px rows: the tallest cell (the 15px position) sets a ~38px row
@@ -35,6 +44,8 @@ export const DriverRow: React.FC<DriverRowProps> = ({
   isWatched = false,
   onToggleWatch,
   showPositionChange = false,
+  isSearchMatch = false,
+  isSearchTarget = false,
 }) => {
   // The feed's team color is data and drawn as-is; with none, the bar falls back to the rule token
   // rather than an invented brand color
@@ -60,6 +71,8 @@ export const DriverRow: React.FC<DriverRowProps> = ({
     (driver as any).FullName ||
     (driver as any).BroadcastName ||
     `Car ${driver.carNumber || driver.number}`;
+  // The surname always shows; the first name only where the cell has room for it
+  const { first: firstName, last: surname } = splitDriverName(driverName);
   const driverCode = driver.code || (driver as any).Tla || '';
   // Unknown stays empty: a made-up team would be a claim the feed never made
   const driverTeam = driver.team || (driver as any).TeamName || '';
@@ -94,29 +107,43 @@ export const DriverRow: React.FC<DriverRowProps> = ({
           ? { label: 'Pit exit', className: 'text-warn' }
           : null;
 
-  // A watched car is held in the same raised state as the selected one, so it is found at a glance
-  const isHighlighted = isSelected || isWatched;
-  // Sticky cells need an opaque background that tracks the row's hover / selected state.
+  // Raised rows: the car whose drawer is open, watched cars, and cars matching the driver search
+  const isRaised = isSelected || isWatched || isSearchMatch;
+  // The 2px left edge: signal for the car whose drawer is open, ink for the car the search points
+  // at. Watched cars carry their star instead: a red edge beside a red team bar (Ferrari) read as
+  // one more team bar
+  const edge = isSelected ? 'bg-signal' : isSearchTarget ? 'bg-ink' : null;
+  // Sticky cells need an opaque background that tracks the row's hover / raised / focused state.
   // No color transition on the row: the sticky cells paint their own background, so a fading row
   // lit the position and name at once and the times behind them 150ms later
-  const stickyBg = isHighlighted ? 'bg-raise' : 'bg-paper group-hover:bg-raise';
+  const stickyBg = isRaised
+    ? 'bg-raise'
+    : 'bg-paper group-hover:bg-raise group-has-[[data-row-trigger]:focus-visible]:bg-raise';
 
   return (
     <tr
+      // How the driver search finds this row to scroll to it and focus it (driverRowDom.ts)
+      data-car={driver.carNumber}
       onClick={() => onSelectDriver(driver)}
+      // Keyboard focus on the driver button lights the whole row (raise and the ink edge below)
+      // instead of a ring around the name: the row is what the button stands for
       className={`group cursor-pointer border-b border-rule ${
-        isHighlighted ? 'bg-raise' : 'hover:bg-raise'
+        isRaised ? 'bg-raise' : 'hover:bg-raise has-[[data-row-trigger]:focus-visible]:bg-raise'
       }`}
     >
-      {/* Position — selected and watched rows are marked by the accent rule on the left */}
+      {/* Position — the open car and the search target are marked by an edge on the left */}
       <td className={`${td} sticky left-0 z-10 w-16 pl-2 text-right ${stickyBg}`}>
         {/* The rule is drawn inside the cell, not as its left border: in a collapsed table the
             table paints the borders, so a border stays put while the sticky cell slides over it,
             and an unselected (transparent) one left a slit where scrolled cells showed through.
-            The sticky cell is the containing block, so the rule moves with it */}
-        {isHighlighted && (
-          <span className="absolute inset-y-0 left-0 w-0.5 bg-signal" aria-hidden="true" />
-        )}
+            The sticky cell is the containing block, so the rule moves with it.
+            A focused row takes the ink edge, as the search target does: Enter opens this car.
+            The open car's signal edge comes later in the DOM, so it paints over it */}
+        <span
+          className="absolute inset-y-0 left-0 hidden w-0.5 bg-ink group-has-[[data-row-trigger]:focus-visible]:block"
+          aria-hidden="true"
+        />
+        {edge && <span className={`absolute inset-y-0 left-0 w-0.5 ${edge}`} aria-hidden="true" />}
         {/* Gain / loss sits beside the position, not under it, so every row stays one line high */}
         <div className="flex items-baseline justify-end gap-1.5">
           {posDelta !== 0 && (
@@ -134,45 +161,22 @@ export const DriverRow: React.FC<DriverRowProps> = ({
 
       {/* Driver — the name is a real button so the row is reachable by keyboard */}
       <td className={`${td} sticky left-16 z-10 ${stickyBg}`}>
-        {/* One line: the team survives as its color bar and in the drawer, not as a second line */}
-        <div className="flex min-w-0 items-center gap-3">
-          <span
-            className={`h-5 w-[3px] flex-shrink-0 rounded-full ${teamColor ? '' : 'bg-rule'}`}
-            style={teamColor ? { backgroundColor: teamColor } : undefined}
-            aria-hidden="true"
-          />
-          <div className="min-w-0">
-            {/* Driver is the one flexible column: long names truncate instead of widening it */}
-            <Button
-              variant="plain"
-              size="inline"
-              className="flex min-w-0 max-w-full items-baseline gap-2 text-left"
-              aria-haspopup="dialog"
-              aria-label={`${driverName}${driverTeam ? `, ${driverTeam}` : ''}${isOut ? ', out of the race' : ''}${isWatched ? ', watching' : ''} — view details`}
-            >
-              <span className="num w-5 shrink-0 text-right text-label text-mute">{carNumber}</span>
-              <span
-                className={`hidden min-w-0 truncate text-data font-semibold sm:inline ${
-                  isOut ? 'text-mute' : 'text-ink'
-                }`}
-              >
-                {driverName}
-              </span>
-              <span className="num shrink-0 text-label text-ink sm:text-mute">{driverCode}</span>
-            </Button>
-          </div>
-
-          {/* Watch toggle at the cell's right end. A watched car always shows its star; the rest
-              show it only under the pointer or keyboard focus, so twenty idle stars don't crowd
-              the tower. Its slot is kept while hidden, so names never shift when it appears.
-              Touch screens have no hover to reveal it, so there only a watched car shows one
-              (to stop watching); the driver drawer has the toggle for everyone */}
+        {/* One line: watch star, team bar, number, name, code. The team survives as its color bar
+            and in the drawer, not as a second line. A size container, so the first name can show
+            only where the cell has room for it */}
+        <div className="flex min-w-0 items-center [container-type:inline-size]">
+          {/* Watch toggle first, beside the position where the eye scans, and a star rather than a
+              bar, so it never reads as a team color. A watched car always shows it; the rest show
+              it only under the pointer or keyboard focus, so twenty idle stars don't crowd the
+              tower. Its slot is always kept (touch screens too, which have no hover to reveal it),
+              so bars and names never shift; clicking it never opens the drawer. On touch, the
+              drawer's Watch toggle is the way in */}
           {onToggleWatch && (
             <span
-              className={`ml-auto shrink-0 ${
+              className={`mr-1.5 flex w-4 shrink-0 justify-center ${
                 isWatched
                   ? ''
-                  : 'opacity-0 group-hover:opacity-100 has-[:focus-visible]:opacity-100 [@media(hover:none)]:hidden'
+                  : 'opacity-0 group-hover:opacity-100 has-[:focus-visible]:opacity-100 [@media(hover:none)]:invisible'
               }`}
             >
               <Button
@@ -195,6 +199,38 @@ export const DriverRow: React.FC<DriverRowProps> = ({
               </Button>
             </span>
           )}
+          <span
+            className={`mr-3 h-5 w-[3px] flex-shrink-0 rounded-full ${teamColor ? '' : 'bg-rule'}`}
+            style={teamColor ? { backgroundColor: teamColor } : undefined}
+            aria-hidden="true"
+          />
+          <div className="min-w-0">
+            {/* Driver is the one flexible column: long names truncate instead of widening it */}
+            <Button
+              data-row-trigger
+              variant="row"
+              size="inline"
+              className="flex min-w-0 max-w-full items-baseline gap-1.5 text-left"
+              aria-haspopup="dialog"
+              aria-label={`${driverName}${driverTeam ? `, ${driverTeam}` : ''}${isOut ? ', out of the race' : ''}${isWatched ? ', watching' : ''} — view details`}
+            >
+              <span className="num w-5 shrink-0 text-right text-label text-mute">{carNumber}</span>
+              {/* The surname, as the broadcast uses it; the first name too from a 240px cell
+                  (every name fits there), so a narrow tower drops first names instead of
+                  cutting surnames. Phones keep only number and code */}
+              <span
+                className={`hidden min-w-0 truncate text-data font-semibold sm:inline ${
+                  isOut ? 'text-mute' : 'text-ink'
+                }`}
+              >
+                {firstName && (
+                  <span className="hidden [@container(min-width:15rem)]:inline">{firstName} </span>
+                )}
+                {surname}
+              </span>
+              <span className="num shrink-0 text-label text-ink sm:text-mute">{driverCode}</span>
+            </Button>
+          </div>
         </div>
       </td>
 
@@ -246,7 +282,7 @@ export const DriverRow: React.FC<DriverRowProps> = ({
         <TyreBadge stint={driver.CurrentStint} />
       </td>
 
-      <td className={`${td} pr-0 text-right`}>
+      <td className={`${td} pr-[3px] text-right`}>
         {carState ? (
           <span className={`label whitespace-nowrap ${carState.className}`}>{carState.label}</span>
         ) : (

@@ -18,7 +18,11 @@ export type ButtonVariant =
   | 'link' // mute text, ink and underline on hover: in-page links
   | 'toggle' // a segment of a text switch; `pressed` makes it ink
   | 'mark' // an on / off marker for one item (watch a driver): mute, ink on hover; `pressed` makes it signal
-  | 'plain'; // no color of its own, for triggers that are content (a driver name)
+  | 'plain' // no color of its own, for triggers that are content
+  // The control a whole table row stands for (a driver name): no color and no focus ring of its
+  // own, because its row shows keyboard focus instead. Only for a control whose row draws that
+  // state, or keyboard focus would vanish
+  | 'row';
 
 export type ButtonSize =
   | 'sm' // 32px
@@ -63,6 +67,7 @@ const variantClass = (variant: ButtonVariant, pressed: boolean): string =>
     toggle: `font-semibold ${pressed ? 'text-ink' : 'text-mute hover:text-ink'}`,
     mark: `font-semibold ${pressed ? 'text-signal' : 'text-mute hover:text-ink'}`,
     plain: '',
+    row: 'focus-visible:outline-none',
   })[variant];
 
 /** The classes Button renders, for the rare element that cannot be a Button itself */

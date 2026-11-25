@@ -129,6 +129,12 @@ components:
     padding: '8px 0'
   tab-active:
     textColor: '{colors.ink}'
+  search-field:
+    textColor: '{colors.ink}'
+    typography: '{typography.body}'
+    rounded: '{rounded.DEFAULT}'
+    padding: '0 40px 0 36px'
+    height: '36px'
   tooltip:
     backgroundColor: '{colors.ink}'
     textColor: '{colors.paper}'
@@ -194,12 +200,12 @@ Every color is an RGB-channel CSS variable defined per theme on `:root, html.dar
 
 ### Primary
 
-- **Start Light Red** (`signal`; `signal-light` in light theme): the only interface accent. Used for the `QTR33` wordmark, the LIVE dot, the global focus ring, the active tab underline, the selected- and watched-row edge, the watch star, the range input accent, and text selection. Never used for data.
+- **Start Light Red** (`signal`; `signal-light` in light theme): the only interface accent. Used for the `QTR33` wordmark, the LIVE dot, the global focus ring, the active tab underline, the selected-row edge, the watch star, the range input accent, and text selection. Never used for data.
 
 ### Neutral
 
 - **Monitor Black / Sheet White** (`paper` / `paper-light`): the page and every surface. Sticky table cells and the header repaint `paper` so they stay opaque.
-- **Raised Panel** (`raise` / `raise-light`): a single tonal step above paper, used only for hovered, selected and watched timing rows. It is a state, not a surface.
+- **Raised Panel** (`raise` / `raise-light`): a single tonal step above paper, used only for hovered, selected, watched and search-matched timing rows. It is a state, not a surface.
 - **Readout White / Ink Black** (`ink` / `ink-light`): primary text and values; also the fill of the primary button and tooltip, with `paper` text.
 - **Dimmed Readout** (`mute` / `mute-light`): labels, secondary text, held (previous-lap) sector times, inactive controls, units.
 - **Hairline** (`rule` / `rule-light`): every divider and border, plus the unreached mini-sector bar.
@@ -254,11 +260,11 @@ These encode timing meaning and nothing else.
 
 A single centered container (max 1600px) with a 16px side gutter on small screens and 32px from `md` (768px). The header is sticky at every width, so track status, session progress and feed state never scroll out of a glance.
 
-The main view puts a 320px sidebar (fastest lap, race control) beside the tower only from `2xl` (1536px), sticky, 48px apart: the tower needs its 1080px, so anything narrower would make it scroll. Below `2xl` the tower takes the full width and the sidebar follows it, as two side-by-side blocks from `lg` (fastest lap 320px, race control the rest), stacked below `lg`. Sections are 40px apart. Wherever the race-control feed sits below the tower, its latest message rides in the header (see Race Control Ticker).
+The main view puts a 320px sidebar (fastest lap, race control) beside the tower only from `2xl` (1536px), sticky, 48px apart: the tower needs its 1086px (with the 320px sidebar, its 48px gap and 64px of gutter that is 1518px, which leaves `2xl` room for a page scrollbar of up to 18px), so anything narrower would make it scroll. Below `2xl` the tower takes the full width and the sidebar follows it, as two side-by-side blocks from `lg` (fastest lap 320px, race control the rest), stacked below `lg`. Sections are 40px apart. Wherever the race-control feed sits below the tower, its latest message rides in the header (see Race Control Ticker).
 
-The timing tower is a real table with a fixed layout (`table-layout: fixed`), 1080px minimum width, scrolling horizontally inside its own container on narrow screens. Position and driver columns stay sticky on the left. Cells use 8px vertical and 12px horizontal padding, giving one-line rows of about 38px (the 15px position is the tallest cell); numeric columns are right-aligned.
+The timing tower is a real table with a fixed layout (`table-layout: fixed`), 1086px minimum width from `sm` (996px below it; 1086px leaves the Driver column exactly the room for the longest surname), scrolling horizontally inside its own container on narrow screens. Messages that stand in for the rows ("Connecting to live timing…") sit outside that scroll container, centred in what the screen shows. Position and driver columns stay sticky on the left. Cells use 8px vertical and 12px horizontal padding, giving one-line rows of about 38px (the 15px position is the tallest cell); numeric columns are right-aligned.
 
-**The Still Columns Rule.** Values change several times a second, so no value may move its neighbours. Every timing column has a fixed width in the `colgroup`, sized to the longest real value it can hold (IBM Plex Mono 13px ≈ 7.8px per digit, plus 24px padding); Driver is the only flexible column and truncates. Rows are one line and never change height either: the position delta sits beside the number. Below `sm` (640px) the driver cell drops to number and three-letter code.
+**The Still Columns Rule.** Values change several times a second, so no value may move its neighbours. Every timing column has a fixed width in the `colgroup`, sized to the longest real value it can hold (IBM Plex Mono 13px ≈ 7.8px per digit, plus 24px padding); Driver is the only flexible column and truncates. Rows are one line and never change height either: the position delta sits beside the number. Below `sm` (640px) the driver cell drops to number and three-letter code, and the table floor drops with it so a 390px phone keeps Pos, Driver, Gap and Int on screen. First names show only where the cell has room for every name (a 240px cell, by container query); narrower, the tower shows surnames, as the broadcast does, rather than cutting them.
 
 The header is a three-zone grid on `md` and up (brand and session left, session progress centered, status right); below `md` the progress hero wraps onto its own row. The brand zone stacks three lines: the BrandMark; the session itself in `ink` 600 ("Practice 1", "Qualifying Q2", "Sprint Qualifying SQ1", "Sprint", "Race": the feed's session name plus the qualifying part, so sessions tell apart at a glance); then the meeting, circuit and, for a recording, its date in `mute`. Each line truncates on its own. The status zone carries the feed status, last update and theme toggle on its first row, and track conditions and track status on its second (see Track Conditions); there is no wall clock.
 
@@ -272,7 +278,7 @@ The system is flat. There are no shadows anywhere. Depth is expressed by tone an
 
 ## Shapes
 
-Square and quiet. Controls, dialogs and tooltips use a barely-softened 4px radius; the driver button's focus target uses 2px. Circles are reserved for meaning: the tyre ring (20px, 1.5px compound-colored stroke), the LIVE and status dots (8px) and the team bar's rounded ends. Borders are always 1px `rule`, except the 2px active-tab underline and the 2px selected- and watched-row edge in `signal`.
+Square and quiet. Controls, dialogs and tooltips use a barely-softened 4px radius; the driver button's focus target uses 2px. Circles are reserved for meaning: the tyre ring (20px, 1.5px compound-colored stroke), the LIVE and status dots (8px) and the team bar's rounded ends. Borders are always 1px `rule`, except the 2px active-tab underline and the 2px row edges: `signal` for the selected car, `ink` for the car the driver search points at.
 
 ## Components
 
@@ -288,12 +294,13 @@ Precise and restrained; the label does the work.
 - **Link:** in-page text links ("All messages"): `mute`, `ink` and underlined on hover, no box.
 - **Toggle:** one segment of a text switch (see below).
 - **Mark:** an on / off marker for one item, such as watching a driver: `mute` (hover `ink`) when off, `signal` when on, with `aria-pressed` and a label that stays the same in both states. Its star icon is outlined when off and filled when on.
-- **Plain:** no color of its own, for triggers that are content, such as the driver name that opens the drawer.
+- **Plain:** no color of its own, for triggers that are content.
+- **Row:** the control a whole table row stands for, such as the driver name that opens the drawer: no color and no focus ring of its own, because its row shows keyboard focus instead (see Timing Tower). Never use it on a control whose container does not draw that state.
 - **Disabled:** 40% opacity, not-allowed cursor. Focus uses the global 2px `signal` outline at 2px offset.
 
 ### Primitives First
 
-**The One Primitive Rule.** Every control comes from `components/common/`. A button, or a link styled as one, is always `Button` (with `as="a"` for links); a text switch is `SegmentedControl`; the hero number is `HeroNumber`; hover or focus detail is `Tooltip`. Call sites add layout with `className` and content with `children` or `icon`, and never restyle a primitive's color, size or type. A new look is a new variant in the primitive, so the next screen inherits it. A pattern that shows up in a second feature becomes a primitive instead of a copy.
+**The One Primitive Rule.** Every control comes from `components/common/`. A button, or a link styled as one, is always `Button` (with `as="a"` for links); a text switch is `SegmentedControl`; a text search is `SearchField`; the hero number is `HeroNumber`; hover or focus detail is `Tooltip`. Call sites add layout with `className` and content with `children` or `icon`, and never restyle a primitive's color, size or type. A new look is a new variant in the primitive, so the next screen inherits it. A pattern that shows up in a second feature becomes a primitive instead of a copy.
 
 ### Tabs and Segmented Text Controls
 
@@ -317,6 +324,12 @@ Precise and restrained; the label does the work.
 - **Style:** `paper` panel, 1px `rule` border, 4px radius (centered) or full-height right drawer (max 576px). Header with a 20px title over a `rule` hairline and a ghost close button.
 - **Behavior:** focus moves to close on open, Tab is trapped, Escape closes, focus returns to the trigger. Entry is a 180ms fade, or a 24px slide-in for the drawer.
 
+### Search Field
+
+- **Style:** a 36px field (the height of a `md` button) with no fill: 1px `rule` border, 4px radius, `ink` text, placeholder in `mute`; the border darkens to `mute` on hover. Focus draws the global 2px `signal` outline inset, over the hairline, so a focused field shows one edge, not the border plus a ring outside it. A 16px search icon in `mute` sits inside the left edge.
+- **Right end:** while the field holds text, a ghost `icon-sm` clear button (`Clear search`). While it is empty and has a `shortcut`, the key as a `kbd` hint (Label, 1px `rule` border, 2px radius), hidden while the field has focus and on touch screens, which have no keyboard to use it.
+- **Behavior:** Escape clears; Escape on an empty field leaves it. Enter submits, ArrowDown moves into the results. The shortcut key focuses the field from anywhere on the page (without scrolling to it), except while typing in another field or while a modal dialog is open. The browser's own search styling and clear button are removed, since they differ per engine.
+
 ### Tooltip
 
 - **Style:** `ink` fill with `paper` 11px text, 4px radius, 4px × 8px padding; shown on hover and focus, linked with `aria-describedby`.
@@ -325,15 +338,19 @@ Precise and restrained; the label does the work.
 
 The product's core component: a table row per car. Columns, in the official order: Pos · Driver · Gap · Int | S1 · S2 · S3 · Best · Last | Tyre · Pit. The pace group (from S1) and the strategy group (from Tyre) each start with 12px of extra lead-in, so the three groups read apart without rules or boxes. Gap and Int carry equal weight.
 
-- **Row:** hairline-separated, `paper` at rest, `raise` on hover and while selected; a 2px left edge in `signal` marks the selected car. A selection lasts only while its drawer is open; closing the drawer clears it, and focus returns to the row. Hover lights every cell at once, with no fade: the sticky cells paint their own background, so a fading row lit the position and name before the times behind them.
-- **Watched cars:** a fan can watch any number of cars to find them at a glance as the order changes. A watched row keeps the selected look (`raise` and the 2px `signal` edge) wherever it moves, plus a filled `signal` star at the right end of the driver cell. Other rows show an outlined `mute` star only under the pointer or keyboard focus, in a slot that is always reserved so names never shift. Touch screens have no hover, so there only watched rows show the star, and the drawer's Watch toggle is the way in. Clicking the star never opens the drawer. Watching lasts for the visit only: it is kept in memory, never saved, and a reload starts with none.
-- **Legend:** the table caption, shown under the rows in `mute` Label size: each color word is set in the color it explains (Purple fastest overall · Green personal best · Grey previous lap · ↑ catching the car ahead · N new tyres).
+- **Row:** hairline-separated, `paper` at rest, `raise` on hover, while selected, while watched and while matching the driver search. Two 2px left edges, never both: `signal` for the selected car, `ink` for the car the search points at and for the row whose driver button has keyboard focus (both mean Enter opens this car). A focused row also turns `raise`; the name carries no focus ring of its own (`row` button), so closing the drawer, which hands focus back to the row, leaves no box around the name. A selection lasts only while its drawer is open; closing the drawer clears it, and focus returns to the row. Hover lights every cell at once, with no fade: the sticky cells paint their own background, so a fading row lit the position and name before the times behind them.
+- **Watched cars:** a fan can watch any number of cars to find them at a glance as the order changes. A watched row stays `raise` wherever it moves and carries a filled `signal` star at the start of the driver cell, right after the position where the eye scans. It has no edge: a red edge beside a red team bar (Ferrari) read as one more team bar, while a star never reads as a team color. Other rows show an outlined `mute` star only under the pointer or keyboard focus. Its slot is always reserved, touch screens included, so bars and names never shift. Touch screens have no hover, so there only watched rows show the star, and the drawer's Watch toggle is the way in. Clicking the star never opens the drawer. Watching lasts for the visit only: it is kept in memory, never saved, and a reload starts with none.
+- **Search:** finding a driver never hides one. A `SearchField` above the tower (full width below `sm`, 288px from `sm`) matches a car number, name or three-letter code: each word typed must match the start of the number, the code or one word of the name ("44", "HAM", "lewis", "lew ham"), ignoring case and accents. Every car stays in race order; matching rows turn `raise`, and the one car the query points at also takes the `ink` edge (an exact number or code wins: "1" is car 1, not 10 to 18).
+  - **Jump:** typing scrolls the page, instantly, just enough to show that car (else the first match). While the field has focus or a query, its band (`paper`, 12px above and below) pins under the header, so it stays in view wherever the page jumps.
+  - **Status line** beside the field, in `mute`, also the live region: "Enter opens Lewis HAMILTON" (Enter as a `kbd`, the name in `ink`), "7 matches · Enter opens Lando NORRIS", "2 matches · type more to pick one", or `No driver matches "zzz"`. On a phone only "no match" shows, on its own line under the field; the marked rows say the rest.
+  - **Keys:** `/` focuses the field from anywhere. Enter opens the drawer of the driver the query points at and clears the query, with focus handed to that row first, so closing the drawer lands on the driver in the full order. ArrowDown moves focus to the row. Like watching, the query lasts for the visit only.
+- **Legend:** the table caption, shown under the rows in `mute` Label size: each color word is set in the color it explains (Purple fastest overall · Green personal best · Grey previous lap · ↑ catching the car ahead · N new tyres · ★ watched driver, the star drawn as the row's own filled `signal` star). With no rows it explains nothing, so only its spoken part stays.
 - **Position:** 15px 600 numeral, with its ▲/▼ delta beside it (to its left) in `pb` or `danger`, so the row stays one line.
-- **Driver:** one line: a 3×20px team-color bar, muted car number, name in 600 (truncating), three-letter code. The team name is not repeated per row; it lives in the drawer and the accessible name.
+- **Driver:** one line: the watch star's slot, a 3×20px team-color bar, muted car number, name in 600 (surname always; first name where it fits; truncating), three-letter code. The team name is not repeated per row; it lives in the drawer and the accessible name.
 - **Times:** right-aligned numerals colored by `best` / `pb` / `ink`; a sector still in progress holds last lap's time in `mute`.
 - **Catching:** an interval that is closing shows a 12px up arrow before the value, in `pb` with the value, so shape as well as color carries it; it sits before the digits so they stay aligned with every other row.
 - **Kept for the drawer:** mini-sectors and speed traps are not in the tower. A glance needs the sector time, not ~24 bars per row; both live in the driver drawer, where there is room to read them.
-- **Tyre:** a 20px compound-colored ring with the compound letter, followed by stint laps in `mute` and a `pb` "N" for a new set.
+- **Tyre:** a 20px compound-colored ring with the compound letter, followed by stint laps in `mute` and a `pb` "N" for a new set. A compound the feed does not know yet (`UNKNOWN`) is a `rule` ring with "–", never a letter.
 - **Car state** (last column, in place of the stop count): an uppercase Label — `Out` in `mute` (the name also drops to `mute`, gap and interval read "—"), `Stopped` in `danger`, `In pit` and `Pit exit` in `warn`.
 - **Meaning in words:** every colored time or speed carries `sr-only` text ("fastest overall", "personal best", "previous lap") so the color is never the only carrier.
 

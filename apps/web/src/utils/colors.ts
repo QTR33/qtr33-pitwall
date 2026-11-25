@@ -88,6 +88,12 @@ export function getTyreCompoundInfo(compound?: string): {
 
   const comp = compound.trim().toUpperCase();
 
+  // The feed sends UNKNOWN (TEST_UNKNOWN in testing) until it knows the set a car left the pits
+  // on: that is no compound, not one starting with "U"
+  if (comp.includes('UNKNOWN')) {
+    return { name: 'No data', short: '–', className: 'text-mute border-rule', isUnknown: true };
+  }
+
   // Medium and intermediate match on how the name starts, not on what it contains:
   // "INTERMEDIATE" contains "MED", so a contains-check showed every intermediate as a medium
 

@@ -8,7 +8,8 @@ interface ReplayEvent {
   data: unknown;
 }
 
-const REPLAY_URL = `${import.meta.env.BASE_URL}replay/f1.json`;
+/** Where a recording in public/replay is served; `f1` is the one every build plays */
+export const replayUrl = (name = 'f1') => `${import.meta.env.BASE_URL}replay/${name}.json`;
 // Fast-forward this many events on start so the first frame already has positions and timing
 const WARMUP_EVENTS = 60;
 // The recording plays on its own clock, scaled by the speed: each tick applies every event the
@@ -36,7 +37,10 @@ export class F1Replayer {
   private speedMultiplier = 1;
   private onStateChange?: () => void;
 
-  constructor(private manager: TimingStateManager) {}
+  constructor(
+    private manager: TimingStateManager,
+    private readonly url = replayUrl()
+  ) {}
 
   public setOnStateChange(cb?: () => void) {
     this.onStateChange = cb;
@@ -47,7 +51,7 @@ export class F1Replayer {
   }
 
   private load(): Promise<void> {
-    this.loading ??= fetch(REPLAY_URL)
+    this.loading ??= fetch(this.url)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json() as Promise<ReplayEvent[]>;
@@ -65,7 +69,7 @@ export class F1Replayer {
       })
       .catch((err) => {
         // No recording available: the timing table stays on its empty state
-        logger.warn(`[F1 Replayer] Could not load ${REPLAY_URL}:`, err);
+        logger.warn(`[F1 Replayer] Could not load ${this.url}:`, err);
       });
     return this.loading;
   }

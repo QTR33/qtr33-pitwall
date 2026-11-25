@@ -1,3 +1,18 @@
+/**
+ * A driver's name as first names and surname. The feed sets the surname in capitals
+ * ("Kimi ANTONELLI", "Nyck DE VRIES"); a name without capitals splits before its last word
+ */
+export function splitDriverName(name: string): { first: string; last: string } {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  if (words.length <= 1) return { first: '', last: words[0] ?? '' };
+  const isCaps = (word: string) => /\p{L}/u.test(word) && word === word.toUpperCase();
+  // The surname is the run of capitalised words at the end; the first word is always a first name
+  let at = words.length;
+  while (at > 1 && isCaps(words[at - 1])) at--;
+  if (at === words.length) at = words.length - 1;
+  return { first: words.slice(0, at).join(' '), last: words.slice(at).join(' ') };
+}
+
 export function formatLapTime(time?: string): string {
   if (!time) return '—';
   return time;

@@ -177,7 +177,7 @@ yarn install
 
 ### 2. Start Development Environment
 
-The web dashboard runs entirely in the browser: it connects straight to the official F1 SignalR hub. When no session is on track, a production build says so ("No session on track") and keeps checking, while development plays the recording in `apps/web/public/replay/f1.json` so there is data to work with (see `VITE_APP_ENV`). The backend server is optional.
+The web dashboard runs entirely in the browser: it connects straight to the official F1 SignalR hub. When no session is on track, a production build says so ("No session on track") and keeps checking, while development plays the recording in `apps/web/public/replay/f1.json` so there is data to work with (see `VITE_APP_ENV`). Development can play another recording from that folder with `?replay=<name>` or `VITE_REPLAY` (e.g. `sao-paulo-fp3`); build one from the server's day logs with `yarn replay:build --logs <date> --from <ISO time> --out <name>`. The backend server is optional.
 
 ```bash
 cp apps/web/.env.example apps/web/.env.development   # then set the variables below
