@@ -35,6 +35,7 @@ QTR33 Pitwall shows the official live timing of a session as a single timing tow
 - Race control feed and track-status flag banner (green, yellow, SC, VSC, red, chequered).
 - Driver detail view: sector splits, mini-sectors, speed traps, stint history.
 - Watched drivers: star any number of cars to keep their rows highlighted in the tower; in memory for the visit only, never saved.
+- Driver search: find a car by number, name or three-letter code. The tower keeps every car in order, marks the matches and jumps to the one the query points at; `/` focuses the search and Enter opens that driver's drawer. In memory for the visit only.
 - An optional Express + WebSocket server exists in `apps/server`; the web app does not require it.
 - Open decision: which device the second screen mainly is (laptop or phone) has not been decided.
 
