@@ -83,3 +83,7 @@ temp/
 **/.impeccable/live/deferred-svelte-component-accepts.json
 **/.impeccable/live/*.png
 # impeccable-ignore-end
+
+# Impeccable critique snapshots stay local, unlike the block above suggests. Kept outside
+# that managed block so an Impeccable update does not drop it
+**/.impeccable/critique/
