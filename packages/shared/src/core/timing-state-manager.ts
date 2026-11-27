@@ -242,11 +242,18 @@ export class TimingStateManager {
             };
           }
 
-          // Calculate position change if position changed
-          const newPos = this.driversState[carNum].Position;
-          if (prevPosition && newPos && prevPosition !== newPos) {
-            const diff = parseInt(prevPosition, 10) - parseInt(newPos, 10);
-            this.driversState[carNum].PositionDelta = diff;
+          // Places gained / lost since the start: grid slot less the current position. GridPos comes
+          // on TimingAppData and Position on TimingData, so it is worked out again on either, whichever
+          // arrives last. A slot of 0 or none (a pit-lane start, or a feed without it) falls back to the
+          // car's latest move alone
+          const driver = this.driversState[carNum];
+          const newPos = driver.Position;
+          const gridPos = parseInt(String(driver.GridPos ?? ''), 10);
+          const currentPos = parseInt(String(newPos ?? ''), 10);
+          if (gridPos > 0 && currentPos > 0) {
+            driver.PositionDelta = gridPos - currentPos;
+          } else if (prevPosition && newPos && prevPosition !== newPos) {
+            driver.PositionDelta = parseInt(prevPosition, 10) - currentPos;
           }
         }
       }
