@@ -60,7 +60,10 @@ export interface DriverState {
   team_color?: string;
   Line?: number;
   Position?: string;
-  PositionDelta?: number; // Gain / loss from starting or previous line
+  /** Grid slot from TimingAppData ("1"–"22"); "0" or absent for a pit-lane start */
+  GridPos?: string;
+  /** Places gained (+) / lost (−) since the grid, or in the latest move when there is no grid slot */
+  PositionDelta?: number;
   TimeDiffToFastest?: string;
   TimeDiffToPositionAhead?: string;
   GapToLeader?: string;

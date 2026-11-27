@@ -52,11 +52,13 @@ export const DriverRow: React.FC<DriverRowProps> = ({
   const rawColor: string = (driver as any).TeamColour || driver.team_color || '';
   const teamColor = rawColor && (rawColor.startsWith('#') ? rawColor : `#${rawColor}`);
   const pos = driver.Position ? parseInt(driver.Position, 10) : driver.Line || '—';
-  // In practice and qualifying the order is a lap-time ranking, so a move up or down is no overtake
-  const posDelta = showPositionChange ? driver.PositionDelta || 0 : 0;
-
   // A retired car's gap and interval froze when it stopped racing; they no longer mean anything
   const isOut = !!driver.Retired;
+
+  // In practice and qualifying the order is a lap-time ranking, so a move up or down is no overtake.
+  // A retired car drops to the back of the order without being passed, so its loss is no overtake
+  // either: a car out from pole would read ▼19
+  const posDelta = showPositionChange && !isOut ? driver.PositionDelta || 0 : 0;
 
   const gapValue = driver.GapToLeader || (driver as any).TimeDiffToFastest;
   const gap = isOut ? '—' : formatGap(gapValue, isLeader);
