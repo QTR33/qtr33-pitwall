@@ -103,9 +103,9 @@ export const TimingTable: React.FC<TimingTableProps> = ({
             <col className="w-[100px]" />
             <col className="w-[88px]" />
             <col className="w-[88px]" />
-            {/* Best "1:21.902", Last up to an out-lap "10:46.790" */}
-            <col className="w-[88px]" />
+            {/* Last up to an out-lap "10:46.790", Best "1:21.902" */}
             <col className="w-[96px]" />
+            <col className="w-[88px]" />
             {/* Tyre ring + "12 N", plus the strategy group's lead-in */}
             <col className="w-[96px]" />
             {/* "PIT EXIT" / "STOPPED", with 3px of air before the tower's edge */}
@@ -135,10 +135,10 @@ export const TimingTable: React.FC<TimingTableProps> = ({
                 S3
               </th>
               <th scope="col" className={`${th} text-right`}>
-                Best
+                Last
               </th>
               <th scope="col" className={`${th} text-right`}>
-                Last
+                Best
               </th>
               <th scope="col" className={`${th} pl-6`}>
                 Tyre

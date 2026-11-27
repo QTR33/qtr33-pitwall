@@ -268,14 +268,14 @@ export const DriverRow: React.FC<DriverRowProps> = ({
         <SectorSegment sectorIndex={2} sector={driver.Sectors?.['2']} />
       </td>
 
-      <td className={`${td} num text-right text-data ${bestColor}`}>
-        {formatLapTime(driver.BestLapTime?.Value)}
-        {bestMeaning && <span className="sr-only">, {bestMeaning}</span>}
-      </td>
-
       <td className={`${td} num text-right text-data ${lastColor}`}>
         {formatLapTime(driver.LastLapTime?.Value)}
         {lastMeaning && <span className="sr-only">, {lastMeaning}</span>}
+      </td>
+
+      <td className={`${td} num text-right text-data ${bestColor}`}>
+        {formatLapTime(driver.BestLapTime?.Value)}
+        {bestMeaning && <span className="sr-only">, {bestMeaning}</span>}
       </td>
 
       <td className={`${td} ${groupStart}`}>
